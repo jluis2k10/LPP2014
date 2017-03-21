@@ -1,0 +1,553 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ejercicios xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../preguntas.xsd">
+  <ejercicio id="e36">
+    <enunciado>&lt;p&gt;El número decimal, 585 = 1001001001&lt;sub&gt;2&lt;/sub&gt; (binario), es palíndromo en ambas bases.&lt;/p&gt;&lt;p&gt;Encuentra la suma de todos los números, menores que un millón, los cuales sean palíndromos en base 10 y en base 2.&lt;/p&gt;&lt;p class="info"&gt;(Ten en cuenta que un número palíndromo, en cualquiera de las bases, no puede ceros a su izquierda).&lt;/p&gt;</enunciado>
+    <nivel_en>3</nivel_en>
+    <orientadoALenguaje>true</orientadoALenguaje>
+    <solucion>
+      <lenguaje>Java</lenguaje>
+      <nivel_sol>1</nivel_sol>
+      <codigo>
+        <linea>public final class e36 {</linea>
+        <linea>	</linea>
+        <linea>	public static void main(String[] args) {</linea>
+        <linea>		System.out.println(new e36().run());</linea>
+        <linea>	}</linea>
+        <linea>	</linea>
+        <linea>	public String run() {</linea>
+        <linea>		int sum = 0;</linea>
+        <linea>		for (int i = 1; i &lt; 1000000; i++) {</linea>
+        <linea>			if (Library.isPalindrome(Integer.toString(i, 10)) &amp;&amp; Library.isPalindrome(Integer.toString(i, 2)))</linea>
+        <linea>				sum += i;</linea>
+        <linea>		}</linea>
+        <linea>		return Integer.toString(sum);</linea>
+        <linea>	}	</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>C</lenguaje>
+      <nivel_sol>2</nivel_sol>
+      <codigo>
+        <linea>#include &lt;stdio.h&gt;</linea>
+        <linea/>
+        <linea>#define N 1000000</linea>
+        <linea/>
+        <linea>static int palindromic_base(int n, int base);</linea>
+        <linea/>
+        <linea>int main(void)</linea>
+        <linea>{</linea>
+        <linea>  int i;</linea>
+        <linea>  int sum = 0;</linea>
+        <linea/>
+        <linea>  for (i = 1; i &lt; N; i++) {</linea>
+        <linea>    if (palindromic_base(i, 10) &amp;&amp; palindromic_base(i, 2)) {</linea>
+        <linea>      sum += i;</linea>
+        <linea>    }</linea>
+        <linea>  }</linea>
+        <linea>  printf("%d\n", sum);</linea>
+        <linea/>
+        <linea>  return 0;</linea>
+        <linea>}</linea>
+        <linea/>
+        <linea>int palindromic_base(int n, int base)</linea>
+        <linea>{</linea>
+        <linea>  int reversed = 0;</linea>
+        <linea>  const int orig = n;</linea>
+        <linea/>
+        <linea>  while (n) {</linea>
+        <linea>    reversed = base*reversed + n%base;</linea>
+        <linea>    n /= base;</linea>
+        <linea>  }</linea>
+        <linea>  return orig == reversed;</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>Python</lenguaje>
+      <nivel_sol>1</nivel_sol>
+      <codigo>
+        <linea>def ispalindrome(n, base):</linea>
+        <linea>    digits = []</linea>
+        <linea>    reverse = []</linea>
+        <linea>    while n &gt; 0:</linea>
+        <linea>        d = str(n % base)</linea>
+        <linea>        digits.append(d)</linea>
+        <linea>        reverse.insert(0, d)</linea>
+        <linea>        n = n / base</linea>
+        <linea>    return digits == reverse</linea>
+        <linea/>
+        <linea>print sum(n for n in xrange(1, 1000000) if ispalindrome(n, 10) and ispalindrome(n, 2))</linea>
+      </codigo>
+    </solucion>
+  </ejercicio>
+  <ejercicio id="e37">
+    <enunciado>&lt;div class="problem_content" role="problem"&gt;&#13;
+&#13;
+&lt;p&gt;El número 3797 tiene una propiedad interesante. Siendo primo él mismo, es posible ir eliminando dígitos de izquierda a derecha y que el número siga siendo primo en cada paso. 3797, 797, 97, and 7. De forma parecida, podemos hacerlo de derecha a izquierda: 3797, 379, 37, and 3.&lt;/p&gt;&#13;
+&lt;p&gt;Encuentra la suma de los once únicos primos que se pueden truncar de esta forma tanto de izquierda a derecha como de derecha a izquierda.&lt;/p&gt;&#13;
+&lt;p class="info"&gt;NOTA: 2, 3, 5, y 7 no se deben considerar.&lt;/p&gt;&#13;
+&#13;
+&lt;/div&gt;</enunciado>
+    <nivel_en>3</nivel_en>
+    <orientadoALenguaje>true</orientadoALenguaje>
+    <solucion>
+      <lenguaje>Java</lenguaje>
+      <nivel_sol>2</nivel_sol>
+      <codigo>
+        <linea>public final class e37 {</linea>
+        <linea>	</linea>
+        <linea>	public static void main(String[] args) {</linea>
+        <linea>		System.out.println(new e37().run());</linea>
+        <linea>	}</linea>
+        <linea>	</linea>
+        <linea>	public String run() {</linea>
+        <linea>		long sum = 0;</linea>
+        <linea>		for (int count = 0, n = 10; count &lt; 11; n++) {</linea>
+        <linea>			if (isTruncatablePrime(n)) {</linea>
+        <linea>				sum += n;</linea>
+        <linea>				count++;</linea>
+        <linea>			}</linea>
+        <linea>		}</linea>
+        <linea>		return Long.toString(sum);</linea>
+        <linea>	}</linea>
+        <linea>		</linea>
+        <linea>	private static boolean isTruncatablePrime(int n) {</linea>
+        <linea>		// Test truncable por la izquierda</linea>
+        <linea>		for (long i = 10; i &lt;= n; i *= 10) {</linea>
+        <linea>			if (!Library.isPrime(n % (int)i))</linea>
+        <linea>				return false;</linea>
+        <linea>		}</linea>
+        <linea>		</linea>
+        <linea>		// Test truncable por la derecha</linea>
+        <linea>		for (; n != 0; n /= 10) {</linea>
+        <linea>			if (!Library.isPrime(n))</linea>
+        <linea>				return false;</linea>
+        <linea>		}</linea>
+        <linea>		</linea>
+        <linea>		return true;</linea>
+        <linea>	}	</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>C</lenguaje>
+      <nivel_sol>2</nivel_sol>
+      <codigo>
+        <linea>#include &lt;stdio.h&gt;</linea>
+        <linea>#include &lt;math.h&gt;</linea>
+        <linea/>
+        <linea>static int is_prime(unsigned n);</linea>
+        <linea/>
+        <linea>int main(void)</linea>
+        <linea>{</linea>
+        <linea>  unsigned i;</linea>
+        <linea>  unsigned count = 0, sum = 0;</linea>
+        <linea/>
+        <linea>  for (i = 10; count &lt; 11; i++) {</linea>
+        <linea>    /* truncar de derecha a izquierda */</linea>
+        <linea>    unsigned k, d;</linea>
+        <linea/>
+        <linea>    k = i;</linea>
+        <linea>    while (k != 0) {</linea>
+        <linea>      if (!is_prime(k)) {</linea>
+        <linea>        goto NEXT;</linea>
+        <linea>      }</linea>
+        <linea>      k /= 10;</linea>
+        <linea>    }</linea>
+        <linea/>
+        <linea>    /* truncar de izquierda a derecha */</linea>
+        <linea>    k = i;</linea>
+        <linea>    d = log10(k);</linea>
+        <linea>    d = pow(10, d);</linea>
+        <linea>    while (d != 1) {</linea>
+        <linea>      if (!is_prime(k % d)) {</linea>
+        <linea>        goto NEXT;</linea>
+        <linea>      }</linea>
+        <linea>      d /= 10;</linea>
+        <linea>    }</linea>
+        <linea>    sum += i;</linea>
+        <linea>    count++;</linea>
+        <linea/>
+        <linea>NEXT:</linea>
+        <linea>    ;</linea>
+        <linea>  }</linea>
+        <linea>  printf("%u\n", sum);</linea>
+        <linea/>
+        <linea>  return 0;</linea>
+        <linea>}</linea>
+        <linea/>
+        <linea>int is_prime(unsigned n)</linea>
+        <linea>{</linea>
+        <linea>  if (n &lt;= 1) {</linea>
+        <linea>    return 0;</linea>
+        <linea>  }</linea>
+        <linea>  else if (n == 2) {</linea>
+        <linea>    return 1;</linea>
+        <linea>  }</linea>
+        <linea>  else {</linea>
+        <linea>    unsigned i;</linea>
+        <linea>    for (i = 2; i*i &lt;= n; i++) {</linea>
+        <linea>      if (n % i == 0) {</linea>
+        <linea>        return 0;</linea>
+        <linea>      }</linea>
+        <linea>    }</linea>
+        <linea>    return 1;</linea>
+        <linea>  }</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>Python</lenguaje>
+      <nivel_sol>3</nivel_sol>
+      <codigo>
+        <linea>import math, prime</linea>
+        <linea/>
+        <linea>digits = range(0, 10)</linea>
+        <linea>prime_digits = (2, 3, 5, 7)</linea>
+        <linea/>
+        <linea>def num(l):</linea>
+        <linea>    s = 0</linea>
+        <linea>    for n in l: s = s * 10 + n</linea>
+        <linea>    return s</linea>
+        <linea/>
+        <linea>def is_left_truncatable(l):</linea>
+        <linea>    is_truncatable = 1</linea>
+        <linea>    for size in xrange(1, len(l)+1):</linea>
+        <linea>        n = num(l[:size])</linea>
+        <linea>        prime._refresh(int(math.sqrt(n)))</linea>
+        <linea>        if not prime._isprime(n):</linea>
+        <linea>            is_truncatable = 0</linea>
+        <linea>            break</linea>
+        <linea>    return is_truncatable</linea>
+        <linea/>
+        <linea>def is_right_truncatable(l):</linea>
+        <linea>    is_truncatable = 1</linea>
+        <linea>    for size in xrange(0, len(l)):</linea>
+        <linea>        n = num(l[size:])</linea>
+        <linea>        prime._refresh(int(math.sqrt(n)))</linea>
+        <linea>        if not prime._isprime(n):</linea>
+        <linea>            is_truncatable = 0</linea>
+        <linea>            break</linea>
+        <linea>    return is_truncatable</linea>
+        <linea/>
+        <linea>def gen(result, number):</linea>
+        <linea>    if len(number) &gt; 6: return</linea>
+        <linea>    number = list(number)</linea>
+        <linea>    number.append('')</linea>
+        <linea>    for digit in digits:</linea>
+        <linea>        number[-1] = digit</linea>
+        <linea>        if is_left_truncatable(number):</linea>
+        <linea>            if is_right_truncatable(number) and len(number) &gt; 1:</linea>
+        <linea>                result.append(num(number))</linea>
+        <linea>            gen(result, number)</linea>
+        <linea/>
+        <linea>result = []</linea>
+        <linea>gen(result, [])</linea>
+        <linea>print sum(result)</linea>
+      </codigo>
+    </solucion>
+  </ejercicio>
+  <ejercicio id="e38">
+    <enunciado>&lt;p&gt;Coge el número 192 y multiplícalos por 1, 2 y 3:&lt;/p&gt;&lt;blockquote&gt;192 × 1 = 192&lt;br&gt;192 × 2 = 384&lt;br&gt;192 × 3 = 576&lt;/blockquote&gt;&lt;p&gt;Juntando cada uno de los resultados se obtiene un pandigital de 1 a 9, 192384576. Llamaremos al número 192384576 el producto concatenado de 192 y (1,2,3).&lt;/p&gt;&lt;p&gt;Se puede conseguir lo mismo a partir del 9 y multiplicándolo por 1, 2, 3, 4 y 5, obteniendo el pandigital&amp;nbsp;918273645, el cual es el producto concatenado de 9 y (1,2,3,4,5).&lt;/p&gt;&lt;p&gt;¿Cuál es el pandigital de 1 a 9 y de 9 dígitos más grande que se puede formar como un producto concatenado de un entero y (1,2, ... , &lt;var&gt;n&lt;/var&gt;) donde &lt;var&gt;n&lt;/var&gt; &amp;gt; 1?&lt;/p&gt;</enunciado>
+    <nivel_en>3</nivel_en>
+    <orientadoALenguaje>true</orientadoALenguaje>
+    <solucion>
+      <lenguaje>Java</lenguaje>
+      <nivel_sol>3</nivel_sol>
+      <codigo>
+        <linea>import java.util.Arrays;</linea>
+        <linea/>
+        <linea>public final class e38 {</linea>
+        <linea>	</linea>
+        <linea>	public static void main(String[] args) {</linea>
+        <linea>		System.out.println(new e38().run());</linea>
+        <linea>	}</linea>
+        <linea>	</linea>
+        <linea>	public String run() {</linea>
+        <linea>		int max = -1;</linea>
+        <linea>		for (int n = 2; n &lt;= 9; n++) {</linea>
+        <linea>			for (int i = 1; i &lt; Library.pow(10, 9 / n); i++) {</linea>
+        <linea>				String concat = "";</linea>
+        <linea>				for (int j = 1; j &lt;= n; j++)</linea>
+        <linea>					concat += i * j;</linea>
+        <linea>				if (isPandigital(concat))</linea>
+        <linea>					max = Math.max(Integer.parseInt(concat), max);</linea>
+        <linea>			}</linea>
+        <linea>		}</linea>
+        <linea>		return Integer.toString(max);</linea>
+        <linea>	}</linea>
+        <linea>	</linea>
+        <linea>	private static boolean isPandigital(String s) {</linea>
+        <linea>		if (s.length() != 9)</linea>
+        <linea>			return false;</linea>
+        <linea>		char[] temp = s.toCharArray();</linea>
+        <linea>		Arrays.sort(temp);</linea>
+        <linea>		return new String(temp).equals("123456789");</linea>
+        <linea>	}	</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>C</lenguaje>
+      <nivel_sol>3</nivel_sol>
+      <codigo>
+        <linea>#include &lt;stdio.h&gt;</linea>
+        <linea>#include &lt;stdlib.h&gt;</linea>
+        <linea>#include &lt;string.h&gt;</linea>
+        <linea/>
+        <linea>#define N 10000</linea>
+        <linea/>
+        <linea>static int is_pandigital(const char *s);</linea>
+        <linea>static int compare(const void *a, const void *b);</linea>
+        <linea/>
+        <linea>int main(void)</linea>
+        <linea>{</linea>
+        <linea>  unsigned max = 0;</linea>
+        <linea>  unsigned i;</linea>
+        <linea/>
+        <linea>  for (i = 1; i &lt; N; i++) {</linea>
+        <linea>    char s[10] = {0};</linea>
+        <linea>    unsigned j;</linea>
+        <linea/>
+        <linea>    snprintf(s, sizeof s, "%u", i);</linea>
+        <linea>    for (j = 2; ; j++) {</linea>
+        <linea>      char t[10] = {0};</linea>
+        <linea/>
+        <linea>      snprintf(t, sizeof t, "%u", i*j);</linea>
+        <linea>      if (strlen(s) + strlen(t) &gt; 9) {</linea>
+        <linea>        break;</linea>
+        <linea>      }</linea>
+        <linea>      strncat(s, t, sizeof s - strlen(s));</linea>
+        <linea>    }</linea>
+        <linea>    if (is_pandigital(s)) {</linea>
+        <linea>      unsigned l = strtoul(s, NULL, 10);</linea>
+        <linea>      if (l &gt; max) {</linea>
+        <linea>        max = l;</linea>
+        <linea>      }</linea>
+        <linea>    }</linea>
+        <linea>  }</linea>
+        <linea>  printf("%u\n", max);</linea>
+        <linea/>
+        <linea>  return 0;</linea>
+        <linea>}</linea>
+        <linea/>
+        <linea>int compare(const void *a, const void *b)</linea>
+        <linea>{</linea>
+        <linea>  return *(const char *)a - *(const char *)b;</linea>
+        <linea>}</linea>
+        <linea/>
+        <linea>int is_pandigital(const char *s)</linea>
+        <linea>{</linea>
+        <linea>  size_t l;</linea>
+        <linea>  char t[10];</linea>
+        <linea>  size_t i;</linea>
+        <linea/>
+        <linea>  l = strlen(s);</linea>
+        <linea>  if (l != 9) {</linea>
+        <linea>    return 0;</linea>
+        <linea>  }</linea>
+        <linea>  strncpy(t, s, sizeof t);</linea>
+        <linea>  qsort(t, l, sizeof *t, compare);</linea>
+        <linea>  for (i = 0; i &lt; l; i++) {</linea>
+        <linea>    if (t[i] != i+'1') {</linea>
+        <linea>      return 0;</linea>
+        <linea>    }</linea>
+        <linea>  }</linea>
+        <linea>  return 1;</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>Python</lenguaje>
+      <nivel_sol>2</nivel_sol>
+      <codigo>
+        <linea>def get_pandigital(n):</linea>
+        <linea>    pandigital = ''</linea>
+        <linea>    for x in xrange(1, 10):</linea>
+        <linea>        pandigital += str(x * n)</linea>
+        <linea>        if len(pandigital) &gt;= 9: break</linea>
+        <linea>    if len(pandigital) == 9 and sorted(dict.fromkeys(list(pandigital)).keys()) == list("123456789"): return pandigital</linea>
+        <linea>    else: return ''</linea>
+        <linea/>
+        <linea>max = 0</linea>
+        <linea>for n in xrange(1, 10000):</linea>
+        <linea>    p = get_pandigital(n)</linea>
+        <linea>    if p and p &gt; max: max = p</linea>
+        <linea/>
+        <linea>print max</linea>
+      </codigo>
+    </solucion>
+  </ejercicio>
+  <ejercicio id="e39">
+    <enunciado>&lt;p&gt;Si &lt;i&gt;p&lt;/i&gt; es el perímetro de un triángulo rectángulo cuyos lados son los números enteros {&lt;i&gt;a&lt;/i&gt;,&lt;i&gt;b&lt;/i&gt;,&lt;i&gt;c&lt;/i&gt;}, existen exactamente tres soluciones para&lt;i&gt; p&lt;/i&gt; = 120.&lt;/p&gt;&lt;p style="\'text-align:center;\'"&gt;{20,48,52}, {24,45,51}, {30,40,50}&lt;/p&gt;&lt;p&gt;¿Para que valor de &lt;i&gt;p&lt;/i&gt; ≤ 1000 se maximiza el número de soluciones posibles?&lt;/p&gt;</enunciado>
+    <nivel_en>3</nivel_en>
+    <orientadoALenguaje>true</orientadoALenguaje>
+    <solucion>
+      <lenguaje>Java</lenguaje>
+      <nivel_sol>3</nivel_sol>
+      <codigo>
+        <linea>public final class e39 {</linea>
+        <linea>	</linea>
+        <linea>	public static void main(String[] args) {</linea>
+        <linea>		System.out.println(new e39().run());</linea>
+        <linea>	}</linea>
+        <linea>	</linea>
+        <linea>	public String run() {</linea>
+        <linea>		int maxPerimeter = 0;</linea>
+        <linea>		int maxTriangles = 0;</linea>
+        <linea>		for (int p = 1; p &lt;= 1000; p++) {</linea>
+        <linea>			int triangles = countSolutions(p);</linea>
+        <linea>			if (triangles &gt; maxTriangles) {</linea>
+        <linea>				maxTriangles = triangles;</linea>
+        <linea>				maxPerimeter = p;</linea>
+        <linea>			}</linea>
+        <linea>		}</linea>
+        <linea>		return Integer.toString(maxPerimeter);</linea>
+        <linea>	}</linea>
+        <linea>	</linea>
+        <linea>	private static int countSolutions(int p) {</linea>
+        <linea>		int count = 0;</linea>
+        <linea>		for (int a = 1; a &lt;= p; a++) {</linea>
+        <linea>			for (int b = a; b &lt;= p; b++) {</linea>
+        <linea>				int c = p - a - b;</linea>
+        <linea>				if (b &lt;= c &amp;&amp; a * a + b * b == c * c)</linea>
+        <linea>					count++;</linea>
+        <linea>			}</linea>
+        <linea>		}</linea>
+        <linea>		return count;</linea>
+        <linea>	}</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>C</lenguaje>
+      <nivel_sol>3</nivel_sol>
+      <codigo>
+        <linea>#include &lt;stdio.h&gt;</linea>
+        <linea/>
+        <linea>int main(void)</linea>
+        <linea>{</linea>
+        <linea>  unsigned a, b, c, p;</linea>
+        <linea>  unsigned cnt, max = 0, maxp = 0;</linea>
+        <linea/>
+        <linea>  for (p = 1; p &lt;= 1000; p++) {</linea>
+        <linea>    cnt = 0;</linea>
+        <linea>    for (a = 1; a &lt; p/2; a++) {</linea>
+        <linea>      for (b = a; b &lt; p/2; b++) {</linea>
+        <linea>        c = p - a - b;</linea>
+        <linea>        if (a*a + b*b == c*c) {</linea>
+        <linea>          cnt++;</linea>
+        <linea>        }</linea>
+        <linea>      }</linea>
+        <linea>    }</linea>
+        <linea>    if (cnt &gt; max) {</linea>
+        <linea>      max = cnt;</linea>
+        <linea>      maxp = p;</linea>
+        <linea>    }</linea>
+        <linea>  }</linea>
+        <linea>  printf("%u\n", maxp);</linea>
+        <linea/>
+        <linea>  return 0;</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>Python</lenguaje>
+      <nivel_sol>2</nivel_sol>
+      <codigo>
+        <linea>maxp, maxsol = 0, 0</linea>
+        <linea>for p in xrange(12, 1001, 2):</linea>
+        <linea>    solutions = 0</linea>
+        <linea>    # a &lt; b &lt; c. So a is at most 1/3 of p. b is between a and (p-a)/2</linea>
+        <linea>    for a in xrange(1, p/3):</linea>
+        <linea>        a2 = a*a</linea>
+        <linea>        for b in xrange(a, (p-a)/2):</linea>
+        <linea>            c = p - a - b</linea>
+        <linea>            if a2 + b*b == c*c: solutions = solutions + 1</linea>
+        <linea>    if solutions &gt; maxsol: maxp, maxsol = p, solutions</linea>
+        <linea/>
+        <linea>print maxp</linea>
+      </codigo>
+    </solucion>
+  </ejercicio>
+  <ejercicio id="e40">
+    <enunciado>&lt;p&gt;Una fracción decimal irracional se crea concatenando enteros positivos de la siguiente manera:&lt;/p&gt;&lt;p style="text-align:center;"&gt;0.12345678910&lt;span style="color:#dd0000;font-size:14pt;"&gt;1&lt;/span&gt;112131415161718192021...&lt;/p&gt;&lt;p&gt;Se observa que el 12º dígito de la parte fraccionaria es el 1.&lt;/p&gt;&lt;p&gt;Si &lt;i&gt;d&lt;/i&gt;&lt;sub&gt;&lt;i&gt;n&lt;/i&gt;&lt;/sub&gt; representa el &lt;span style="font-style: italic;"&gt;n&lt;/span&gt;-esimo dígito de la parte fraccionaria, encuentra el valor de la siguiente expresión:&lt;/p&gt;&lt;p style="text-align:center;"&gt;&lt;i&gt;d&lt;/i&gt;&lt;sub&gt;1&lt;/sub&gt; × &lt;i&gt;d&lt;/i&gt;&lt;sub&gt;10&lt;/sub&gt; × &lt;i&gt;d&lt;/i&gt;&lt;sub&gt;100&lt;/sub&gt; × &lt;i&gt;d&lt;/i&gt;&lt;sub&gt;1000&lt;/sub&gt; × &lt;i&gt;d&lt;/i&gt;&lt;sub&gt;10000&lt;/sub&gt; × &lt;i&gt;d&lt;/i&gt;&lt;sub&gt;100000&lt;/sub&gt; × &lt;i&gt;d&lt;/i&gt;&lt;sub&gt;1000000&lt;/sub&gt;&lt;/p&gt;</enunciado>
+    <nivel_en>3</nivel_en>
+    <orientadoALenguaje>true</orientadoALenguaje>
+    <solucion>
+      <lenguaje>Java</lenguaje>
+      <nivel_sol>3</nivel_sol>
+      <codigo>
+        <linea>public final class e40 {</linea>
+        <linea>	</linea>
+        <linea>	public static void main(String[] args) {</linea>
+        <linea>		System.out.println(new e40().run());</linea>
+        <linea>	}</linea>
+        <linea>	</linea>
+        <linea>	public String run() {</linea>
+        <linea>		StringBuilder sb = new StringBuilder();</linea>
+        <linea>		for (int i = 1; i &lt; 1000000; i++)</linea>
+        <linea>			sb.append(i);</linea>
+        <linea>		</linea>
+        <linea>		int prod = 1;</linea>
+        <linea>		for (int i = 0; i &lt;= 6; i++)</linea>
+        <linea>			prod *= sb.charAt(Library.pow(10, i) - 1) - '0';</linea>
+        <linea>		return Integer.toString(prod);</linea>
+        <linea>	}	</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>C</lenguaje>
+      <nivel_sol>2</nivel_sol>
+      <codigo>
+        <linea>#include &lt;stdio.h&gt;</linea>
+        <linea>#include &lt;math.h&gt;</linea>
+        <linea></linea>
+        <linea>int main(void)</linea>
+        <linea>{</linea>
+        <linea>  int nth = 1;</linea>
+        <linea>  int i;</linea>
+        <linea>  int d[7], l;</linea>
+        <linea>  int p = 1;</linea>
+        <linea></linea>
+        <linea>  for (i = 1, l = 0; l &lt; 7; i++) {</linea>
+        <linea>    int digits = log10(i)+1;</linea>
+        <linea>    int j;</linea>
+        <linea>    for (j = 0; j &lt; digits; j++, nth++) {</linea>
+        <linea>      if (nth == pow(10, l)) {</linea>
+        <linea>        d[l++] = (i / (int)pow(10, digits-j-1)) % 10; /* retrieve i's j-th digit */</linea>
+        <linea>      }</linea>
+        <linea>    }</linea>
+        <linea>  }</linea>
+        <linea></linea>
+        <linea>  for (i = 0; i &lt; l; i++) {</linea>
+        <linea>    p *= d[i];</linea>
+        <linea>  }</linea>
+        <linea>  printf("%d\n", p);</linea>
+        <linea></linea>
+        <linea>  return 0;</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>Python</lenguaje>
+      <nivel_sol>1</nivel_sol>
+      <codigo>
+        <linea>def digit_at(n):</linea>
+        <linea>    digits = 1</linea>
+        <linea>    n = n - 1</linea>
+        <linea>    while True:</linea>
+        <linea>        numbers = 9 * pow(10, digits-1) * digits</linea>
+        <linea>        if n &gt; numbers: n = n - numbers</linea>
+        <linea>        else: break</linea>
+        <linea>        digits = digits + 1</linea>
+        <linea>    num = n / digits + pow(10, digits-1)</linea>
+        <linea>    return int(str(num)[n % digits])</linea>
+        <linea></linea>
+        <linea>print digit_at(1) * digit_at(10) * digit_at(100) * digit_at(1000) * digit_at(10000) * digit_at(100000) * digit_at(1000000)</linea>
+      </codigo>
+    </solucion>
+  </ejercicio>
+</ejercicios>

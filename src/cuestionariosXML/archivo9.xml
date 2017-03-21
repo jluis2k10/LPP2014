@@ -1,0 +1,546 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ejercicios xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../preguntas.xsd">
+  <ejercicio id="e41">
+    <enunciado>&lt;p&gt;Diremos que un número de &lt;span style="font-style: italic;"&gt;n&lt;/span&gt; dígitos es pandigital si utiliza todos los dígitos de 1 a &lt;span style="font-style: italic;"&gt;n&lt;/span&gt; exactamente una vez. Por ejemplo, 2143 es un pandigital de 4 dígitos y también un número primo.&lt;/p&gt;&lt;p&gt;¿Cuál es el mayor pandigital primo que existe?&lt;/p&gt;</enunciado>
+    <nivel_en>3</nivel_en>
+    <orientadoALenguaje>true</orientadoALenguaje>
+    <solucion>
+      <lenguaje>Java</lenguaje>
+      <nivel_sol>2</nivel_sol>
+      <codigo>
+        <linea>public final class e41 {</linea>
+        <linea>	</linea>
+        <linea>	public static void main(String[] args) {</linea>
+        <linea>		System.out.println(new e41().run());</linea>
+        <linea>	}</linea>
+        <linea>	</linea>
+        <linea>	public String run() {</linea>
+        <linea>		for (int n = 9; n &gt;= 1; n--) {</linea>
+        <linea>			int[] digits = new int[n];</linea>
+        <linea>			for (int i = 0; i &lt; digits.length; i++)</linea>
+        <linea>				digits[i] = i + 1;</linea>
+        <linea>			</linea>
+        <linea>			int result = -1;</linea>
+        <linea>			do {</linea>
+        <linea>				if (Library.isPrime(toInteger(digits)))</linea>
+        <linea>					result = toInteger(digits);</linea>
+        <linea>			} while (Library.nextPermutation(digits));</linea>
+        <linea>			if (result != -1)</linea>
+        <linea>				return Integer.toString(result);</linea>
+        <linea>		}</linea>
+        <linea>		throw new RuntimeException("No encontrado");</linea>
+        <linea>	}</linea>
+        <linea>	</linea>
+        <linea>	private static int toInteger(int[] digits) {</linea>
+        <linea>		int result = 0;</linea>
+        <linea>		for (int x : digits)</linea>
+        <linea>			result = result * 10 + x;</linea>
+        <linea>		return result;</linea>
+        <linea>	}	</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>C</lenguaje>
+      <nivel_sol>2</nivel_sol>
+      <codigo>
+        <linea>#include &lt;iostream&gt;</linea>
+        <linea>#include &lt;numeric&gt;</linea>
+        <linea>#include &lt;algorithm&gt;</linea>
+        <linea/>
+        <linea>template &lt;typename T&gt;</linea>
+        <linea>struct func {</linea>
+        <linea>  T operator()(T a, T b) const</linea>
+        <linea>  {</linea>
+        <linea>    return 10*a + b;</linea>
+        <linea>  }</linea>
+        <linea>};</linea>
+        <linea/>
+        <linea>static bool is_prime(unsigned n);</linea>
+        <linea>  </linea>
+        <linea>int main()</linea>
+        <linea>{</linea>
+        <linea>  using namespace std;</linea>
+        <linea/>
+        <linea>  int a[] = {9,8,7,6,5,4,3,2,1};</linea>
+        <linea>  static const size_t N = 9;</linea>
+        <linea/>
+        <linea>  for (unsigned i = 0; i &lt; N; i++) {</linea>
+        <linea>    do {</linea>
+        <linea>      int n = accumulate(a+i, a+N, 0, func&lt;int&gt;());</linea>
+        <linea>      if (is_prime(n)) {</linea>
+        <linea>        cout &lt;&lt; n &lt;&lt; endl;</linea>
+        <linea>        goto FINISH;</linea>
+        <linea>      }</linea>
+        <linea>    } while (prev_permutation(a+i, a+N));</linea>
+        <linea>  }</linea>
+        <linea/>
+        <linea>FINISH:</linea>
+        <linea>  return 0;</linea>
+        <linea>}</linea>
+        <linea/>
+        <linea>bool is_prime(unsigned n)</linea>
+        <linea>{</linea>
+        <linea>  if (n == 1) {</linea>
+        <linea>    return false;</linea>
+        <linea>  }</linea>
+        <linea>  else if (n % 2 == 0) {</linea>
+        <linea>    return n == 2;</linea>
+        <linea>  }</linea>
+        <linea>  else {</linea>
+        <linea>    for (unsigned d = 3; d*d &lt; n; d += 2) {</linea>
+        <linea>      if (n % d == 0) {</linea>
+        <linea>        return false;</linea>
+        <linea>      }</linea>
+        <linea>    }</linea>
+        <linea>    return true;</linea>
+        <linea>  }</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>Python</lenguaje>
+      <nivel_sol>1</nivel_sol>
+      <codigo>
+        <linea>import prime</linea>
+        <linea>from combinatorics import permutations</linea>
+        <linea/>
+        <linea># Primos pandigitales son de 4 o 7 dígitos. Los otros pueden dividirse entre 3</linea>
+        <linea>prime._refresh(2766)    # sqrt(7654321)</linea>
+        <linea>for perm in permutations(range(7, 0, -1)):</linea>
+        <linea>    num = 0</linea>
+        <linea>    for n in perm: num = num * 10 + n</linea>
+        <linea>    if prime._isprime(num):</linea>
+        <linea>        print num</linea>
+        <linea>        break</linea>
+      </codigo>
+    </solucion>
+  </ejercicio>
+  <ejercicio id="e42">
+    <enunciado>&lt;p&gt;El &lt;span style="font-style: italic;"&gt;n&lt;/span&gt;-ésimo término de una secuencia de números triangulares está dado por &lt;i&gt;t&lt;sub&gt;n&lt;/sub&gt;&lt;/i&gt; = ½&lt;i&gt;n&lt;/i&gt;(&lt;i&gt;n&lt;/i&gt;+1); así los diez primeros números triangulares son:&lt;/p&gt;&lt;p style="text-align:center;"&gt;1, 3, 6, 10, 15, 21, 28, 36, 45, 55, ...&lt;/p&gt;&lt;p&gt;Convirtiendo cada letra de una palabra a un número correspondiente a su posición en el alfabeto y sumando cada uno de los valores de las letras de la palabra, conseguimos el valor numérico de una palabra. Por ejemplo, el valor de la palabra SKY es 19 + 11 + 25 = 55 = &lt;i&gt;t&lt;/i&gt;&lt;sub&gt;10&lt;/sub&gt;. Si el valor de la palabra es un número triangular, llamemos a la palabra como palabra triangular.&lt;/p&gt;&lt;p&gt;Utilizando &lt;a href="https://projecteuler.net/project/resources/p042_words.txt"&gt;words.txt&lt;/a&gt; (click derecho y 'Guardar enlace/destino como...'), un fichero de 16K que contiene cerca de dos mil palabras inglesas, ¿cuántas de ellas son palabras triangulares?&lt;/p&gt;</enunciado>
+    <nivel_en>3</nivel_en>
+    <orientadoALenguaje>true</orientadoALenguaje>
+    <solucion>
+      <lenguaje>Java</lenguaje>
+      <nivel_sol>1</nivel_sol>
+      <codigo>
+        <linea>public final class e42 {</linea>
+        <linea>	</linea>
+        <linea>	public static void main(String[] args) {</linea>
+        <linea>		System.out.println(new e42().run());</linea>
+        <linea>	}</linea>
+        <linea>	</linea>
+        <linea>	public String run() {</linea>
+        <linea>		int count = 0;</linea>
+        <linea>		for (String word : WORDS) {</linea>
+        <linea>			if (isTriangularNumber(wordValue(word)))</linea>
+        <linea>				count++;</linea>
+        <linea>		}</linea>
+        <linea>		return Integer.toString(count);</linea>
+        <linea>	}</linea>
+        <linea>	</linea>
+        <linea>	private static boolean isTriangularNumber(int x) {</linea>
+        <linea>		for (int i = 1; ; i++) {</linea>
+        <linea>			int t = i * (i + 1) / 2;</linea>
+        <linea>			if (t == x)</linea>
+        <linea>				return true;</linea>
+        <linea>			if (t &gt; x)</linea>
+        <linea>				return false;</linea>
+        <linea>		}</linea>
+        <linea>	}</linea>
+        <linea>		</linea>
+        <linea>	private static int wordValue(String s) {</linea>
+        <linea>		int sum = 0;</linea>
+        <linea>		for (int i = 0; i &lt; s.length(); i++) {</linea>
+        <linea>			char c = s.charAt(i);</linea>
+        <linea>			if (c &lt; 'A' || c &gt; 'Z')</linea>
+        <linea>				throw new IllegalArgumentException();</linea>
+        <linea>			sum += c - 'A' + 1;</linea>
+        <linea>		}</linea>
+        <linea>		return sum;</linea>
+        <linea>	}</linea>
+        <linea>		</linea>
+        <linea>	private static String[] WORDS = {"A","ABILITY","ABLE","ABOUT","ABOVE","ABSENCE","ABSOLUTELY","ACADEMIC","ACCEPT","ACCESS","ACCIDENT","ACCOMPANY","ACCORDING","ACCOUNT","ACHIEVE","ACHIEVEMENT","ACID","ACQUIRE","ACROSS","ACT","ACTION","ACTIVE","ACTIVITY","ACTUAL","ACTUALLY","ADD","ADDITION","ADDITIONAL","ADDRESS","ADMINISTRATION","ADMIT","ADOPT","ADULT","ADVANCE","ADVANTAGE","ADVICE","ADVISE","AFFAIR","AFFECT","AFFORD","AFRAID","AFTER","AFTERNOON","AFTERWARDS","AGAIN","AGAINST","AGE","AGENCY","AGENT","AGO","AGREE","AGREEMENT","AHEAD","AID","AIM","AIR","AIRCRAFT","ALL","ALLOW","ALMOST","ALONE","ALONG","ALREADY","ALRIGHT","ALSO","ALTERNATIVE","ALTHOUGH","ALWAYS","AMONG","AMONGST","AMOUNT","AN","ANALYSIS","ANCIENT","AND","ANIMAL","ANNOUNCE","ANNUAL","ANOTHER","ANSWER","ANY","ANYBODY","ANYONE","ANYTHING","ANYWAY","APART","APPARENT","APPARENTLY","APPEAL","APPEAR","APPEARANCE","APPLICATION","APPLY","APPOINT","APPOINTMENT","APPROACH","APPROPRIATE","APPROVE","AREA","ARGUE","ARGUMENT","ARISE","ARM","ARMY","AROUND","ARRANGE","ARRANGEMENT","ARRIVE","ART","ARTICLE","ARTIST","AS","ASK","ASPECT","ASSEMBLY","ASSESS","ASSESSMENT","ASSET","ASSOCIATE","ASSOCIATION","ASSUME","ASSUMPTION","AT","ATMOSPHERE","ATTACH","ATTACK","ATTEMPT","ATTEND","ATTENTION","ATTITUDE","ATTRACT","ATTRACTIVE","AUDIENCE","AUTHOR","AUTHORITY","AVAILABLE","AVERAGE","AVOID","AWARD","AWARE","AWAY","AYE","BABY","BACK","BACKGROUND","BAD","BAG","BALANCE","BALL","BAND","BANK","BAR","BASE","BASIC","BASIS","BATTLE","BE","BEAR","BEAT","BEAUTIFUL","BECAUSE","BECOME","BED","BEDROOM","BEFORE","BEGIN","BEGINNING","BEHAVIOUR","BEHIND","BELIEF","BELIEVE","BELONG","BELOW","BENEATH","BENEFIT","BESIDE","BEST","BETTER","BETWEEN","BEYOND","BIG","BILL","BIND","BIRD","BIRTH","BIT","BLACK","BLOCK","BLOOD","BLOODY","BLOW","BLUE","BOARD","BOAT","BODY","BONE","BOOK","BORDER","BOTH","BOTTLE","BOTTOM","BOX","BOY","BRAIN","BRANCH","BREAK","BREATH","BRIDGE","BRIEF","BRIGHT","BRING","BROAD","BROTHER","BUDGET","BUILD","BUILDING","BURN","BUS","BUSINESS","BUSY","BUT","BUY","BY","CABINET","CALL","CAMPAIGN","CAN","CANDIDATE","CAPABLE","CAPACITY","CAPITAL","CAR","CARD","CARE","CAREER","CAREFUL","CAREFULLY","CARRY","CASE","CASH","CAT","CATCH","CATEGORY","CAUSE","CELL","CENTRAL","CENTRE","CENTURY","CERTAIN","CERTAINLY","CHAIN","CHAIR","CHAIRMAN","CHALLENGE","CHANCE","CHANGE","CHANNEL","CHAPTER","CHARACTER","CHARACTERISTIC","CHARGE","CHEAP","CHECK","CHEMICAL","CHIEF","CHILD","CHOICE","CHOOSE","CHURCH","CIRCLE","CIRCUMSTANCE","CITIZEN","CITY","CIVIL","CLAIM","CLASS","CLEAN","CLEAR","CLEARLY","CLIENT","CLIMB","CLOSE","CLOSELY","CLOTHES","CLUB","COAL","CODE","COFFEE","COLD","COLLEAGUE","COLLECT","COLLECTION","COLLEGE","COLOUR","COMBINATION","COMBINE","COME","COMMENT","COMMERCIAL","COMMISSION","COMMIT","COMMITMENT","COMMITTEE","COMMON","COMMUNICATION","COMMUNITY","COMPANY","COMPARE","COMPARISON","COMPETITION","COMPLETE","COMPLETELY","COMPLEX","COMPONENT","COMPUTER","CONCENTRATE","CONCENTRATION","CONCEPT","CONCERN","CONCERNED","CONCLUDE","CONCLUSION","CONDITION","CONDUCT","CONFERENCE","CONFIDENCE","CONFIRM","CONFLICT","CONGRESS","CONNECT","CONNECTION","CONSEQUENCE","CONSERVATIVE","CONSIDER","CONSIDERABLE","CONSIDERATION","CONSIST","CONSTANT","CONSTRUCTION","CONSUMER","CONTACT","CONTAIN","CONTENT","CONTEXT","CONTINUE","CONTRACT","CONTRAST","CONTRIBUTE","CONTRIBUTION","CONTROL","CONVENTION","CONVERSATION","COPY","CORNER","CORPORATE","CORRECT","COS","COST","COULD","COUNCIL","COUNT","COUNTRY","COUNTY","COUPLE","COURSE","COURT","COVER","CREATE","CREATION","CREDIT","CRIME","CRIMINAL","CRISIS","CRITERION","CRITICAL","CRITICISM","CROSS","CROWD","CRY","CULTURAL","CULTURE","CUP","CURRENT","CURRENTLY","CURRICULUM","CUSTOMER","CUT","DAMAGE","DANGER","DANGEROUS","DARK","DATA","DATE","DAUGHTER","DAY","DEAD","DEAL","DEATH","DEBATE","DEBT","DECADE","DECIDE","DECISION","DECLARE","DEEP","DEFENCE","DEFENDANT","DEFINE","DEFINITION","DEGREE","DELIVER","DEMAND","DEMOCRATIC","DEMONSTRATE","DENY","DEPARTMENT","DEPEND","DEPUTY","DERIVE","DESCRIBE","DESCRIPTION","DESIGN","DESIRE","DESK","DESPITE","DESTROY","DETAIL","DETAILED","DETERMINE","DEVELOP","DEVELOPMENT","DEVICE","DIE","DIFFERENCE","DIFFERENT","DIFFICULT","DIFFICULTY","DINNER","DIRECT","DIRECTION","DIRECTLY","DIRECTOR","DISAPPEAR","DISCIPLINE","DISCOVER","DISCUSS","DISCUSSION","DISEASE","DISPLAY","DISTANCE","DISTINCTION","DISTRIBUTION","DISTRICT","DIVIDE","DIVISION","DO","DOCTOR","DOCUMENT","DOG","DOMESTIC","DOOR","DOUBLE","DOUBT","DOWN","DRAW","DRAWING","DREAM","DRESS","DRINK","DRIVE","DRIVER","DROP","DRUG","DRY","DUE","DURING","DUTY","EACH","EAR","EARLY","EARN","EARTH","EASILY","EAST","EASY","EAT","ECONOMIC","ECONOMY","EDGE","EDITOR","EDUCATION","EDUCATIONAL","EFFECT","EFFECTIVE","EFFECTIVELY","EFFORT","EGG","EITHER","ELDERLY","ELECTION","ELEMENT","ELSE","ELSEWHERE","EMERGE","EMPHASIS","EMPLOY","EMPLOYEE","EMPLOYER","EMPLOYMENT","EMPTY","ENABLE","ENCOURAGE","END","ENEMY","ENERGY","ENGINE","ENGINEERING","ENJOY","ENOUGH","ENSURE","ENTER","ENTERPRISE","ENTIRE","ENTIRELY","ENTITLE","ENTRY","ENVIRONMENT","ENVIRONMENTAL","EQUAL","EQUALLY","EQUIPMENT","ERROR","ESCAPE","ESPECIALLY","ESSENTIAL","ESTABLISH","ESTABLISHMENT","ESTATE","ESTIMATE","EVEN","EVENING","EVENT","EVENTUALLY","EVER","EVERY","EVERYBODY","EVERYONE","EVERYTHING","EVIDENCE","EXACTLY","EXAMINATION","EXAMINE","EXAMPLE","EXCELLENT","EXCEPT","EXCHANGE","EXECUTIVE","EXERCISE","EXHIBITION","EXIST","EXISTENCE","EXISTING","EXPECT","EXPECTATION","EXPENDITURE","EXPENSE","EXPENSIVE","EXPERIENCE","EXPERIMENT","EXPERT","EXPLAIN","EXPLANATION","EXPLORE","EXPRESS","EXPRESSION","EXTEND","EXTENT","EXTERNAL","EXTRA","EXTREMELY","EYE","FACE","FACILITY","FACT","FACTOR","FACTORY","FAIL","FAILURE","FAIR","FAIRLY","FAITH","FALL","FAMILIAR","FAMILY","FAMOUS","FAR","FARM","FARMER","FASHION","FAST","FATHER","FAVOUR","FEAR","FEATURE","FEE","FEEL","FEELING","FEMALE","FEW","FIELD","FIGHT","FIGURE","FILE","FILL","FILM","FINAL","FINALLY","FINANCE","FINANCIAL","FIND","FINDING","FINE","FINGER","FINISH","FIRE","FIRM","FIRST","FISH","FIT","FIX","FLAT","FLIGHT","FLOOR","FLOW","FLOWER","FLY","FOCUS","FOLLOW","FOLLOWING","FOOD","FOOT","FOOTBALL","FOR","FORCE","FOREIGN","FOREST","FORGET","FORM","FORMAL","FORMER","FORWARD","FOUNDATION","FREE","FREEDOM","FREQUENTLY","FRESH","FRIEND","FROM","FRONT","FRUIT","FUEL","FULL","FULLY","FUNCTION","FUND","FUNNY","FURTHER","FUTURE","GAIN","GAME","GARDEN","GAS","GATE","GATHER","GENERAL","GENERALLY","GENERATE","GENERATION","GENTLEMAN","GET","GIRL","GIVE","GLASS","GO","GOAL","GOD","GOLD","GOOD","GOVERNMENT","GRANT","GREAT","GREEN","GREY","GROUND","GROUP","GROW","GROWING","GROWTH","GUEST","GUIDE","GUN","HAIR","HALF","HALL","HAND","HANDLE","HANG","HAPPEN","HAPPY","HARD","HARDLY","HATE","HAVE","HE","HEAD","HEALTH","HEAR","HEART","HEAT","HEAVY","HELL","HELP","HENCE","HER","HERE","HERSELF","HIDE","HIGH","HIGHLY","HILL","HIM","HIMSELF","HIS","HISTORICAL","HISTORY","HIT","HOLD","HOLE","HOLIDAY","HOME","HOPE","HORSE","HOSPITAL","HOT","HOTEL","HOUR","HOUSE","HOUSEHOLD","HOUSING","HOW","HOWEVER","HUGE","HUMAN","HURT","HUSBAND","I","IDEA","IDENTIFY","IF","IGNORE","ILLUSTRATE","IMAGE","IMAGINE","IMMEDIATE","IMMEDIATELY","IMPACT","IMPLICATION","IMPLY","IMPORTANCE","IMPORTANT","IMPOSE","IMPOSSIBLE","IMPRESSION","IMPROVE","IMPROVEMENT","IN","INCIDENT","INCLUDE","INCLUDING","INCOME","INCREASE","INCREASED","INCREASINGLY","INDEED","INDEPENDENT","INDEX","INDICATE","INDIVIDUAL","INDUSTRIAL","INDUSTRY","INFLUENCE","INFORM","INFORMATION","INITIAL","INITIATIVE","INJURY","INSIDE","INSIST","INSTANCE","INSTEAD","INSTITUTE","INSTITUTION","INSTRUCTION","INSTRUMENT","INSURANCE","INTEND","INTENTION","INTEREST","INTERESTED","INTERESTING","INTERNAL","INTERNATIONAL","INTERPRETATION","INTERVIEW","INTO","INTRODUCE","INTRODUCTION","INVESTIGATE","INVESTIGATION","INVESTMENT","INVITE","INVOLVE","IRON","IS","ISLAND","ISSUE","IT","ITEM","ITS","ITSELF","JOB","JOIN","JOINT","JOURNEY","JUDGE","JUMP","JUST","JUSTICE","KEEP","KEY","KID","KILL","KIND","KING","KITCHEN","KNEE","KNOW","KNOWLEDGE","LABOUR","LACK","LADY","LAND","LANGUAGE","LARGE","LARGELY","LAST","LATE","LATER","LATTER","LAUGH","LAUNCH","LAW","LAWYER","LAY","LEAD","LEADER","LEADERSHIP","LEADING","LEAF","LEAGUE","LEAN","LEARN","LEAST","LEAVE","LEFT","LEG","LEGAL","LEGISLATION","LENGTH","LESS","LET","LETTER","LEVEL","LIABILITY","LIBERAL","LIBRARY","LIE","LIFE","LIFT","LIGHT","LIKE","LIKELY","LIMIT","LIMITED","LINE","LINK","LIP","LIST","LISTEN","LITERATURE","LITTLE","LIVE","LIVING","LOAN","LOCAL","LOCATION","LONG","LOOK","LORD","LOSE","LOSS","LOT","LOVE","LOVELY","LOW","LUNCH","MACHINE","MAGAZINE","MAIN","MAINLY","MAINTAIN","MAJOR","MAJORITY","MAKE","MALE","MAN","MANAGE","MANAGEMENT","MANAGER","MANNER","MANY","MAP","MARK","MARKET","MARRIAGE","MARRIED","MARRY","MASS","MASTER","MATCH","MATERIAL","MATTER","MAY","MAYBE","ME","MEAL","MEAN","MEANING","MEANS","MEANWHILE","MEASURE","MECHANISM","MEDIA","MEDICAL","MEET","MEETING","MEMBER","MEMBERSHIP","MEMORY","MENTAL","MENTION","MERELY","MESSAGE","METAL","METHOD","MIDDLE","MIGHT","MILE","MILITARY","MILK","MIND","MINE","MINISTER","MINISTRY","MINUTE","MISS","MISTAKE","MODEL","MODERN","MODULE","MOMENT","MONEY","MONTH","MORE","MORNING","MOST","MOTHER","MOTION","MOTOR","MOUNTAIN","MOUTH","MOVE","MOVEMENT","MUCH","MURDER","MUSEUM","MUSIC","MUST","MY","MYSELF","NAME","NARROW","NATION","NATIONAL","NATURAL","NATURE","NEAR","NEARLY","NECESSARILY","NECESSARY","NECK","NEED","NEGOTIATION","NEIGHBOUR","NEITHER","NETWORK","NEVER","NEVERTHELESS","NEW","NEWS","NEWSPAPER","NEXT","NICE","NIGHT","NO","NOBODY","NOD","NOISE","NONE","NOR","NORMAL","NORMALLY","NORTH","NORTHERN","NOSE","NOT","NOTE","NOTHING","NOTICE","NOTION","NOW","NUCLEAR","NUMBER","NURSE","OBJECT","OBJECTIVE","OBSERVATION","OBSERVE","OBTAIN","OBVIOUS","OBVIOUSLY","OCCASION","OCCUR","ODD","OF","OFF","OFFENCE","OFFER","OFFICE","OFFICER","OFFICIAL","OFTEN","OIL","OKAY","OLD","ON","ONCE","ONE","ONLY","ONTO","OPEN","OPERATE","OPERATION","OPINION","OPPORTUNITY","OPPOSITION","OPTION","OR","ORDER","ORDINARY","ORGANISATION","ORGANISE","ORGANIZATION","ORIGIN","ORIGINAL","OTHER","OTHERWISE","OUGHT","OUR","OURSELVES","OUT","OUTCOME","OUTPUT","OUTSIDE","OVER","OVERALL","OWN","OWNER","PACKAGE","PAGE","PAIN","PAINT","PAINTING","PAIR","PANEL","PAPER","PARENT","PARK","PARLIAMENT","PART","PARTICULAR","PARTICULARLY","PARTLY","PARTNER","PARTY","PASS","PASSAGE","PAST","PATH","PATIENT","PATTERN","PAY","PAYMENT","PEACE","PENSION","PEOPLE","PER","PERCENT","PERFECT","PERFORM","PERFORMANCE","PERHAPS","PERIOD","PERMANENT","PERSON","PERSONAL","PERSUADE","PHASE","PHONE","PHOTOGRAPH","PHYSICAL","PICK","PICTURE","PIECE","PLACE","PLAN","PLANNING","PLANT","PLASTIC","PLATE","PLAY","PLAYER","PLEASE","PLEASURE","PLENTY","PLUS","POCKET","POINT","POLICE","POLICY","POLITICAL","POLITICS","POOL","POOR","POPULAR","POPULATION","POSITION","POSITIVE","POSSIBILITY","POSSIBLE","POSSIBLY","POST","POTENTIAL","POUND","POWER","POWERFUL","PRACTICAL","PRACTICE","PREFER","PREPARE","PRESENCE","PRESENT","PRESIDENT","PRESS","PRESSURE","PRETTY","PREVENT","PREVIOUS","PREVIOUSLY","PRICE","PRIMARY","PRIME","PRINCIPLE","PRIORITY","PRISON","PRISONER","PRIVATE","PROBABLY","PROBLEM","PROCEDURE","PROCESS","PRODUCE","PRODUCT","PRODUCTION","PROFESSIONAL","PROFIT","PROGRAM","PROGRAMME","PROGRESS","PROJECT","PROMISE","PROMOTE","PROPER","PROPERLY","PROPERTY","PROPORTION","PROPOSE","PROPOSAL","PROSPECT","PROTECT","PROTECTION","PROVE","PROVIDE","PROVIDED","PROVISION","PUB","PUBLIC","PUBLICATION","PUBLISH","PULL","PUPIL","PURPOSE","PUSH","PUT","QUALITY","QUARTER","QUESTION","QUICK","QUICKLY","QUIET","QUITE","RACE","RADIO","RAILWAY","RAIN","RAISE","RANGE","RAPIDLY","RARE","RATE","RATHER","REACH","REACTION","READ","READER","READING","READY","REAL","REALISE","REALITY","REALIZE","REALLY","REASON","REASONABLE","RECALL","RECEIVE","RECENT","RECENTLY","RECOGNISE","RECOGNITION","RECOGNIZE","RECOMMEND","RECORD","RECOVER","RED","REDUCE","REDUCTION","REFER","REFERENCE","REFLECT","REFORM","REFUSE","REGARD","REGION","REGIONAL","REGULAR","REGULATION","REJECT","RELATE","RELATION","RELATIONSHIP","RELATIVE","RELATIVELY","RELEASE","RELEVANT","RELIEF","RELIGION","RELIGIOUS","RELY","REMAIN","REMEMBER","REMIND","REMOVE","REPEAT","REPLACE","REPLY","REPORT","REPRESENT","REPRESENTATION","REPRESENTATIVE","REQUEST","REQUIRE","REQUIREMENT","RESEARCH","RESOURCE","RESPECT","RESPOND","RESPONSE","RESPONSIBILITY","RESPONSIBLE","REST","RESTAURANT","RESULT","RETAIN","RETURN","REVEAL","REVENUE","REVIEW","REVOLUTION","RICH","RIDE","RIGHT","RING","RISE","RISK","RIVER","ROAD","ROCK","ROLE","ROLL","ROOF","ROOM","ROUND","ROUTE","ROW","ROYAL","RULE","RUN","RURAL","SAFE","SAFETY","SALE","SAME","SAMPLE","SATISFY","SAVE","SAY","SCALE","SCENE","SCHEME","SCHOOL","SCIENCE","SCIENTIFIC","SCIENTIST","SCORE","SCREEN","SEA","SEARCH","SEASON","SEAT","SECOND","SECONDARY","SECRETARY","SECTION","SECTOR","SECURE","SECURITY","SEE","SEEK","SEEM","SELECT","SELECTION","SELL","SEND","SENIOR","SENSE","SENTENCE","SEPARATE","SEQUENCE","SERIES","SERIOUS","SERIOUSLY","SERVANT","SERVE","SERVICE","SESSION","SET","SETTLE","SETTLEMENT","SEVERAL","SEVERE","SEX","SEXUAL","SHAKE","SHALL","SHAPE","SHARE","SHE","SHEET","SHIP","SHOE","SHOOT","SHOP","SHORT","SHOT","SHOULD","SHOULDER","SHOUT","SHOW","SHUT","SIDE","SIGHT","SIGN","SIGNAL","SIGNIFICANCE","SIGNIFICANT","SILENCE","SIMILAR","SIMPLE","SIMPLY","SINCE","SING","SINGLE","SIR","SISTER","SIT","SITE","SITUATION","SIZE","SKILL","SKIN","SKY","SLEEP","SLIGHTLY","SLIP","SLOW","SLOWLY","SMALL","SMILE","SO","SOCIAL","SOCIETY","SOFT","SOFTWARE","SOIL","SOLDIER","SOLICITOR","SOLUTION","SOME","SOMEBODY","SOMEONE","SOMETHING","SOMETIMES","SOMEWHAT","SOMEWHERE","SON","SONG","SOON","SORRY","SORT","SOUND","SOURCE","SOUTH","SOUTHERN","SPACE","SPEAK","SPEAKER","SPECIAL","SPECIES","SPECIFIC","SPEECH","SPEED","SPEND","SPIRIT","SPORT","SPOT","SPREAD","SPRING","STAFF","STAGE","STAND","STANDARD","STAR","START","STATE","STATEMENT","STATION","STATUS","STAY","STEAL","STEP","STICK","STILL","STOCK","STONE","STOP","STORE","STORY","STRAIGHT","STRANGE","STRATEGY","STREET","STRENGTH","STRIKE","STRONG","STRONGLY","STRUCTURE","STUDENT","STUDIO","STUDY","STUFF","STYLE","SUBJECT","SUBSTANTIAL","SUCCEED","SUCCESS","SUCCESSFUL","SUCH","SUDDENLY","SUFFER","SUFFICIENT","SUGGEST","SUGGESTION","SUITABLE","SUM","SUMMER","SUN","SUPPLY","SUPPORT","SUPPOSE","SURE","SURELY","SURFACE","SURPRISE","SURROUND","SURVEY","SURVIVE","SWITCH","SYSTEM","TABLE","TAKE","TALK","TALL","TAPE","TARGET","TASK","TAX","TEA","TEACH","TEACHER","TEACHING","TEAM","TEAR","TECHNICAL","TECHNIQUE","TECHNOLOGY","TELEPHONE","TELEVISION","TELL","TEMPERATURE","TEND","TERM","TERMS","TERRIBLE","TEST","TEXT","THAN","THANK","THANKS","THAT","THE","THEATRE","THEIR","THEM","THEME","THEMSELVES","THEN","THEORY","THERE","THEREFORE","THESE","THEY","THIN","THING","THINK","THIS","THOSE","THOUGH","THOUGHT","THREAT","THREATEN","THROUGH","THROUGHOUT","THROW","THUS","TICKET","TIME","TINY","TITLE","TO","TODAY","TOGETHER","TOMORROW","TONE","TONIGHT","TOO","TOOL","TOOTH","TOP","TOTAL","TOTALLY","TOUCH","TOUR","TOWARDS","TOWN","TRACK","TRADE","TRADITION","TRADITIONAL","TRAFFIC","TRAIN","TRAINING","TRANSFER","TRANSPORT","TRAVEL","TREAT","TREATMENT","TREATY","TREE","TREND","TRIAL","TRIP","TROOP","TROUBLE","TRUE","TRUST","TRUTH","TRY","TURN","TWICE","TYPE","TYPICAL","UNABLE","UNDER","UNDERSTAND","UNDERSTANDING","UNDERTAKE","UNEMPLOYMENT","UNFORTUNATELY","UNION","UNIT","UNITED","UNIVERSITY","UNLESS","UNLIKELY","UNTIL","UP","UPON","UPPER","URBAN","US","USE","USED","USEFUL","USER","USUAL","USUALLY","VALUE","VARIATION","VARIETY","VARIOUS","VARY","VAST","VEHICLE","VERSION","VERY","VIA","VICTIM","VICTORY","VIDEO","VIEW","VILLAGE","VIOLENCE","VISION","VISIT","VISITOR","VITAL","VOICE","VOLUME","VOTE","WAGE","WAIT","WALK","WALL","WANT","WAR","WARM","WARN","WASH","WATCH","WATER","WAVE","WAY","WE","WEAK","WEAPON","WEAR","WEATHER","WEEK","WEEKEND","WEIGHT","WELCOME","WELFARE","WELL","WEST","WESTERN","WHAT","WHATEVER","WHEN","WHERE","WHEREAS","WHETHER","WHICH","WHILE","WHILST","WHITE","WHO","WHOLE","WHOM","WHOSE","WHY","WIDE","WIDELY","WIFE","WILD","WILL","WIN","WIND","WINDOW","WINE","WING","WINNER","WINTER","WISH","WITH","WITHDRAW","WITHIN","WITHOUT","WOMAN","WONDER","WONDERFUL","WOOD","WORD","WORK","WORKER","WORKING","WORKS","WORLD","WORRY","WORTH","WOULD","WRITE","WRITER","WRITING","WRONG","YARD","YEAH","YEAR","YES","YESTERDAY","YET","YOU","YOUNG","YOUR","YOURSELF","YOUTH"};	</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>C</lenguaje>
+      <nivel_sol>1</nivel_sol>
+      <codigo>
+        <linea>#include &lt;stdio.h&gt;</linea>
+        <linea>#include &lt;math.h&gt;</linea>
+        <linea/>
+        <linea>static int is_triangle(int c);</linea>
+        <linea/>
+        <linea>int main(void)</linea>
+        <linea>{</linea>
+        <linea>  FILE *fp;</linea>
+        <linea>  int cnt = 0;</linea>
+        <linea>  char buf[32];</linea>
+        <linea/>
+        <linea>  fp = fopen("words.txt", "r");</linea>
+        <linea>  if (!fp) {</linea>
+        <linea>    perror("words.txt");</linea>
+        <linea>    return 1;</linea>
+        <linea>  }</linea>
+        <linea/>
+        <linea>  while (fscanf(fp, "\"%[^\"]\",", buf) != EOF) {</linea>
+        <linea>    int i, sum = 0;</linea>
+        <linea>    for (i = 0; buf[i] != '\0'; i++) {</linea>
+        <linea>      sum += buf[i]-'A'+1;</linea>
+        <linea>    }</linea>
+        <linea>    cnt += is_triangle(sum);</linea>
+        <linea>  }</linea>
+        <linea>  fclose(fp);</linea>
+        <linea/>
+        <linea>  printf("%d\n", cnt);</linea>
+        <linea/>
+        <linea>  return 0;</linea>
+        <linea>}</linea>
+        <linea/>
+        <linea>int is_triangle(int c)</linea>
+        <linea>{</linea>
+        <linea>  /*</linea>
+        <linea>   * si c es un número triangular, c = 1/2*n*(n+1) y entonces n = (-1 + sqrt(1+8*c))/2.</linea>
+        <linea>   * así que c es un número triangular si 1+8*c es una potencia de 2 y sqrt(1+8*c) es impar.</linea>
+        <linea>   */</linea>
+        <linea>  int sq = sqrt(1+8*c);</linea>
+        <linea>  return (sq*sq == 1+8*c &amp;&amp; (sq &amp; 1) == 1);</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>Python</lenguaje>
+      <nivel_sol>1</nivel_sol>
+      <codigo>
+        <linea>def worth(word): return sum(ord(letter) - ord('A') + 1 for letter in word)</linea>
+        <linea/>
+        <linea>words = open('words.txt').read().replace('"', '').split(',')</linea>
+        <linea>triangle_numbers = dict.fromkeys(list(n*(n+1)/2 for n in xrange(1, 100)), 1)</linea>
+        <linea/>
+        <linea>print sum(1 for word in words if worth(word) in triangle_numbers)</linea>
+      </codigo>
+    </solucion>
+  </ejercicio>
+  <ejercicio id="e43">
+    <enunciado>&lt;p&gt;El número&amp;nbsp;1406357289 es un pandigital de 0 a 9 porque está formado por todos los dígitos del 0 al 9, pero tiene también una interesante propiedad sobre la divisibilidad de sus subcadenas.&lt;/p&gt;&lt;p&gt;Sea &lt;i&gt;d&lt;/i&gt;&lt;sub&gt;1&lt;/sub&gt; el 1er.&lt;sup&gt;&lt;/sup&gt; dígito, &lt;i&gt;d&lt;/i&gt;&lt;sub&gt;2&lt;/sub&gt; el 2º&lt;sup&gt;&lt;/sup&gt; dígito, y así sucesivamente. De esta manera, nos damos cuenta de lo siguiente:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;&lt;i&gt;d&lt;/i&gt;&lt;sub&gt;2&lt;/sub&gt;&lt;i&gt;d&lt;/i&gt;&lt;sub&gt;3&lt;/sub&gt;&lt;i&gt;d&lt;/i&gt;&lt;sub&gt;4&lt;/sub&gt;=406 es divisible entre 2&lt;/li&gt;&lt;li&gt;&lt;i&gt;d&lt;/i&gt;&lt;sub&gt;3&lt;/sub&gt;&lt;i&gt;d&lt;/i&gt;&lt;sub&gt;4&lt;/sub&gt;&lt;i&gt;d&lt;/i&gt;&lt;sub&gt;5&lt;/sub&gt;=063 es divisible entre 3&lt;/li&gt;&lt;li&gt;&lt;i&gt;d&lt;/i&gt;&lt;sub&gt;4&lt;/sub&gt;&lt;i&gt;d&lt;/i&gt;&lt;sub&gt;5&lt;/sub&gt;&lt;i&gt;d&lt;/i&gt;&lt;sub&gt;6&lt;/sub&gt;=635 es divisible entre 5&lt;/li&gt;&lt;li&gt;&lt;i&gt;d&lt;/i&gt;&lt;sub&gt;5&lt;/sub&gt;&lt;i&gt;d&lt;/i&gt;&lt;sub&gt;6&lt;/sub&gt;&lt;i&gt;d&lt;/i&gt;&lt;sub&gt;7&lt;/sub&gt;=357 es divisible entre 7&lt;/li&gt;&lt;li&gt;&lt;i&gt;d&lt;/i&gt;&lt;sub&gt;6&lt;/sub&gt;&lt;i&gt;d&lt;/i&gt;&lt;sub&gt;7&lt;/sub&gt;&lt;i&gt;d&lt;/i&gt;&lt;sub&gt;8&lt;/sub&gt;=572 es divisible entre 11&lt;/li&gt;&lt;li&gt;&lt;i&gt;d&lt;/i&gt;&lt;sub&gt;7&lt;/sub&gt;&lt;i&gt;d&lt;/i&gt;&lt;sub&gt;8&lt;/sub&gt;&lt;i&gt;d&lt;/i&gt;&lt;sub&gt;9&lt;/sub&gt;=728 es divisible entre 13&lt;/li&gt;&lt;li&gt;&lt;i&gt;d&lt;/i&gt;&lt;sub&gt;8&lt;/sub&gt;&lt;i&gt;d&lt;/i&gt;&lt;sub&gt;9&lt;/sub&gt;&lt;i&gt;d&lt;/i&gt;&lt;sub&gt;10&lt;/sub&gt;=289 es divisible entre 17&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Encuentra la suma de todos los pandigitales del 0 al 9 que cumplan con esta propiedad.&lt;/p&gt;</enunciado>
+    <nivel_en>3</nivel_en>
+    <orientadoALenguaje>true</orientadoALenguaje>
+    <solucion>
+      <lenguaje>Java</lenguaje>
+      <nivel_sol>3</nivel_sol>
+      <codigo>
+        <linea>public final class e43 {</linea>
+        <linea>	</linea>
+        <linea>	public static void main(String[] args) {</linea>
+        <linea>		System.out.println(new e43().run());</linea>
+        <linea>	}</linea>
+        <linea>	</linea>
+        <linea>	private static int[] DIVISIBILITY_TESTS = {2, 3, 5, 7, 11, 13, 17};  // Primeros 7 primos</linea>
+        <linea>	</linea>
+        <linea>	public String run() {</linea>
+        <linea>		long sum = 0;</linea>
+        <linea>		int[] digits = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};</linea>
+        <linea>		outer:</linea>
+        <linea>		do {</linea>
+        <linea>			for (int i = 0; i &lt; DIVISIBILITY_TESTS.length; i++) {</linea>
+        <linea>				if (toInteger(digits, i + 1, 3) % DIVISIBILITY_TESTS[i] != 0)</linea>
+        <linea>					continue outer;</linea>
+        <linea>			}</linea>
+        <linea>			sum += toInteger(digits, 0, digits.length);</linea>
+        <linea>		} while (Library.nextPermutation(digits));</linea>
+        <linea>		return Long.toString(sum);</linea>
+        <linea>	}</linea>
+        <linea>	</linea>
+        <linea>	private static long toInteger(int[] digits, int off, int len) {</linea>
+        <linea>		long result = 0;</linea>
+        <linea>		for (int i = off; i &lt; off + len; i++)</linea>
+        <linea>			result = result * 10 + digits[i];</linea>
+        <linea>		return result;</linea>
+        <linea>	}	</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>C</lenguaje>
+      <nivel_sol>3</nivel_sol>
+      <codigo>
+        <linea>#include &lt;iostream&gt;</linea>
+        <linea>#include &lt;algorithm&gt;</linea>
+        <linea/>
+        <linea>int main(void)</linea>
+        <linea>{</linea>
+        <linea>  using namespace std;</linea>
+        <linea/>
+        <linea>  unsigned d[] = {0,1,2,3,4,5,6,7,8,9};</linea>
+        <linea>  static const unsigned N = sizeof d/sizeof *d;</linea>
+        <linea>  unsigned long long sum = 0;</linea>
+        <linea/>
+        <linea>  do {</linea>
+        <linea>    if (   (d[1]*100 + d[2]*10 + d[3]) % 2 == 0</linea>
+        <linea>        &amp;&amp; (d[2]*100 + d[3]*10 + d[4]) % 3 == 0</linea>
+        <linea>        &amp;&amp; (d[3]*100 + d[4]*10 + d[5]) % 5 == 0</linea>
+        <linea>        &amp;&amp; (d[4]*100 + d[5]*10 + d[6]) % 7 == 0</linea>
+        <linea>        &amp;&amp; (d[5]*100 + d[6]*10 + d[7]) % 11 == 0</linea>
+        <linea>        &amp;&amp; (d[6]*100 + d[7]*10 + d[8]) % 13 == 0</linea>
+        <linea>        &amp;&amp; (d[7]*100 + d[8]*10 + d[9]) % 17 == 0) {</linea>
+        <linea>      unsigned long long p = 1;</linea>
+        <linea>      for (unsigned i = 0; i &lt; N; i++) {</linea>
+        <linea>        sum += d[N-i-1]*p;</linea>
+        <linea>        p *= 10;</linea>
+        <linea>      }</linea>
+        <linea>    }</linea>
+        <linea>  } while (next_permutation(d, d+N));</linea>
+        <linea/>
+        <linea>  cout &lt;&lt; sum &lt;&lt; endl;</linea>
+        <linea/>
+        <linea>  return 0;</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>Python</lenguaje>
+      <nivel_sol>3</nivel_sol>
+      <codigo>
+        <linea>from combinatorics import permutations</linea>
+        <linea/>
+        <linea>def num(l):</linea>
+        <linea>    s = 0</linea>
+        <linea>    for n in l: s = s * 10 + n</linea>
+        <linea>    return s</linea>
+        <linea/>
+        <linea>def subdiv(l, n): return num(l) % n == 0</linea>
+        <linea/>
+        <linea>total = 0</linea>
+        <linea>for perm in permutations((0,1,2,3,4,6,7,8,9)):</linea>
+        <linea>    perm.insert(5, 5)               # d6 must be 5</linea>
+        <linea>    if (subdiv(perm[7:10], 17) and</linea>
+        <linea>        subdiv(perm[6:9],  13) and</linea>
+        <linea>        subdiv(perm[5:8],  11) and</linea>
+        <linea>        subdiv(perm[4:7],   7) and</linea>
+        <linea>        subdiv(perm[3:6],   5) and</linea>
+        <linea>        subdiv(perm[2:5],   3) and</linea>
+        <linea>        subdiv(perm[1:4],   2)):</linea>
+        <linea>            total += num(perm)</linea>
+        <linea/>
+        <linea>print total</linea>
+      </codigo>
+    </solucion>
+  </ejercicio>
+  <ejercicio id="e44">
+    <enunciado>&lt;p&gt;Los números pentagonales se generan a partir de la fórmula P&lt;sub&gt;&lt;var&gt;n&lt;/var&gt;&lt;/sub&gt;=&lt;var&gt;n&lt;/var&gt;(3&lt;var&gt;n&lt;/var&gt;−1)/2. Los diez primeros números pentagonales son:&lt;/p&gt;&lt;p style="text-align:center;"&gt;1, 5, 12, 22, 35, 51, 70, 92, 117, 145, ...&lt;/p&gt;&lt;p&gt;Se observa que P&lt;sub&gt;4&lt;/sub&gt; + P&lt;sub&gt;7&lt;/sub&gt; = 22 + 70 = 92 = P&lt;sub&gt;8&lt;/sub&gt;. No obstante, su diferencia, 70 − 22 = 48, no es pentagonal.&lt;/p&gt;&lt;p&gt;Encuentra el par de números pentagonales, P&lt;sub&gt;&lt;var&gt;j&lt;/var&gt;&lt;/sub&gt; y P&lt;sub&gt;&lt;var&gt;k&lt;/var&gt;&lt;/sub&gt;, para los cuales tanto su suma como su diferencia es un número pentagonal y además and D = |P&lt;sub&gt;&lt;var&gt;k&lt;/var&gt;&lt;/sub&gt; − P&lt;sub&gt;&lt;var&gt;j&lt;/var&gt;&lt;/sub&gt;| sea un mínimo; ¿cuál es el valor de D?&lt;/p&gt;</enunciado>
+    <nivel_en>3</nivel_en>
+    <orientadoALenguaje>true</orientadoALenguaje>
+    <solucion>
+      <lenguaje>Java</lenguaje>
+      <nivel_sol>4</nivel_sol>
+      <codigo>
+        <linea>public final class e44 {</linea>
+        <linea>	</linea>
+        <linea>	public static void main(String[] args) {</linea>
+        <linea>		System.out.println(new e44().run());</linea>
+        <linea>	}</linea>
+        <linea>	</linea>
+        <linea>	public String run() {</linea>
+        <linea>		long minD = -1;</linea>
+        <linea>		for (int i = 2; ; i++) {</linea>
+        <linea>			long pentI = pentagonalNumber(i);</linea>
+        <linea>			// Si el siguiente número inferior es mayor que la diferencia encontrada, finalizar la búsqueda</linea>
+        <linea>			if (minD != -1 &amp;&amp; pentI - pentagonalNumber(i - 1) &gt; minD)</linea>
+        <linea>				break;</linea>
+        <linea>			</linea>
+        <linea>			for (int j = i - 1; j &gt;= 1; j--) {</linea>
+        <linea>				long pentJ = pentagonalNumber(j);</linea>
+        <linea>				long diff = pentI - pentJ;</linea>
+        <linea>				if (minD != -1 &amp;&amp; diff &gt;= minD)</linea>
+        <linea>					break;</linea>
+        <linea>				else if (isPentagonalNumber(pentI + pentJ) &amp;&amp; isPentagonalNumber(diff) &amp;&amp; (minD == -1 || diff &lt; minD))</linea>
+        <linea>					minD = diff;  // Encontrada diferencia menor</linea>
+        <linea>			}</linea>
+        <linea>		}</linea>
+        <linea>		return Long.toString(minD);</linea>
+        <linea>	}</linea>
+        <linea>	</linea>
+        <linea>	private static long pentagonalNumber(int x) {</linea>
+        <linea>		if (x &lt;= 0)</linea>
+        <linea>			throw new IllegalArgumentException();</linea>
+        <linea>		return (long)x * (x * 3 - 1) &gt;&gt;&gt; 1;</linea>
+        <linea>	}</linea>
+        <linea>	</linea>
+        <linea>	private static boolean isPentagonalNumber(long y) {</linea>
+        <linea>		if (y &lt;= 0)</linea>
+        <linea>			return false;</linea>
+        <linea>		</linea>
+        <linea>		/* </linea>
+        <linea>		 * Si y = pentagonalNumber(x) = x(3x-1) / 2,</linea>
+        <linea>		 * entonces por la fórmula cuadrática, la solución positiva es x = (sqrt(24y + 1) + 1) / 6.</linea>
+        <linea>		 * Existe una solución para x si y sólo si ambas de estas condiciones se cumplen:</linea>
+        <linea>		 * (24y + 1) es un cuadrado perfecto, y sqrt(24y + 1) + 1 mod 6 = 0.</linea>
+        <linea>		 * La segunda condición es equivalente a sqrt(24y + 1) = 5 mod 6.</linea>
+        <linea>		 */</linea>
+        <linea>		long temp = y * 24 + 1;</linea>
+        <linea>		long sqrt = Library.sqrt(temp);</linea>
+        <linea>		return sqrt * sqrt == temp &amp;&amp; sqrt % 6 == 5;</linea>
+        <linea>	}	</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>C</lenguaje>
+      <nivel_sol>4</nivel_sol>
+      <codigo>
+        <linea>#include &lt;stdio.h&gt;</linea>
+        <linea>#include &lt;limits.h&gt;</linea>
+        <linea>#include &lt;math.h&gt;</linea>
+        <linea/>
+        <linea>#define N 10000</linea>
+        <linea/>
+        <linea>static unsigned pentagonal(unsigned n);</linea>
+        <linea>static int is_pentagonal(unsigned n);</linea>
+        <linea/>
+        <linea>int main(void)</linea>
+        <linea>{</linea>
+        <linea>  unsigned i, j;</linea>
+        <linea>  unsigned min = UINT_MAX;</linea>
+        <linea>  for (i = 1; i &lt; N; i++) {</linea>
+        <linea>    for (j = i; j &lt; N; j++) {</linea>
+        <linea>      unsigned k = pentagonal(i);</linea>
+        <linea>      unsigned l = pentagonal(j);</linea>
+        <linea>      if (is_pentagonal(k+l) &amp;&amp; is_pentagonal(l-k)) {</linea>
+        <linea>        if (l-k &lt; min) {</linea>
+        <linea>          min = l-k;</linea>
+        <linea>        }</linea>
+        <linea>      }</linea>
+        <linea>    }</linea>
+        <linea>  }</linea>
+        <linea>  printf("%u\n", min);</linea>
+        <linea/>
+        <linea>  return 0;</linea>
+        <linea>}</linea>
+        <linea/>
+        <linea>unsigned pentagonal(unsigned n)</linea>
+        <linea>{</linea>
+        <linea>  return n*(3*n-1)/2;</linea>
+        <linea>}</linea>
+        <linea/>
+        <linea>int is_pentagonal(unsigned n)</linea>
+        <linea>{</linea>
+        <linea>  unsigned sq = sqrt(1+24*n);</linea>
+        <linea>  return sq*sq == 1+24*n &amp;&amp; (1+sq) % 6 == 0;</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>Python</lenguaje>
+      <nivel_sol>3</nivel_sol>
+      <codigo>
+        <linea>MAX = 2000</linea>
+        <linea>pent = [ n * (3*n - 1) / 2 for n in xrange(1, 2*MAX) ]</linea>
+        <linea>pdic = dict.fromkeys(pent)</linea>
+        <linea/>
+        <linea>def main2():</linea>
+        <linea>    for j in xrange(0, MAX):</linea>
+        <linea>        for k in xrange(j+1, 2*MAX-1):</linea>
+        <linea>            p_j = pent[j]</linea>
+        <linea>            p_k = pent[k]</linea>
+        <linea>            p_sum = p_j + p_k</linea>
+        <linea>            p_diff = p_k - p_j</linea>
+        <linea>            if pdic.has_key(p_sum) and pdic.has_key(p_diff):</linea>
+        <linea>                return p_diff</linea>
+        <linea/>
+        <linea>print main2()</linea>
+      </codigo>
+    </solucion>
+  </ejercicio>
+  <ejercicio id="e45">
+    <enunciado>&lt;p&gt;Los números triangulares, pentagonales y hexagonales se generan a partir de las fórmulas siguientes:&lt;/p&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td&gt;Triangular&lt;/td&gt;&lt;td&gt;&amp;nbsp;&lt;/td&gt;&lt;td&gt;T&lt;sub&gt;&lt;i&gt;n&lt;/i&gt;&lt;/sub&gt;=&lt;i&gt;n&lt;/i&gt;(&lt;i&gt;n&lt;/i&gt;+1)/2&lt;/td&gt;&lt;td&gt;&amp;nbsp;&lt;/td&gt;&lt;td&gt;1, 3, 6, 10, 15, ...&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Pentagonal&lt;/td&gt;&lt;td&gt;&amp;nbsp;&lt;/td&gt;&lt;td&gt;P&lt;sub&gt;&lt;i&gt;n&lt;/i&gt;&lt;/sub&gt;=&lt;i&gt;n&lt;/i&gt;(3&lt;i&gt;n&lt;/i&gt;−1)/2&lt;/td&gt;&lt;td&gt;&amp;nbsp;&lt;/td&gt;&lt;td&gt;1, 5, 12, 22, 35, ...&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Hexagonal&lt;/td&gt;&lt;td&gt;&amp;nbsp;&lt;/td&gt;&lt;td&gt;H&lt;sub&gt;&lt;i&gt;n&lt;/i&gt;&lt;/sub&gt;=&lt;i&gt;n&lt;/i&gt;(2&lt;i&gt;n&lt;/i&gt;−1)&lt;/td&gt;&lt;td&gt;&amp;nbsp;&lt;/td&gt;&lt;td&gt;1, 6, 15, 28, 45, ...&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;p&gt;Puede verificarse que T&lt;sub&gt;285&lt;/sub&gt; = P&lt;sub&gt;165&lt;/sub&gt; = H&lt;sub&gt;143&lt;/sub&gt; = 40755.&lt;/p&gt;&lt;p&gt;Encuentra el siguiente número triangular que sea también pentagonal y hexagonal.&lt;/p&gt;</enunciado>
+    <nivel_en>3</nivel_en>
+    <orientadoALenguaje>true</orientadoALenguaje>
+    <solucion>
+      <lenguaje>Java</lenguaje>
+      <nivel_sol>3</nivel_sol>
+      <codigo>
+        <linea>public final class e45 {</linea>
+        <linea>	</linea>
+        <linea>	public static void main(String[] args) {</linea>
+        <linea>		System.out.println(new e45().run());</linea>
+        <linea>	}</linea>
+        <linea>	</linea>
+        <linea>	public String run() {</linea>
+        <linea>		int i = 286;</linea>
+        <linea>		int j = 166;</linea>
+        <linea>		int k = 144;</linea>
+        <linea>		while (true) {</linea>
+        <linea>			long triangle = (long)i * (i + 1) / 2;</linea>
+        <linea>			long pentagon = (long)j * (j * 3 - 1) / 2;</linea>
+        <linea>			long hexagon  = (long)k * (k * 2 - 1);</linea>
+        <linea>			long min = Math.min(Math.min(triangle, pentagon), hexagon);</linea>
+        <linea>			if (min == triangle &amp;&amp; min == pentagon &amp;&amp; min == hexagon)</linea>
+        <linea>				return Long.toString(min);</linea>
+        <linea>			if (min == triangle) i++;</linea>
+        <linea>			if (min == pentagon) j++;</linea>
+        <linea>			if (min == hexagon ) k++;</linea>
+        <linea>		}</linea>
+        <linea>	}</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>C</lenguaje>
+      <nivel_sol>3</nivel_sol>
+      <codigo>
+        <linea>#include &lt;stdio.h&gt;</linea>
+        <linea>#include &lt;math.h&gt;</linea>
+        <linea></linea>
+        <linea>int is_triangle(unsigned long long n);</linea>
+        <linea>int is_pentagonal(unsigned long long n);</linea>
+        <linea>unsigned long long hexagonal(unsigned long long n);</linea>
+        <linea></linea>
+        <linea>int main(void)</linea>
+        <linea>{</linea>
+        <linea>  unsigned long long h, i;</linea>
+        <linea>  for (i = 144; !(is_pentagonal(h = hexagonal(i)) &amp;&amp; is_triangle(h)); i++)</linea>
+        <linea>    ;</linea>
+        <linea>  printf("%llu\n", h);</linea>
+        <linea>  return 0;</linea>
+        <linea>}</linea>
+        <linea></linea>
+        <linea>int is_triangle(unsigned long long n)</linea>
+        <linea>{</linea>
+        <linea>  unsigned long long sq = sqrt(1+8*n);</linea>
+        <linea>  return sq*sq == 1+8*n &amp;&amp; (sq-1) % 2 == 0;</linea>
+        <linea>}</linea>
+        <linea></linea>
+        <linea>int is_pentagonal(unsigned long long n)</linea>
+        <linea>{</linea>
+        <linea>  unsigned long long sq = sqrt(1+24*n);</linea>
+        <linea>  return sq*sq == 1+24*n &amp;&amp; (1+sq) % 6 == 0;</linea>
+        <linea>}</linea>
+        <linea></linea>
+        <linea>unsigned long long hexagonal(unsigned long long n)</linea>
+        <linea>{</linea>
+        <linea>  return n*(2*n-1);</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>Python</lenguaje>
+      <nivel_sol>3</nivel_sol>
+      <codigo>
+        <linea>MAX = 100000</linea>
+        <linea>triangle = [ n * (  n + 1) / 2 for n in xrange(0, MAX) ]</linea>
+        <linea>pentagon = [ n * (3*n - 1) / 2 for n in xrange(0, MAX) ]</linea>
+        <linea>hexagon  = [ n * (2*n - 1)     for n in xrange(0, MAX) ]</linea>
+        <linea>pentagon_dict = dict.fromkeys(pentagon, 1)</linea>
+        <linea>hexagon_dict  = dict.fromkeys(hexagon, 1)</linea>
+        <linea></linea>
+        <linea>for t in xrange(286, MAX):</linea>
+        <linea>    v = triangle[t]</linea>
+        <linea>    if pentagon_dict.has_key(v) and hexagon_dict.has_key(v):</linea>
+        <linea>        print v</linea>
+        <linea>        break</linea>
+      </codigo>
+    </solucion>
+  </ejercicio>
+</ejercicios>

@@ -1,0 +1,488 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ejercicios xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../preguntas.xsd">
+  <ejercicio id="e26">
+    <enunciado>&lt;p&gt;Una fracción unitaria es aquella que tiene un 1 en el numerador. Mostramos la representación decimal de las fracciones unitarias con denominadores del 2 al 10:&lt;/p&gt;&lt;blockquote&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td&gt;&lt;sup&gt;1&lt;/sup&gt;/&lt;sub&gt;2&lt;/sub&gt;&lt;/td&gt;&lt;td&gt;=&amp;nbsp;&lt;/td&gt;&lt;td&gt;0.5&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;sup&gt;1&lt;/sup&gt;/&lt;sub&gt;3&lt;/sub&gt;&lt;/td&gt;&lt;td&gt;=&amp;nbsp;&lt;/td&gt;&lt;td&gt;0.(3)&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;sup&gt;1&lt;/sup&gt;/&lt;sub&gt;4&lt;/sub&gt;&lt;/td&gt;&lt;td&gt;=&amp;nbsp;&lt;/td&gt;&lt;td&gt;0.25&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;sup&gt;1&lt;/sup&gt;/&lt;sub&gt;5&lt;/sub&gt;&lt;/td&gt;&lt;td&gt;=&amp;nbsp;&lt;/td&gt;&lt;td&gt;0.2&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;sup&gt;1&lt;/sup&gt;/&lt;sub&gt;6&lt;/sub&gt;&lt;/td&gt;&lt;td&gt;=&amp;nbsp;&lt;/td&gt;&lt;td&gt;0.1(6)&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;sup&gt;1&lt;/sup&gt;/&lt;sub&gt;7&lt;/sub&gt;&lt;/td&gt;&lt;td&gt;=&amp;nbsp;&lt;/td&gt;&lt;td&gt;0.(142857)&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;sup&gt;1&lt;/sup&gt;/&lt;sub&gt;8&lt;/sub&gt;&lt;/td&gt;&lt;td&gt;=&amp;nbsp;&lt;/td&gt;&lt;td&gt;0.125&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;sup&gt;1&lt;/sup&gt;/&lt;sub&gt;9&lt;/sub&gt;&lt;/td&gt;&lt;td&gt;=&amp;nbsp;&lt;/td&gt;&lt;td&gt;0.(1)&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;sup&gt;1&lt;/sup&gt;/&lt;sub&gt;10&lt;/sub&gt;&lt;/td&gt;&lt;td&gt;=&amp;nbsp;&lt;/td&gt;&lt;td&gt;0.1&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/blockquote&gt;&lt;p&gt;Donde 0.1(6) significa 0.166666..., y tiene 1 dígito periódico. Se observa que &lt;sup&gt;1&lt;/sup&gt;/&lt;sub&gt;7&lt;/sub&gt; tiene 6 dígitos periódicos.&lt;/p&gt;&lt;p&gt;Encuentra el valor &lt;i&gt;d&lt;/i&gt; &amp;lt; 1000 para el cual &lt;sup&gt;1&lt;/sup&gt;/&lt;sub&gt;&lt;i&gt;d&lt;/i&gt;&lt;/sub&gt; contiene el mayor número de dígitos periódicos en su representación decimal de la fracción.&lt;/p&gt;</enunciado>
+    <nivel_en>2</nivel_en>
+    <orientadoALenguaje>true</orientadoALenguaje>
+    <solucion>
+      <lenguaje>Java</lenguaje>
+      <nivel_sol>2</nivel_sol>
+      <codigo>
+        <linea>import java.util.HashMap;</linea>
+        <linea>import java.util.Map;</linea>
+        <linea/>
+        <linea>public final class e26 {</linea>
+        <linea>	</linea>
+        <linea>	public static void main(String[] args) {</linea>
+        <linea>		System.out.println(new e26().run());</linea>
+        <linea>	}</linea>
+        <linea>	</linea>
+        <linea>	public String run() {</linea>
+        <linea>		int bestNumber = 0;</linea>
+        <linea>		int bestLength = 0;</linea>
+        <linea>		for (int i = 1; i &lt;= 1000; i++) {</linea>
+        <linea>			int len = getCycleLength(i);</linea>
+        <linea>			if (len &gt; bestLength) {</linea>
+        <linea>				bestNumber = i;</linea>
+        <linea>				bestLength = len;</linea>
+        <linea>			}</linea>
+        <linea>		}</linea>
+        <linea>		return Integer.toString(bestNumber);</linea>
+        <linea>	}</linea>
+        <linea>		</linea>
+        <linea>	private static int getCycleLength(int n) {</linea>
+        <linea>		Map&lt;Integer,Integer&gt; stateToIter = new HashMap&lt;Integer,Integer&gt;();</linea>
+        <linea>		int state = 1;</linea>
+        <linea>		int iter = 0;</linea>
+        <linea>		while (!stateToIter.containsKey(state)) {</linea>
+        <linea>			stateToIter.put(state, iter);</linea>
+        <linea>			state = state * 10 % n;</linea>
+        <linea>			iter++;</linea>
+        <linea>		}</linea>
+        <linea>		return iter - stateToIter.get(state);</linea>
+        <linea>	}	</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>C</lenguaje>
+      <nivel_sol>3</nivel_sol>
+      <codigo>
+        <linea>#include &lt;stdio.h&gt;</linea>
+        <linea>#include &lt;gmp.h&gt;</linea>
+        <linea/>
+        <linea>#define M 1000</linea>
+        <linea/>
+        <linea>int main(void)</linea>
+        <linea>{</linea>
+        <linea>  mpz_t p, r;</linea>
+        <linea>  unsigned maxlen = 0, imax = 0;</linea>
+        <linea>  unsigned i;</linea>
+        <linea/>
+        <linea>  mpz_init(p); mpz_init(r);</linea>
+        <linea/>
+        <linea>  for (i = 2; i &lt; M; i++) {</linea>
+        <linea>    unsigned len = 1;</linea>
+        <linea/>
+        <linea>    if (i % 2 == 0 || i % 5 == 0) {</linea>
+        <linea>      continue;</linea>
+        <linea>    }</linea>
+        <linea/>
+        <linea>    mpz_set_ui(p, 10);</linea>
+        <linea>    while (mpz_mod_ui(r, p, i), mpz_cmp_ui(r, 1) != 0) {</linea>
+        <linea>      len++;</linea>
+        <linea>      mpz_mul_ui(p, p, 10);</linea>
+        <linea>    }</linea>
+        <linea>    if (len &gt; maxlen) {</linea>
+        <linea>      maxlen = len;</linea>
+        <linea>      imax = i;</linea>
+        <linea>    }</linea>
+        <linea>  }</linea>
+        <linea>  printf("%u\n", imax);</linea>
+        <linea/>
+        <linea>  mpz_clear(p);</linea>
+        <linea>  mpz_clear(r);</linea>
+        <linea/>
+        <linea>  return 0;</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>Python</lenguaje>
+      <nivel_sol>4</nivel_sol>
+      <codigo>
+        <linea>def cycle_length(n):</linea>
+        <linea>    i = 1</linea>
+        <linea>    if n % 2 == 0: return cycle_length(n / 2)</linea>
+        <linea>    if n % 5 == 0: return cycle_length(n / 5)</linea>
+        <linea>    while True:</linea>
+        <linea>        if (pow(10, i) - 1) % n == 0: return i</linea>
+        <linea>        else: i = i + 1</linea>
+        <linea/>
+        <linea>m = 0</linea>
+        <linea>n = 0</linea>
+        <linea>for d in xrange(1,1000):</linea>
+        <linea>    c = cycle_length(d)</linea>
+        <linea>    if c &gt; m:</linea>
+        <linea>        m = c</linea>
+        <linea>        n = d</linea>
+        <linea/>
+        <linea>print n</linea>
+      </codigo>
+    </solucion>
+  </ejercicio>
+  <ejercicio id="e27">
+    <enunciado>&lt;p&gt;Euler descubrión la extraordinaria fórmula cuadrática:&lt;/p&gt;&lt;p style="text-align:center;"&gt;&lt;i&gt;n&lt;/i&gt;² + &lt;i&gt;n&lt;/i&gt; + 41&lt;/p&gt;&lt;p&gt;Resulta que esta fórmula producirá 40 primos para los valores consecutivos de &lt;span style="font-style: italic;"&gt;n&lt;/span&gt; = 0 a 39. No obstante, cuando&lt;i&gt; n&lt;/i&gt; = 40, 40&lt;sup&gt;2&lt;/sup&gt; + 40 + 41 = 40(40 + 1) + 41 es divisible entre 41, y definitivamente cuando &lt;i&gt;n&lt;/i&gt; = 41, 41² + 41 + 41 también es claramente divisible entre 41.&lt;/p&gt;&lt;p&gt;La increible fórmula &lt;i&gt;n&lt;/i&gt;² − 79&lt;i&gt;n&lt;/i&gt; + 1601 fue descubierta, la cual produce 80 primos para los valores consecutivos de &lt;i&gt;n&lt;/i&gt; = 0 a 79. El producto de los coeficientes de esta fórmula, −79 y 1601, es −126479.&lt;/p&gt;&lt;p&gt;Considerando cuadráticas de la forma:&lt;/p&gt;&lt;blockquote&gt;&lt;i&gt;n&lt;/i&gt;² + &lt;i&gt;an&lt;/i&gt; + &lt;i&gt;b&lt;/i&gt;, donde |&lt;i&gt;a&lt;/i&gt;| &amp;lt; 1000 y |&lt;i&gt;b&lt;/i&gt;| &amp;lt; 1000&lt;br&gt;&lt;br&gt;&lt;div class="info" style="text-align:left;"&gt;donde |&lt;i&gt;n&lt;/i&gt;| es el valor absoluto de&lt;i&gt; n&lt;/i&gt;&lt;br&gt;e.g. |11| = 11 y |−4| = 4&lt;/div&gt;&lt;/blockquote&gt;&lt;p&gt;Encuentra el producto de los coeficientes, &lt;i&gt;a&lt;/i&gt; y &lt;i&gt;b&lt;/i&gt;, para la expresión cuadrática que produce el mayor número de primos para valores consecutivos de &lt;span style="font-style: italic;"&gt;n&lt;/span&gt;, empezando con &lt;i&gt;n&lt;/i&gt; = 0.&lt;/p&gt;</enunciado>
+    <nivel_en>2</nivel_en>
+    <orientadoALenguaje>true</orientadoALenguaje>
+    <solucion>
+      <lenguaje>C</lenguaje>
+      <nivel_sol>1</nivel_sol>
+      <codigo>
+        <linea>public final class e27 {</linea>
+        <linea>	</linea>
+        <linea>	public static void main(String[] args) {</linea>
+        <linea>		System.out.println(new e27().run());</linea>
+        <linea>	}</linea>
+        <linea>	</linea>
+        <linea>	public String run() {</linea>
+        <linea>		int bestNum = 0;</linea>
+        <linea>		int bestA = 0;</linea>
+        <linea>		int bestB = 0;</linea>
+        <linea>		for (int a = -1000; a &lt;= 1000; a++) {</linea>
+        <linea>			for (int b = -1000; b &lt;= 1000; b++) {</linea>
+        <linea>				int num = numberOfConsecutivePrimesGenerated(a, b);</linea>
+        <linea>				if (num &gt; bestNum) {</linea>
+        <linea>					bestNum = num;</linea>
+        <linea>					bestA = a;</linea>
+        <linea>					bestB = b;</linea>
+        <linea>				}</linea>
+        <linea>			}</linea>
+        <linea>		}</linea>
+        <linea>		return Integer.toString(bestA * bestB);</linea>
+        <linea>	}</linea>
+        <linea>	</linea>
+        <linea>	private static int numberOfConsecutivePrimesGenerated(int a, int b) {</linea>
+        <linea>		for (int i = 0; ; i++) {</linea>
+        <linea>			int n = i * i + i * a + b;</linea>
+        <linea>			if (n &lt; 0 || !Library.isPrime(n))</linea>
+        <linea>				return i;</linea>
+        <linea>		}</linea>
+        <linea>	}	</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>C</lenguaje>
+      <nivel_sol>1</nivel_sol>
+      <codigo>
+        <linea>#include &lt;stdio.h&gt;</linea>
+        <linea>#include &lt;math.h&gt;</linea>
+        <linea/>
+        <linea>static int is_prime(int n);</linea>
+        <linea/>
+        <linea>int main(void)</linea>
+        <linea>{</linea>
+        <linea>  int a, b, n;</linea>
+        <linea>  int nmax = 0, amax = 0, bmax = 0;</linea>
+        <linea/>
+        <linea>  for (a = -999; a &lt; 1000; a++) {</linea>
+        <linea>    for (b = -999; b &lt; 1000; b++) {</linea>
+        <linea>      for (n = 0; is_prime(n*n + a*n + b); n++);</linea>
+        <linea>      if (n &gt; nmax) {</linea>
+        <linea>        nmax = n;</linea>
+        <linea>        amax = a;</linea>
+        <linea>        bmax = b;</linea>
+        <linea>      }</linea>
+        <linea>    }</linea>
+        <linea>  }</linea>
+        <linea>  printf("%d\n", amax * bmax);</linea>
+        <linea/>
+        <linea>  return 0;</linea>
+        <linea>}</linea>
+        <linea/>
+        <linea>int is_prime(int n)</linea>
+        <linea>{</linea>
+        <linea>  int i;</linea>
+        <linea/>
+        <linea>  if (n &lt;= 1) {</linea>
+        <linea>    return 0;</linea>
+        <linea>  }</linea>
+        <linea>  if (n == 2) {</linea>
+        <linea>    return 1;</linea>
+        <linea>  }</linea>
+        <linea/>
+        <linea>  for (i = 2; i &lt; sqrt((double)n); i++) {</linea>
+        <linea>    if (n % i == 0) {</linea>
+        <linea>      return 0;</linea>
+        <linea>    }</linea>
+        <linea>  }</linea>
+        <linea>  return 1;</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>Python</lenguaje>
+      <nivel_sol>1</nivel_sol>
+      <codigo>
+        <linea>import prime</linea>
+        <linea/>
+        <linea>max_pair = (0,0,0)</linea>
+        <linea>for a in xrange(-999, 1000):</linea>
+        <linea>    for b in xrange(max(2, 1-a), 1000): # b &gt;= 2, a + b + 1 &gt;= 2</linea>
+        <linea>        n, count = 0, 0</linea>
+        <linea>        while True:</linea>
+        <linea>            v = n*n + a*n + b</linea>
+        <linea>            prime._refresh(v)</linea>
+        <linea>            if prime.isprime(v): count = count + 1</linea>
+        <linea>            else: break</linea>
+        <linea>            n = n + 1</linea>
+        <linea>        if count &gt; max_pair[2]:</linea>
+        <linea>            max_pair = (a,b,count)</linea>
+        <linea/>
+        <linea>print max_pair[0] * max_pair[1]</linea>
+      </codigo>
+    </solucion>
+  </ejercicio>
+  <ejercicio id="e28">
+    <enunciado>&lt;p&gt;Comenzando por el número 1 y moviéndose hacia la derecha en el sentido de las agujas del reloj se forma una espiral de 5 por 5 como la siguiente:&lt;/p&gt;&lt;p style="text-align:center;font-family:courier new;"&gt;&lt;span style="color:#ff0000;font-family:courier new;"&gt;&lt;b&gt;21&lt;/b&gt;&lt;/span&gt; 22 23 24 &lt;span style="color:#ff0000;font-family:courier new;"&gt;&lt;b&gt;25&lt;/b&gt;&lt;/span&gt;&lt;br&gt;20 &amp;nbsp;&lt;span style="color:#ff0000;font-family:courier new;"&gt;&lt;b&gt;7&lt;/b&gt;&lt;/span&gt; &amp;nbsp;8 &amp;nbsp;&lt;span style="color:#ff0000;font-family:courier new;"&gt;&lt;b&gt;9&lt;/b&gt;&lt;/span&gt; 10&lt;br&gt;19 &amp;nbsp;6 &amp;nbsp;&lt;span style="color:#ff0000;font-family:courier new;"&gt;&lt;b&gt;1&lt;/b&gt;&lt;/span&gt; &amp;nbsp;2 11&lt;br&gt;18 &amp;nbsp;&lt;span style="color:#ff0000;font-family:courier new;"&gt;&lt;b&gt;5&lt;/b&gt;&lt;/span&gt; &amp;nbsp;4 &amp;nbsp;&lt;span style="color:#ff0000;font-family:courier new;"&gt;&lt;b&gt;3&lt;/b&gt;&lt;/span&gt; 12&lt;br&gt;&lt;span style="color:#ff0000;font-family:courier new;"&gt;&lt;b&gt;17&lt;/b&gt;&lt;/span&gt; 16 15 14 &lt;span style="color:#ff0000;font-family:courier new;"&gt;&lt;b&gt;13&lt;/b&gt;&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Puede comprobarse que la suma de los números de las diagonales es 101.&lt;/p&gt;&lt;p&gt;¿Cuál es la suma de los números de las diagonales en una espiral de 1001 por 1001 creada de la misma forma?&lt;/p&gt;</enunciado>
+    <nivel_en>2</nivel_en>
+    <orientadoALenguaje>true</orientadoALenguaje>
+    <solucion>
+      <lenguaje>Java</lenguaje>
+      <nivel_sol>1</nivel_sol>
+      <codigo>
+        <linea>public final class e28 {</linea>
+        <linea>	</linea>
+        <linea>	public static void main(String[] args) {</linea>
+        <linea>		System.out.println(new e28().run());</linea>
+        <linea>	}</linea>
+        <linea>	</linea>
+        <linea>	/* </linea>
+        <linea>	 * Observando el diagrama no es difícil darse cuenta de que, en un cuadrado n * n (donde</linea>
+        <linea>	 * n es impar), el valor de la esquina superior derecha del cuadrado siempre es n^2.</linea>
+        <linea>	 * Trabajando en contra de las agujas del reloj (hacia atrás), la esquina superior izquierda</linea>
+        <linea>	 * tiene un valor de n^2 - (n - 1), la esquina inferior izquierda de n^2 - 2(n - 1), y la</linea>
+        <linea>	 * esquina inferior derecha de n^2 - 3(n - 1).</linea>
+        <linea>	 * Juntándolo todo, las esquinas exteriores contribuyen con 4n^2 - 6(n - 1) a la suma final.</linea>
+        <linea>	 * </linea>
+        <linea>	 * Consecuentemente, la forma de la suma que debemos calcular es (4m^3 + 3m^2 + 8m - 9) / 6,</linea>
+        <linea>	 * donde m = tamaño.</linea>
+        <linea>	 */</linea>
+        <linea>	private static final int SIZE = 1001;  // Debe ser impar</linea>
+        <linea>	</linea>
+        <linea>	public String run() {</linea>
+        <linea>		long sum = 1;  // Caso especial donde tamaño = 1</linea>
+        <linea>		for (int n = 3; n &lt;= SIZE; n += 2)</linea>
+        <linea>			sum += 4 * n * n - 6 * (n - 1);</linea>
+        <linea>		return Long.toString(sum);</linea>
+        <linea>	}</linea>
+        <linea>	</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>C</lenguaje>
+      <nivel_sol>1</nivel_sol>
+      <codigo>
+        <linea>#include &lt;stdio.h&gt;</linea>
+        <linea/>
+        <linea>#define N 1001</linea>
+        <linea/>
+        <linea>int main(void)</linea>
+        <linea>{</linea>
+        <linea>  int sum = 1, i;</linea>
+        <linea>  for (i = 3; i &lt;= N; i += 2) {</linea>
+        <linea>    sum += 2*(2*i*i - 3*i + 3);</linea>
+        <linea>  }</linea>
+        <linea>  printf("%d\n", sum);</linea>
+        <linea>  return 0;</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>Python</lenguaje>
+      <nivel_sol>1</nivel_sol>
+      <codigo>
+        <linea>diagonal = 1</linea>
+        <linea>start = 1</linea>
+        <linea>for width in xrange(3, 1002, 2):</linea>
+        <linea>    increment = width - 1</linea>
+        <linea>    count = increment * 4</linea>
+        <linea>    diagonal = diagonal + start * 4 + increment * 10</linea>
+        <linea>    start = start + count</linea>
+        <linea/>
+        <linea>print diagonal</linea>
+      </codigo>
+    </solucion>
+  </ejercicio>
+  <ejercicio id="e29">
+    <enunciado>Considera todas las combinaciones de&lt;i&gt; a&lt;/i&gt;&lt;sup&gt;&lt;i&gt;b&lt;/i&gt;&lt;/sup&gt; para 2 ≤ &lt;i&gt;a&lt;/i&gt; ≤ 5 y 2 ≤ &lt;i&gt;b&lt;/i&gt; ≤ 5:&lt;blockquote&gt;2&lt;sup&gt;2&lt;/sup&gt;=4, 2&lt;sup&gt;3&lt;/sup&gt;=8, 2&lt;sup&gt;4&lt;/sup&gt;=16, 2&lt;sup&gt;5&lt;/sup&gt;=32&lt;br&gt;3&lt;sup&gt;2&lt;/sup&gt;=9, 3&lt;sup&gt;3&lt;/sup&gt;=27, 3&lt;sup&gt;4&lt;/sup&gt;=81, 3&lt;sup&gt;5&lt;/sup&gt;=243&lt;br&gt;4&lt;sup&gt;2&lt;/sup&gt;=16, 4&lt;sup&gt;3&lt;/sup&gt;=64, 4&lt;sup&gt;4&lt;/sup&gt;=256, 4&lt;sup&gt;5&lt;/sup&gt;=1024&lt;br&gt;5&lt;sup&gt;2&lt;/sup&gt;=25, 5&lt;sup&gt;3&lt;/sup&gt;=125, 5&lt;sup&gt;4&lt;/sup&gt;=625, 5&lt;sup&gt;5&lt;/sup&gt;=3125&lt;br&gt;&lt;/blockquote&gt;&lt;p&gt;Si se colocan en orden, con todas las repeticiones eliminadas, obtenemos la siguiente secuencia de 15 números distintos:&lt;/p&gt;&lt;p style="text-align:center;"&gt;4, 8, 9, 16, 25, 27, 32, 64, 81, 125, 243, 256, 625, 1024, 3125&lt;/p&gt;&lt;p&gt;¿Cuántos números distintos hay en la secuencia generada por &lt;i&gt;a&lt;/i&gt;&lt;sup&gt;&lt;i&gt;b&lt;/i&gt;&lt;/sup&gt; cuando 2 ≤ &lt;i&gt;a&lt;/i&gt; ≤ 100 y 2 ≤ &lt;i&gt;b&lt;/i&gt; ≤ 100?&lt;/p&gt;</enunciado>
+    <nivel_en>2</nivel_en>
+    <orientadoALenguaje>true</orientadoALenguaje>
+    <solucion>
+      <lenguaje>Java</lenguaje>
+      <nivel_sol>1</nivel_sol>
+      <codigo>
+        <linea>import java.math.BigInteger;</linea>
+        <linea>import java.util.HashSet;</linea>
+        <linea>import java.util.Set;</linea>
+        <linea/>
+        <linea>public final class e29 {</linea>
+        <linea>	</linea>
+        <linea>	public static void main(String[] args) {</linea>
+        <linea>		System.out.println(new e29().run());</linea>
+        <linea>	}	</linea>
+        <linea>	</linea>
+        <linea>	public String run() {</linea>
+        <linea>		Set&lt;BigInteger&gt; generated = new HashSet&lt;BigInteger&gt;();</linea>
+        <linea>		for (int a = 2; a &lt;= 100; a++) {</linea>
+        <linea>			for (int b = 2; b &lt;= 100; b++)</linea>
+        <linea>				generated.add(BigInteger.valueOf(a).pow(b));</linea>
+        <linea>		}</linea>
+        <linea>		return Integer.toString(generated.size());</linea>
+        <linea>	}	</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>C</lenguaje>
+      <nivel_sol>2</nivel_sol>
+      <codigo>
+        <linea>#include &lt;stdio.h&gt;</linea>
+        <linea>#include &lt;stdlib.h&gt;</linea>
+        <linea>#include &lt;gmp.h&gt;</linea>
+        <linea/>
+        <linea>#define N 100</linea>
+        <linea/>
+        <linea>static int compare(const void *a, const void *b);</linea>
+        <linea/>
+        <linea>int main(void)</linea>
+        <linea>{</linea>
+        <linea>  int a, b;</linea>
+        <linea>  int i = 0;</linea>
+        <linea>  int count = 0;</linea>
+        <linea>  mpz_t *nums;</linea>
+        <linea>  mpz_t t;</linea>
+        <linea/>
+        <linea>  mpz_init(t);</linea>
+        <linea/>
+        <linea>  nums = malloc((N-1)*(N-1) * sizeof *nums);</linea>
+        <linea>  for (a = 2; a &lt;= N; a++) {</linea>
+        <linea>    mpz_set_ui(t, a);</linea>
+        <linea>    for (b = 2; b &lt;= N; b++) {</linea>
+        <linea>      mpz_mul_ui(t, t, a);</linea>
+        <linea>      mpz_init(nums[i]);</linea>
+        <linea>      mpz_set(nums[i], t);</linea>
+        <linea>      i++;</linea>
+        <linea>    }</linea>
+        <linea>  }</linea>
+        <linea/>
+        <linea>  qsort(nums, (N-1)*(N-1), sizeof *nums, compare);</linea>
+        <linea/>
+        <linea>  mpz_set_ui(t, 0);</linea>
+        <linea>  for (i = 0; i &lt; (N-1)*(N-1); i++) {</linea>
+        <linea>    if (mpz_cmp(t, nums[i]) != 0) {</linea>
+        <linea>      count++;</linea>
+        <linea>    }</linea>
+        <linea>    mpz_set(t, nums[i]);</linea>
+        <linea>    mpz_clear(nums[i]);</linea>
+        <linea>  }</linea>
+        <linea>  printf("%d\n", count);</linea>
+        <linea/>
+        <linea>  free(nums);</linea>
+        <linea>  mpz_clear(t);</linea>
+        <linea/>
+        <linea>  return 0;</linea>
+        <linea>}</linea>
+        <linea/>
+        <linea>int compare(const void *a, const void *b)</linea>
+        <linea>{</linea>
+        <linea>  return mpz_cmp(*(const mpz_t *)a, *(mpz_t const *)b);</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>Python</lenguaje>
+      <nivel_sol>1</nivel_sol>
+      <codigo>
+        <linea>terms = {}</linea>
+        <linea>count = 0</linea>
+        <linea>for a in xrange(2,101):</linea>
+        <linea>    for b in xrange(2,101):</linea>
+        <linea>        c = pow(a,b)</linea>
+        <linea>        if not terms.get(c, 0):</linea>
+        <linea>            terms[c] = 1</linea>
+        <linea>            count = count + 1</linea>
+        <linea/>
+        <linea>print count</linea>
+      </codigo>
+    </solucion>
+  </ejercicio>
+  <ejercicio id="e30">
+    <enunciado>&lt;p&gt;Sorprendentemente, sólo hay tres números que pueden ser escritos como la suma de sus dígitos elevados a la cuarta potencia:&lt;/p&gt;&lt;blockquote&gt;1634 = 1&lt;sup&gt;4&lt;/sup&gt; + 6&lt;sup&gt;4&lt;/sup&gt; + 3&lt;sup&gt;4&lt;/sup&gt; + 4&lt;sup&gt;4&lt;/sup&gt;&lt;br&gt;8208 = 8&lt;sup&gt;4&lt;/sup&gt; + 2&lt;sup&gt;4&lt;/sup&gt; + 0&lt;sup&gt;4&lt;/sup&gt; + 8&lt;sup&gt;4&lt;/sup&gt;&lt;br&gt;9474 = 9&lt;sup&gt;4&lt;/sup&gt; + 4&lt;sup&gt;4&lt;/sup&gt; + 7&lt;sup&gt;4&lt;/sup&gt; + 4&lt;sup&gt;4&lt;/sup&gt;&lt;/blockquote&gt;&lt;p class="info"&gt;Como 1 = 1&lt;sup&gt;4&lt;/sup&gt; no es una suma no se incluye.&lt;/p&gt;&lt;p&gt;La suma de estos números es 1634 + 8208 + 9474 = 19316.&lt;/p&gt;&lt;p&gt;Encuentra la suma de todos los números que pueden ser escritos como la suma de sus dígitos elevados a su quinta potencia.&lt;/p&gt;</enunciado>
+    <nivel_en>2</nivel_en>
+    <orientadoALenguaje>true</orientadoALenguaje>
+    <solucion>
+      <lenguaje>Java</lenguaje>
+      <nivel_sol>2</nivel_sol>
+      <codigo>
+        <linea>public final class e30 {</linea>
+        <linea>	</linea>
+        <linea>	public static void main(String[] args) {</linea>
+        <linea>		System.out.println(new e30().run());</linea>
+        <linea>	}</linea>
+        <linea>	</linea>
+        <linea>	public String run() {</linea>
+        <linea>		// Como se apunta en el problema exluimos 1 = 1^5.</linea>
+        <linea>		// Si un número tiene al menos n &gt;= 7 dígitos, entonces incluso si cada dígito es 9,</linea>
+        <linea>		// n * 9^5 es todavía menor que dicho número (que es al menos 10^n).</linea>
+        <linea>		int sum = 0;</linea>
+        <linea>		for (int i = 2; i &lt; 1000000; i++) {</linea>
+        <linea>			if (i == fifthPowerDigitSum(i))</linea>
+        <linea>				sum += i;</linea>
+        <linea>		}</linea>
+        <linea>		return Integer.toString(sum);</linea>
+        <linea>	}</linea>
+        <linea>	</linea>
+        <linea>	private static int fifthPowerDigitSum(int x) {</linea>
+        <linea>		int sum = 0;</linea>
+        <linea>		while (x != 0) {</linea>
+        <linea>			int y = x % 10;</linea>
+        <linea>			sum += y * y * y * y * y;</linea>
+        <linea>			x /= 10;</linea>
+        <linea>		}</linea>
+        <linea>		return sum;</linea>
+        <linea>	}	</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>C</lenguaje>
+      <nivel_sol>3</nivel_sol>
+      <codigo>
+        <linea>#include &lt;stdio.h&gt;</linea>
+        <linea>#include &lt;math.h&gt;</linea>
+        <linea></linea>
+        <linea>#define M 1000000</linea>
+        <linea>#define E 5</linea>
+        <linea></linea>
+        <linea>int main(void)</linea>
+        <linea>{</linea>
+        <linea>  char buf[16];</linea>
+        <linea>  int i;</linea>
+        <linea>  int ttl = 0;</linea>
+        <linea>  for (i = 10; i &lt; M; i++) {</linea>
+        <linea>    int sum = 0, j;</linea>
+        <linea></linea>
+        <linea>    snprintf(buf, sizeof buf, "%d", i);</linea>
+        <linea>    for (j = 0; buf[j]; j++) {</linea>
+        <linea>      sum += pow(buf[j]-'0', E);</linea>
+        <linea>    }</linea>
+        <linea>    if (i == sum) {</linea>
+        <linea>      ttl += i;</linea>
+        <linea>    }</linea>
+        <linea>  }</linea>
+        <linea>  printf("%d\n", ttl);</linea>
+        <linea>  return 0;</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>Python</lenguaje>
+      <nivel_sol>4</nivel_sol>
+      <codigo>
+        <linea>def power_of_digits(n, p):</linea>
+        <linea>    s = 0</linea>
+        <linea>    while n &gt; 0:</linea>
+        <linea>        d = n % 10</linea>
+        <linea>        n = n / 10</linea>
+        <linea>        s = s + pow(d, p)</linea>
+        <linea>    return s</linea>
+        <linea></linea>
+        <linea></linea>
+        <linea>print sum(n for n in xrange(2, 200000) if power_of_digits(n, 5) == n)</linea>
+      </codigo>
+    </solucion>
+  </ejercicio>
+</ejercicios>

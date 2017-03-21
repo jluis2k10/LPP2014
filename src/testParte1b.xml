@@ -1,0 +1,553 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ejercicios xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:noNamespaceSchemaLocation="preguntas.xsd">
+  <ejercicio id="e01">
+    <enunciado>&lt;p&gt;Los números naturales menores que 10 que son múltiplos de 3 ó 5 son: 3, 5, 6 y 9. La suma de estos múltiplos es 23.&lt;/p&gt;&lt;p&gt;Encuentra la suma de todos los múltiplos de 3 ó 5 menores que 1000.&lt;/p&gt;</enunciado>
+    <nivel_en>1</nivel_en>
+    <orientadoALenguaje>true</orientadoALenguaje>
+    <solucion>
+      <lenguaje>Java</lenguaje>
+      <nivel_sol>1</nivel_sol>
+      <codigo>
+        <linea>public final class e01 {</linea>
+        <linea>	</linea>
+        <linea>	public static void main(String[] args) {</linea>
+        <linea>		System.out.println(new e01().run());</linea>
+        <linea>	}</linea>
+        <linea>	</linea>
+        <linea>	</linea>
+        <linea>	public String run() {</linea>
+        <linea>		int sum = 0;</linea>
+        <linea>		for (int i = 0; i &lt; 1000; i++) {</linea>
+        <linea>			if (i % 3 == 0 || i % 5 == 0)</linea>
+        <linea>				sum += i;</linea>
+        <linea>		}</linea>
+        <linea>		return Integer.toString(sum);</linea>
+        <linea>	}</linea>
+        <linea>	</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>C</lenguaje>
+      <nivel_sol>1</nivel_sol>
+      <codigo>
+        <linea>#include &lt;stdio.h&gt;</linea>
+        <linea/>
+        <linea>int main(void)</linea>
+        <linea>{</linea>
+        <linea>  int s3 = 0, s5 = 0, s15 = 0;</linea>
+        <linea>  int i;</linea>
+        <linea/>
+        <linea>  for (i = 0; i &lt; 1000; i++) {</linea>
+        <linea>    if (i % 3 == 0) {</linea>
+        <linea>      s3 += i;</linea>
+        <linea>    }</linea>
+        <linea>    if (i % 5 == 0) {</linea>
+        <linea>      s5 += i;</linea>
+        <linea>    }</linea>
+        <linea>    if (i % 15 == 0) {</linea>
+        <linea>      s15 += i;</linea>
+        <linea>    }</linea>
+        <linea>  }</linea>
+        <linea>  printf("%d\n", s3 + s5 - s15);</linea>
+        <linea/>
+        <linea>  return 0;</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+  </ejercicio>
+  <ejercicio id="e02">
+    <enunciado>&lt;p&gt;Cada nuevo término de la secuencia de Fibonacci se genera sumando los dos términos inmediatamente anteriores. Si empezamos con el 1 y el 2, los primeros 10 términos serán:&lt;/p&gt;&lt;p style="text-align: center;"&gt;1, 2, 3, 5, 8, 13, 21, 34, 55, 89, ...&lt;/p&gt;Considerando los términos de la secuencia de Fibonnaci cuyo valor no sea superior a los cuatro millones, encontrar la suma de los términos impares.</enunciado>
+    <nivel_en>1</nivel_en>
+    <orientadoALenguaje>true</orientadoALenguaje>
+    <solucion>
+      <lenguaje>Java</lenguaje>
+      <nivel_sol>1</nivel_sol>
+      <codigo>
+        <linea>public final class e02 {</linea>
+        <linea>	</linea>
+        <linea>	public static void main(String[] args) {</linea>
+        <linea>		System.out.println(new e02().run());</linea>
+        <linea>	}</linea>
+        <linea>	</linea>
+        <linea>	</linea>
+        <linea>	public String run() {</linea>
+        <linea>		int sum = 0;</linea>
+        <linea>		for (int i = 0; ; i++) {</linea>
+        <linea>			int fib = fibonacci(i);</linea>
+        <linea>			if (fib &gt; 4000000)</linea>
+        <linea>				break;</linea>
+        <linea>			if (fib % 2 == 0)</linea>
+        <linea>				sum += fib;</linea>
+        <linea>		}</linea>
+        <linea>		return Integer.toString(sum);</linea>
+        <linea>	}</linea>
+        <linea>	</linea>
+        <linea>	</linea>
+        <linea>	private static int fibonacci(int x) {</linea>
+        <linea>		if (x &lt; 0 || x &gt; 46)</linea>
+        <linea>			throw new IllegalArgumentException();</linea>
+        <linea>		int a = 0;</linea>
+        <linea>		int b = 1;</linea>
+        <linea>		for (int i = 0; i &lt; x; i++) {</linea>
+        <linea>			int c = a + b;</linea>
+        <linea>			a = b;</linea>
+        <linea>			b = c;</linea>
+        <linea>		}</linea>
+        <linea>		return a;</linea>
+        <linea>	}</linea>
+        <linea>	</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>C</lenguaje>
+      <nivel_sol>1</nivel_sol>
+      <codigo>
+        <linea>#include &lt;stdio.h&gt;</linea>
+        <linea/>
+        <linea>int main(void)</linea>
+        <linea>{</linea>
+        <linea>  unsigned int a1 = 1, a2 = 1, a3 = 2, sum = 0;</linea>
+        <linea/>
+        <linea>  while (a3 &lt; 4000000) {</linea>
+        <linea>    a3 = a1 + a2;</linea>
+        <linea>    sum += a3 * !(a3%2);</linea>
+        <linea>    a1 = a2;</linea>
+        <linea>    a2 = a3;</linea>
+        <linea>  }</linea>
+        <linea/>
+        <linea>  printf("%u\n", sum);</linea>
+        <linea/>
+        <linea>  return 0;</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>PHP</lenguaje>
+      <nivel_sol>1</nivel_sol>
+      <codigo>
+        <linea>&lt;?php</linea>
+        <linea>  $prev = 2;</linea>
+        <linea>  $prev2 = 1;</linea>
+        <linea>  $sum = 2;</linea>
+        <linea>  $_num = 0;</linea>
+        <linea>  while ($_num &lt; 4000000) {</linea>
+        <linea>    $_num = $prev + $prev2;</linea>
+        <linea/>
+        <linea>    $prev2 = $prev;</linea>
+        <linea>    $prev = $_num;</linea>
+        <linea/>
+        <linea>    if (!($_num % 2)) {</linea>
+        <linea>      $sum += $_num;</linea>
+        <linea>    }</linea>
+        <linea>  }</linea>
+        <linea>  echo $sum;</linea>
+        <linea>?&gt;</linea>
+      </codigo>
+    </solucion>
+  </ejercicio>
+  <ejercicio id="e03">
+    <enunciado>&lt;p&gt;Los factores primos de 13195 son 5, 7, 13 y 29.&lt;/p&gt;&lt;p&gt;¿Cuál es el mayor factor primo del número 600851475143?&lt;/p&gt;</enunciado>
+    <nivel_en>2</nivel_en>
+    <orientadoALenguaje>true</orientadoALenguaje>
+    <solucion>
+      <lenguaje>C</lenguaje>
+      <nivel_sol>2</nivel_sol>
+      <codigo>
+        <linea>#include &lt;stdio.h&gt;</linea>
+        <linea/>
+        <linea>int main(void)</linea>
+        <linea>{</linea>
+        <linea>  unsigned long long n = 600851475143ULL;</linea>
+        <linea>  unsigned long long i;</linea>
+        <linea/>
+        <linea>  for (i = 2ULL; i &lt; n; i++) {</linea>
+        <linea>    while (n % i == 0) {</linea>
+        <linea>      n /= i;</linea>
+        <linea>    }</linea>
+        <linea>  }</linea>
+        <linea>  printf("%llu\n", n);</linea>
+        <linea/>
+        <linea>  return 0;</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>Java</lenguaje>
+      <nivel_sol>2</nivel_sol>
+      <codigo>
+        <linea>public final class e03 {</linea>
+        <linea>	</linea>
+        <linea>	public static void main(String[] args) {</linea>
+        <linea>		System.out.println(new e03().run());</linea>
+        <linea>	}</linea>
+        <linea/>
+        <linea>	public String run() {</linea>
+        <linea>		long n = 600851475143L;</linea>
+        <linea>		while (true) {</linea>
+        <linea>			long p = smallestFactor(n);</linea>
+        <linea>			if (p &lt; n)</linea>
+        <linea>				n /= p;</linea>
+        <linea>			else</linea>
+        <linea>				return Long.toString(n);</linea>
+        <linea>		}</linea>
+        <linea>	}</linea>
+        <linea>	</linea>
+        <linea>	</linea>
+        <linea>	private static long smallestFactor(long n) {</linea>
+        <linea>		for (long i = 2, end = Library.sqrt(n); i &lt;= end; i++) {</linea>
+        <linea>			if (n % i == 0)</linea>
+        <linea>				return i;</linea>
+        <linea>		}</linea>
+        <linea>		return n;  // Prime</linea>
+        <linea>	}</linea>
+        <linea>	</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>PHP</lenguaje>
+      <nivel_sol>1</nivel_sol>
+      <codigo>
+        <linea>&lt;?php</linea>
+        <linea>  $max = 600851475143;</linea>
+        <linea>  $largest = 0;</linea>
+        <linea>  for ($i = floor(sqrt($max)) / 2; $i &gt;= 2; $i--) {</linea>
+        <linea>    if (!($i % 2)) {</linea>
+        <linea>      continue;</linea>
+        <linea>    }</linea>
+        <linea>    $d = 3;</linea>
+        <linea>    $x = sqrt($i);</linea>
+        <linea>    while (($i % $d) &amp;&amp; $d &lt; $x) {</linea>
+        <linea>      $d += 2;</linea>
+        <linea>    }</linea>
+        <linea>    if (((!($i % $d) &amp;&amp; $i != $d) * 1) == 0) {</linea>
+        <linea>      if (!($max % $i)) {</linea>
+        <linea>        $largest = $i;</linea>
+        <linea>        break;</linea>
+        <linea>      }</linea>
+        <linea>    }</linea>
+        <linea>  }</linea>
+        <linea>  echo $largest;</linea>
+        <linea>?&gt;</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>Python</lenguaje>
+      <nivel_sol>1</nivel_sol>
+      <codigo>
+        <linea>n = 600851475143</linea>
+        <linea>i = 2</linea>
+        <linea>while i * i &lt; n:</linea>
+        <linea>	while n % i == 0:</linea>
+        <linea>		n = n / i</linea>
+        <linea>	i = i + 1</linea>
+        <linea>  </linea>
+        <linea>print n</linea>
+      </codigo>
+    </solucion>
+  </ejercicio>
+  <ejercicio id="e04">
+    <enunciado>&lt;p&gt;Un número palíndromo se lee igual de izquierda a derecha que de derecha a izquierda. El mayor palíndromo que se puede obtener multiplicando números de dos dígitos es 9009 = 91 × 99.&lt;/p&gt;&lt;p&gt;Encuentra el el mayor palíndromo posible obtenido a partir de la multiplicación de dos números de tres dígitos.&lt;br&gt;&lt;/p&gt;</enunciado>
+    <nivel_en>3</nivel_en>
+    <orientadoALenguaje>true</orientadoALenguaje>
+    <solucion>
+      <lenguaje>PHP</lenguaje>
+      <nivel_sol>1</nivel_sol>
+      <codigo>
+        <linea>&lt;?php</linea>
+        <linea>  $palindrome = $palindrome_i = $palindome_j = 0;</linea>
+        <linea>  for ($i = 999; $i &gt; 99; $i--) {</linea>
+        <linea>    for ($j = 999; $j &gt; 99; $j--) {</linea>
+        <linea>      $product = $i * $j;</linea>
+        <linea>      if ($product == strrev($product)) {</linea>
+        <linea>        $palindrome_j = $j;</linea>
+        <linea>        $palindrome = $product;</linea>
+        <linea>        break;</linea>
+        <linea>      }</linea>
+        <linea>    }</linea>
+        <linea>    if ($palindrome) {</linea>
+        <linea>      $palindrome_i = $i;</linea>
+        <linea>      break;</linea>
+        <linea>    }</linea>
+        <linea>  }</linea>
+        <linea>  $palindrome2 = 0;</linea>
+        <linea>  for ($i = $palindrome_i; $i &gt; $palindrome_j; $i--) {</linea>
+        <linea>    for ($j = $palindrome_i; $j &gt; $palindrome_j; $j--) {</linea>
+        <linea>      $product = $i * $j;</linea>
+        <linea>      if ($product == strrev($product)) {</linea>
+        <linea>        $palindrome2 = $product;</linea>
+        <linea>        break;</linea>
+        <linea>      }</linea>
+        <linea>    }</linea>
+        <linea>    if ($palindrome2) {</linea>
+        <linea>      break;</linea>
+        <linea>    }</linea>
+        <linea>  }</linea>
+        <linea>  echo ($palindrome2) ? $palindrome2 : $palindrome;</linea>
+        <linea>?&gt;</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>C</lenguaje>
+      <nivel_sol>3</nivel_sol>
+      <codigo>
+        <linea>#include &lt;stdio.h&gt;</linea>
+        <linea/>
+        <linea>static int is_palindromic(unsigned int n);</linea>
+        <linea/>
+        <linea>int main(void)</linea>
+        <linea>{</linea>
+        <linea>  unsigned int i, j, max = 0;</linea>
+        <linea>  for (i = 100; i &lt;= 999; i++) {</linea>
+        <linea>    for (j = 100; j &lt;= 999; j++) {</linea>
+        <linea>      unsigned int p = i*j;</linea>
+        <linea>      if (is_palindromic(p) &amp;&amp; p &gt; max) {</linea>
+        <linea>        max = p;</linea>
+        <linea>      }</linea>
+        <linea>    }</linea>
+        <linea>  }</linea>
+        <linea>  printf("%u\n", max);</linea>
+        <linea>  return 0;</linea>
+        <linea>}</linea>
+        <linea/>
+        <linea>int is_palindromic(unsigned int n)</linea>
+        <linea>{</linea>
+        <linea>  unsigned int reversed = 0, t = n;</linea>
+        <linea/>
+        <linea>  while (t) {</linea>
+        <linea>    reversed = 10*reversed + (t % 10);</linea>
+        <linea>    t /= 10;</linea>
+        <linea>  }</linea>
+        <linea>  return reversed == n;</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+  </ejercicio>
+  <ejercicio id="e05">
+    <enunciado>&lt;p&gt;2520 es el número más pequeño que puede ser dividido de forma exacta por cada uno de los números del 1 al 10.&lt;/p&gt;&lt;p&gt;¿Cuál es el número positivo más pequeño que puede ser dividido de forma exacta por todos los números del 1 al 20?&lt;br&gt;&lt;/p&gt;</enunciado>
+    <nivel_en>4</nivel_en>
+    <orientadoALenguaje>true</orientadoALenguaje>
+    <solucion>
+      <lenguaje>Python</lenguaje>
+      <nivel_sol>2</nivel_sol>
+      <codigo>
+        <linea>def gcd(a,b): return b and gcd(b, a % b) or a</linea>
+        <linea>def lcm(a,b): return a * b / gcd(a,b)</linea>
+        <linea></linea>
+        <linea>n = 1</linea>
+        <linea>for i in xrange(1, 21):</linea>
+        <linea>    n = lcm(n, i)</linea>
+        <linea></linea>
+        <linea>print n</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>C</lenguaje>
+      <nivel_sol>4</nivel_sol>
+      <codigo>
+        <linea>#include &lt;stdio.h&gt;</linea>
+        <linea></linea>
+        <linea>static unsigned long gcd(unsigned long a, unsigned long b);</linea>
+        <linea>static __inline unsigned long lcm(unsigned long a, unsigned long b);</linea>
+        <linea></linea>
+        <linea>int main(void)</linea>
+        <linea>{</linea>
+        <linea>  unsigned long ans = 1;</linea>
+        <linea>  unsigned long i;</linea>
+        <linea></linea>
+        <linea>  for (i = 1; i &lt;= 20; i++) {</linea>
+        <linea>    ans = lcm(ans, i);</linea>
+        <linea>  }</linea>
+        <linea>  printf("%lu\n", ans);</linea>
+        <linea>  return 0;</linea>
+        <linea>}</linea>
+        <linea></linea>
+        <linea>unsigned long gcd(unsigned long a, unsigned long b)</linea>
+        <linea>{</linea>
+        <linea>  unsigned long r;</linea>
+        <linea></linea>
+        <linea>  if (a &gt; b) {</linea>
+        <linea>    unsigned long t = a;</linea>
+        <linea>    a = b;</linea>
+        <linea>    b = t;</linea>
+        <linea>  }</linea>
+        <linea></linea>
+        <linea>  while (r = a%b) {</linea>
+        <linea>    a = b;</linea>
+        <linea>    b = r;</linea>
+        <linea>  }</linea>
+        <linea>  return b;</linea>
+        <linea>}</linea>
+        <linea></linea>
+        <linea>unsigned long lcm(unsigned long a, unsigned long b)</linea>
+        <linea>{</linea>
+        <linea>  unsigned long long p = (unsigned long long)a * b;</linea>
+        <linea>  return p/gcd(a, b);</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+  </ejercicio>
+    <ejercicio id="p01">
+        <enunciado>&lt;p&gt;Diseñe el algoritmo de Dijkstra.&lt;br&gt;&lt;/p&gt;&lt;p&gt;La idea subyacente en este algoritmo consiste en ir explorando todos los&#13;
+            caminos más cortos que parten del vértice origen y que llevan a todos &#13;
+            los demás vértices; cuando se obtiene el camino más corto desde el &#13;
+            vértice origen, al resto de vértices que componen el grafo, el algoritmo&#13;
+            se detiene. El algoritmo es una especialización de la búsqueda de costo&#13;
+            uniforme, y como tal, no funciona en grafos con aristas de coste &#13;
+            negativo (al elegir siempre el nodo con distancia menor, pueden quedar &#13;
+            excluidos de la búsqueda nodos que en próximas iteraciones bajarían el &#13;
+            costo general del camino al pasar por una arista con costo negativo).&lt;/p&gt;</enunciado>
+        <nivel_en>1</nivel_en>
+        <orientadoALenguaje>false</orientadoALenguaje>
+        <solucion>
+            <lenguaje>Pseudocodigo</lenguaje>
+            <nivel_sol>1</nivel_sol>
+            <codigo>
+                <linea>función Dijkstra (Grafo G, nodo_salida s)</linea>
+                <linea>  //Usaremos un vector para guardar las distancias del nodo salida al resto</linea>
+                <linea>  entero distancia[n] </linea>
+                <linea>  //Inicializamos el vector con distancias iniciales</linea>
+                <linea>  booleano visto[n] </linea>
+                <linea>  //vector de boleanos para controlar los vértices de los que ya tenemos la distancia mínima</linea>
+                <linea>  para cada w ∈ V[G] hacer</linea>
+                <linea>     Si (no existe arista entre s y w) entonces</linea>
+                <linea>         distancia[w] = Infinito //puedes marcar la casilla con un -1 por ejemplo</linea>
+                <linea>     Si_no</linea>
+                <linea>         distancia[w] = peso (s, w)</linea>
+                <linea>     fin si </linea>
+                <linea>  fin para</linea>
+                <linea>  distancia[s] = 0</linea>
+                <linea>  visto[s] = cierto</linea>
+                <linea>  //n es el número de vértices que tiene el Grafo</linea>
+                <linea>  mientras que (no_estén_vistos_todos) hacer </linea>
+                <linea>     vértice = coger_el_mínimo_del_vector distancia y que no esté visto;</linea>
+                <linea>     visto[vértice] = cierto;</linea>
+                <linea>     para cada w ∈ sucesores (G, vértice) hacer</linea>
+                <linea>         si distancia[w]&gt;distancia[vértice]+peso (vértice, w) entonces</linea>
+                <linea>            distancia[w] = distancia[vértice]+peso (vértice, w)</linea>
+                <linea>         fin si</linea>
+                <linea>     fin para </linea>
+                <linea>  fin mientras</linea>
+                <linea>fin función.</linea>
+            </codigo>
+        </solucion>
+    </ejercicio>
+    <ejercicio id="p02">
+        <enunciado>Diseñar un algoritmo de búsqueda en profundidad para grafos.&lt;br&gt;</enunciado>
+        <nivel_en>1</nivel_en>
+        <orientadoALenguaje>false</orientadoALenguaje>
+        <solucion>
+            <lenguaje>Pseudocodigo</lenguaje>
+            <nivel_sol>1</nivel_sol>
+            <codigo>
+                <linea>DFS(grafo G)</linea>
+                <linea>     PARA CADA vertice u ∈ V[G] HACER</linea>
+                <linea>             estado[u] ← NO_VISITADO</linea>
+                <linea>             padre[u] ← NULO</linea>
+                <linea>     tiempo ← 0</linea>
+                <linea>     PARA CADA vertice u ∈ V[G] HACER</linea>
+                <linea>             SI estado[u] = NO_VISITADO ENTONCES</linea>
+                <linea>                     DFS_Visitar(u,tiempo)</linea>
+            </codigo>
+        </solucion>
+        <solucion>
+            <lenguaje>Pseudocodigo</lenguaje>
+            <nivel_sol>1</nivel_sol>
+            <codigo>
+                <linea>DFS_Visitar(nodo u, int tiempo)</linea>
+                <linea>     estado[u] ← VISITADO</linea>
+                <linea>     tiempo ← tiempo + 1</linea>
+                <linea>     d[u] ← tiempo</linea>
+                <linea>     PARA CADA v ∈ Vecinos[u] HACER</linea>
+                <linea>             SI estado[v] = NO_VISITADO ENTONCES</linea>
+                <linea>                     padre[v] ← u</linea>
+                <linea>                     DFS_Visitar(v,tiempo)</linea>
+                <linea>     estado[u] ← TERMINADO</linea>
+                <linea>     tiempo ← tiempo + 1</linea>
+                <linea>     f[u] ← tiempo</linea>
+            </codigo>
+        </solucion>
+    </ejercicio>
+    <ejercicio id="p06">
+        <enunciado>Diseña un ejemplo del algoritmo Gnome sort.</enunciado>
+        <nivel_en>2</nivel_en>
+        <orientadoALenguaje>false</orientadoALenguaje>
+        <solucion>
+            <lenguaje>Pseudocodigo</lenguaje>
+            <nivel_sol>1</nivel_sol>
+            <codigo>
+                <linea> i := 1</linea>
+                <linea>  mientras i ≤ len- 1</linea>
+                <linea>    si a[i-1] ≤ a[i]</linea>
+                <linea>        i := i+1</linea>
+                <linea>    sino</linea>
+                <linea>        intercambiar a[i-1] y a[i]</linea>
+                <linea>        i := i - 1</linea>
+                <linea>        si i = 0</linea>
+                <linea>          i := 1</linea>
+                <linea> }</linea>
+            </codigo>
+        </solucion>
+    </ejercicio>
+    <ejercicio id="p07">
+        <enunciado>&lt;p&gt;Implementa el Algoritmo de Prim para grafos.&lt;/p&gt;&lt;p&gt;El &lt;b&gt;algoritmo de Prim&lt;/b&gt; es un algoritmo perteneciente a la &lt;span class="mw-redirect"&gt;teoría de los grafos&lt;/span&gt; para encontrar un árbol recubridor mínimo en un grafo &lt;span class="mw-redirect"&gt;conexo&lt;/span&gt;, &lt;b&gt;no&lt;/b&gt; dirigido y cuyas &lt;span class="mw-redirect"&gt;aristas&lt;/span&gt; están etiquetadas.&lt;/p&gt;&#13;
+            &lt;p&gt;En otras palabras, el algoritmo encuentra un subconjunto de &lt;span class="mw-redirect"&gt;aristas&lt;/span&gt; que forman un árbol con todos los &lt;span class="mw-redirect"&gt;vértices&lt;/span&gt;, donde el peso total de todas las &lt;span class="mw-redirect"&gt;aristas&lt;/span&gt; en el árbol es el mínimo posible. Si el grafo no es conexo, entonces el algoritmo encontrará el árbol recubridor mínimo para uno de los componentes conexos que forman dicho grafo no conexo.&lt;/p&gt;</enunciado>
+        <nivel_en>2</nivel_en>
+        <orientadoALenguaje>false</orientadoALenguaje>
+        <solucion>
+            <lenguaje>Pseudocodigo</lenguaje>
+            <nivel_sol>3</nivel_sol>
+            <codigo>
+                <linea>Prim (Grafo G)</linea>
+                <linea>       /* Inicializamos todos los nodos del grafo. </linea>
+                <linea>       La distancia la ponemos a infinito y el padre de cada nodo a NULL</linea>
+                <linea>       Encolamos, en una cola de prioridad </linea>
+                <linea>       donde la prioridad es la distancia, </linea>
+                <linea>       todas las parejas &lt;nodo,distancia&gt; del grafo*/</linea>
+                <linea>       por cada u en V[G] hacer</linea>
+                <linea>           distancia[u] = INFINITO</linea>
+                <linea>           padre[u] = NULL</linea>
+                <linea>           Añadir(cola,&lt;u,distancia[u]&gt;)</linea>
+                <linea>       distancia[u]=0</linea>
+                <linea>       mientras !esta_vacia(cola) hacer</linea>
+                <linea>           // OJO: Se entiende por mayor prioridad aquel nodo cuya distancia[u] es menor.</linea>
+                <linea>           u = extraer_minimo(cola) //devuelve el minimo y lo elimina de la cola.</linea>
+                <linea>           por cada v adyacente a 'u' hacer</linea>
+                <linea>               si ((v ∈ cola) &amp;&amp; (distancia[v] &gt; peso(u, v)) entonces</linea>
+                <linea>                   padre[v] = u</linea>
+                <linea>                   distancia[v] = peso(u, v)</linea>
+                <linea>                   Actualizar(cola,&lt;v,distancia[v]&gt;)</linea>
+            </codigo>
+        </solucion>
+    </ejercicio>
+    <ejercicio id="p19">
+        <enunciado>Una tienda ofrece un descuento del 15% sobre el total de la compra &#13;
+            durante el mes de octubre. Dado un mes y un importe, calcular cuál es la&#13;
+            cantidad que se debe cobrar al cliente.&lt;br&gt;</enunciado>
+        <nivel_en>4</nivel_en>
+        <orientadoALenguaje>false</orientadoALenguaje>
+        <solucion>
+            <lenguaje>Pseudocodigo</lenguaje>
+            <nivel_sol>1</nivel_sol>
+            <codigo>
+                <linea>Var mes: cadena</linea>
+                <linea>    importe, total:numerico</linea>
+                <linea>Inicio</linea>
+                <linea>    Escribir "escribe el importe de la compra"</linea>
+                <linea>    Leer importe</linea>
+                <linea>    Escribir "Introduce el mes"</linea>
+                <linea>    Leer mes</linea>
+                <linea>    Si (mes="octubre") Entonces</linea>
+                <linea>       total&lt;-importe*0.85</linea>
+                <linea>    Sino</linea>
+                <linea>        total&lt;-importe</linea>
+                <linea>    FinSi</linea>
+                <linea>    Escribir total</linea>
+                <linea>Fin</linea>
+            </codigo>
+        </solucion>
+    </ejercicio>
+</ejercicios>

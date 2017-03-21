@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ejercicios xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../preguntas.xsd">
+  <ejercicio id="p06">
+    <enunciado>Diseña un ejemplo del algoritmo Gnome sort.</enunciado>
+    <nivel_en>2</nivel_en>
+    <orientadoALenguaje>false</orientadoALenguaje>
+    <solucion>
+      <lenguaje>Pseudocodigo</lenguaje>
+      <nivel_sol>1</nivel_sol>
+      <codigo>
+        <linea> i := 1</linea>
+        <linea>  mientras i ≤ len- 1</linea>
+        <linea>    si a[i-1] ≤ a[i]</linea>
+        <linea>        i := i+1</linea>
+        <linea>    sino</linea>
+        <linea>        intercambiar a[i-1] y a[i]</linea>
+        <linea>        i := i - 1</linea>
+        <linea>        si i = 0</linea>
+        <linea>          i := 1</linea>
+        <linea> }</linea>
+      </codigo>
+    </solucion>
+  </ejercicio>
+  <ejercicio id="p07">
+    <enunciado>&lt;p&gt;Implementa el Algoritmo de Prim para grafos.&lt;/p&gt;&lt;p&gt;El &lt;b&gt;algoritmo de Prim&lt;/b&gt; es un algoritmo perteneciente a la &lt;span class="mw-redirect"&gt;teoría de los grafos&lt;/span&gt; para encontrar un árbol recubridor mínimo en un grafo &lt;span class="mw-redirect"&gt;conexo&lt;/span&gt;, &lt;b&gt;no&lt;/b&gt; dirigido y cuyas &lt;span class="mw-redirect"&gt;aristas&lt;/span&gt; están etiquetadas.&lt;/p&gt;&#13;
+&lt;p&gt;En otras palabras, el algoritmo encuentra un subconjunto de &lt;span class="mw-redirect"&gt;aristas&lt;/span&gt; que forman un árbol con todos los &lt;span class="mw-redirect"&gt;vértices&lt;/span&gt;, donde el peso total de todas las &lt;span class="mw-redirect"&gt;aristas&lt;/span&gt; en el árbol es el mínimo posible. Si el grafo no es conexo, entonces el algoritmo encontrará el árbol recubridor mínimo para uno de los componentes conexos que forman dicho grafo no conexo.&lt;/p&gt;</enunciado>
+    <nivel_en>2</nivel_en>
+    <orientadoALenguaje>false</orientadoALenguaje>
+    <solucion>
+      <lenguaje>Pseudocodigo</lenguaje>
+      <nivel_sol>3</nivel_sol>
+      <codigo>
+        <linea>Prim (Grafo G)</linea>
+        <linea>       /* Inicializamos todos los nodos del grafo. </linea>
+        <linea>       La distancia la ponemos a infinito y el padre de cada nodo a NULL</linea>
+        <linea>       Encolamos, en una cola de prioridad </linea>
+        <linea>       donde la prioridad es la distancia, </linea>
+        <linea>       todas las parejas &lt;nodo,distancia&gt; del grafo*/</linea>
+        <linea>       por cada u en V[G] hacer</linea>
+        <linea>           distancia[u] = INFINITO</linea>
+        <linea>           padre[u] = NULL</linea>
+        <linea>           Añadir(cola,&lt;u,distancia[u]&gt;)</linea>
+        <linea>       distancia[u]=0</linea>
+        <linea>       mientras !esta_vacia(cola) hacer</linea>
+        <linea>           // OJO: Se entiende por mayor prioridad aquel nodo cuya distancia[u] es menor.</linea>
+        <linea>           u = extraer_minimo(cola) //devuelve el minimo y lo elimina de la cola.</linea>
+        <linea>           por cada v adyacente a 'u' hacer</linea>
+        <linea>               si ((v ∈ cola) &amp;&amp; (distancia[v] &gt; peso(u, v)) entonces</linea>
+        <linea>                   padre[v] = u</linea>
+        <linea>                   distancia[v] = peso(u, v)</linea>
+        <linea>                   Actualizar(cola,&lt;v,distancia[v]&gt;)</linea>
+      </codigo>
+    </solucion>
+  </ejercicio>
+  <ejercicio id="p08">
+    <enunciado>Diseñe un algoritmo que calcule el &lt;span style="font-style: italic;"&gt;n&lt;/span&gt;-ésimo elemento de la sucesión de Fibonnaci y sea de complejidad logarítmica (O(log(n))).&lt;br&gt;</enunciado>
+    <nivel_en>2</nivel_en>
+    <orientadoALenguaje>false</orientadoALenguaje>
+    <solucion>
+      <lenguaje>Pseudocodigo</lenguaje>
+      <nivel_sol>3</nivel_sol>
+      <codigo>
+        <linea>función fib(n)</linea>
+        <linea>  	si n ≤ 0 entonces</linea>
+        <linea>  		devuelve 0</linea>
+        <linea>  </linea>
+        <linea>  	i ← n - 1</linea>
+        <linea>  	(a,b) ← (1,0)</linea>
+        <linea>  	(c,d) ← (0,1)</linea>
+        <linea>  	mientras i &gt; 0 hacer</linea>
+        <linea>  		si i es impar entonces</linea>
+        <linea>  			(a,b) ← (db + ca,d(b + a) + cb)</linea>
+        <linea>  		(c,d) ← (c^2 + d^2,d(2c + d))</linea>
+        <linea>  		i ← i / 2</linea>
+        <linea>  	devuelve a + b</linea>
+      </codigo>
+    </solucion>
+  </ejercicio>
+  <ejercicio id="p09">
+    <enunciado>Implementa un algoritmo que recorra un grafo mediante búsqueda en profundidad limitada.&lt;br&gt;</enunciado>
+    <nivel_en>2</nivel_en>
+    <orientadoALenguaje>false</orientadoALenguaje>
+    <solucion>
+      <lenguaje>Pseudocodigo</lenguaje>
+      <nivel_sol>1</nivel_sol>
+      <codigo>
+        <linea>BPL(nodo, objetivo, profundidad) {</linea>
+        <linea>  si ( profundidad &gt;= 0 ) {</linea>
+        <linea>    si ( nodo == objetivo )</linea>
+        <linea>      devolver nodo</linea>
+        <linea/>
+        <linea>    para cada hijo en expandir(nodo)</linea>
+        <linea>      BPL(hijo, objetivo, profundidad-1)</linea>
+        <linea>  }</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+  </ejercicio>
+  <ejercicio id="p10">
+    <enunciado>Implementa una versión del algoritmo de ordenación &lt;span style="font-style: italic;"&gt;merge sort&lt;/span&gt;.&lt;br&gt;</enunciado>
+    <nivel_en>2</nivel_en>
+    <orientadoALenguaje>false</orientadoALenguaje>
+    <solucion>
+      <lenguaje>Pseudocodigo</lenguaje>
+      <nivel_sol>3</nivel_sol>
+      <codigo>
+        <linea>function mergesort(m)</linea>
+        <linea>  var list left, right, result</linea>
+        <linea>  if length(m) ≤ 1</linea>
+        <linea>      return m</linea>
+        <linea>  else</linea>
+        <linea>      var middle = length(m) / 2</linea>
+        <linea>      for each x in m up to middle - 1</linea>
+        <linea>          add x to left</linea>
+        <linea>      for each x in m at and after middle</linea>
+        <linea>          add x to right</linea>
+        <linea>      left = mergesort(left)</linea>
+        <linea>      right = mergesort(right)</linea>
+        <linea>      if last(left) ≤ first(right) </linea>
+        <linea>         append right to left</linea>
+        <linea>         return left</linea>
+        <linea>      result = merge(left, right)</linea>
+        <linea>      return result</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>Pseudocodigo</lenguaje>
+      <nivel_sol>3</nivel_sol>
+      <codigo>
+        <linea>function merge(left,right)</linea>
+        <linea>  var list result</linea>
+        <linea>  while length(left) &gt; 0 and length(right) &gt; 0</linea>
+        <linea>      if first(left) ≤ first(right)</linea>
+        <linea>          append first(left) to result</linea>
+        <linea>          left = rest(left)</linea>
+        <linea>      else</linea>
+        <linea>          append first(right) to result</linea>
+        <linea>          right = rest(right)</linea>
+        <linea>  if length(left) &gt; 0 </linea>
+        <linea>      append rest(left) to result</linea>
+        <linea>  if length(right) &gt; 0 </linea>
+        <linea>      append rest(right) to result</linea>
+        <linea>  return result</linea>
+      </codigo>
+    </solucion>
+  </ejercicio>
+</ejercicios>

@@ -1,0 +1,534 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ejercicios xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../preguntas.xsd">
+  <ejercicio id="e21">
+    <enunciado>&lt;p&gt;Definamos d(&lt;i&gt;n&lt;/i&gt;) como la suma de los divisores exactos de &lt;i&gt;n&lt;/i&gt; (números menores que &lt;span style="font-style: italic;"&gt;n&lt;/span&gt; los cuales pueden dividir &lt;span style="font-style: italic;"&gt;n&lt;/span&gt; sin producir un resto).&lt;br&gt;Si d(&lt;i&gt;a&lt;/i&gt;) = &lt;i&gt;b&lt;/i&gt; y d(&lt;i&gt;b&lt;/i&gt;) = &lt;i&gt;a&lt;/i&gt;, donde &lt;i&gt;a&lt;/i&gt; ≠ &lt;i&gt;b&lt;/i&gt;, entonces &lt;span style="font-style: italic;"&gt;a&lt;/span&gt; y &lt;span style="font-style: italic;"&gt;b &lt;/span&gt;son números amigos.&lt;/p&gt;&lt;p&gt;Por ejemplo, los divisores exactos de 220 son 1, 2, 4, 5, 10, 11, 20, 22, 44, 55 y 110; por lo tanto d(220) = 284. Los divisores exactos de 284 son 1, 2, 4, 71 y 142; con lo que d(284) = 220.&lt;/p&gt;&lt;p&gt;Evalua la suma de todos los números amigos por debajo de 10000.&lt;/p&gt;</enunciado>
+    <nivel_en>1</nivel_en>
+    <orientadoALenguaje>true</orientadoALenguaje>
+    <solucion>
+      <lenguaje>Java</lenguaje>
+      <nivel_sol>1</nivel_sol>
+      <codigo>
+        <linea>public final class e21 {</linea>
+        <linea>	</linea>
+        <linea>	public static void main(String[] args) {</linea>
+        <linea>		System.out.println(new e21().run());</linea>
+        <linea>	}</linea>
+        <linea>		</linea>
+        <linea>	public String run() {</linea>
+        <linea>		int sum = 0;</linea>
+        <linea>		for (int i = 1; i &lt; 10000; i++) {</linea>
+        <linea>			if (isAmicable(i))</linea>
+        <linea>				sum += i;</linea>
+        <linea>		}</linea>
+        <linea>		return Integer.toString(sum);</linea>
+        <linea>	}	</linea>
+        <linea>	</linea>
+        <linea>	private static boolean isAmicable(int n) {</linea>
+        <linea>		int m = divisorSum(n);</linea>
+        <linea>		return m != n &amp;&amp; divisorSum(m) == n;</linea>
+        <linea>	}</linea>
+        <linea>		</linea>
+        <linea>	private static int divisorSum(int n) {</linea>
+        <linea>		int sum = 0;</linea>
+        <linea>		for (int i = 1; i &lt; n; i++) {</linea>
+        <linea>			if (n % i == 0)</linea>
+        <linea>				sum += i;</linea>
+        <linea>		}</linea>
+        <linea>		return sum;</linea>
+        <linea>	}	</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>C</lenguaje>
+      <nivel_sol>1</nivel_sol>
+      <codigo>
+        <linea>#include &lt;stdio.h&gt;</linea>
+        <linea/>
+        <linea>static int divisors_sum(int n);</linea>
+        <linea/>
+        <linea>int main(void)</linea>
+        <linea>{</linea>
+        <linea>  int i, d, sum = 0;</linea>
+        <linea/>
+        <linea>  for (i = 2; i &lt; 10000; i++) {</linea>
+        <linea>    d = divisors_sum(i);</linea>
+        <linea>    if (i &lt; d &amp;&amp; i == divisors_sum(d)) {</linea>
+        <linea>      sum += i + d;</linea>
+        <linea>    }</linea>
+        <linea>  }</linea>
+        <linea>  printf("%d\n", sum);</linea>
+        <linea/>
+        <linea>  return 0;</linea>
+        <linea>}</linea>
+        <linea/>
+        <linea>int divisors_sum(int n)</linea>
+        <linea>{</linea>
+        <linea>  int sum= 1;</linea>
+        <linea>  int i, k = n;</linea>
+        <linea/>
+        <linea>  for (i = 2; i &lt;= k; i++) {</linea>
+        <linea>    int p = 1;</linea>
+        <linea>    while (k % i == 0) {</linea>
+        <linea>      p *= i;</linea>
+        <linea>      k /= i;</linea>
+        <linea>    }</linea>
+        <linea>    sum *= (p*i - 1)/(i-1);</linea>
+        <linea>  }</linea>
+        <linea>  return sum - n;</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>Python</lenguaje>
+      <nivel_sol>1</nivel_sol>
+      <codigo>
+        <linea>def divisors(n): return list(i for i in xrange(1, n/2+1) if n % i == 0)</linea>
+        <linea>pair = dict( ((n, sum(divisors(n))) for n in xrange(1, 10000)) )</linea>
+        <linea>print sum(n for n in xrange(1, 10000) if pair.get(pair[n], 0) == n and pair[n] != n)</linea>
+      </codigo>
+    </solucion>
+  </ejercicio>
+  <ejercicio id="e22">
+    <enunciado>&lt;p&gt;Utilizando &lt;a href="https://projecteuler.net/project/resources/p022_names.txt"&gt;names.txt&lt;/a&gt; (click derecho y 'Guardar enlace/destino como...'), un archivo de texto de 46K el cual contiene más de cinco mil nombres propios, empieza ordenándolos alfabéticamente. Después, calcula el valor alfabético de cada nombre y multiplica este valor por su posición en la lista ordenada alfabéticamente para obtener la puntuación del nombre.&lt;/p&gt;&lt;p&gt;Por ejemplo, cuando la lista ya está ordenada alfabéticamente, COLIN tiene un valor alfabético de 3 + 15 + 12 + 9 + 14 = 53, y está en la posición número 938 de la lista. Por lo tanto, COLIN obtendría una puntuación de 938 × 53 = 49714.&lt;/p&gt;&lt;p&gt;¿Cuál es la suma total de todas las puntuaciones de los nombres que aparecen en el archivo?&lt;/p&gt;</enunciado>
+    <nivel_en>1</nivel_en>
+    <orientadoALenguaje>true</orientadoALenguaje>
+    <solucion>
+      <lenguaje>Java</lenguaje>
+      <nivel_sol>1</nivel_sol>
+      <codigo>
+        <linea>public final class e22 implements EulerSolution {</linea>
+        <linea>	</linea>
+        <linea>	public static void main(String[] args) {</linea>
+        <linea>		System.out.println(new e22().run());</linea>
+        <linea>	}</linea>
+        <linea>		</linea>
+        <linea>	public String run() {</linea>
+        <linea>		Arrays.sort(names);</linea>
+        <linea>		int sum = 0;</linea>
+        <linea>		for (int i = 0; i &lt; names.length; i++) {</linea>
+        <linea>			int value = 0;</linea>
+        <linea>			for (int j = 0; j &lt; names[i].length(); j++)</linea>
+        <linea>				value += names[i].charAt(j) - 'A' + 1;</linea>
+        <linea>			sum += value * (i + 1);</linea>
+        <linea>		}</linea>
+        <linea>		return Integer.toString(sum);</linea>
+        <linea>	}</linea>
+        <linea>		</linea>
+        <linea>	private String[] names = {</linea>
+        <linea>		"MARY",</linea>
+        <linea>		"PATRICIA",</linea>
+        <linea>		"LINDA",</linea>
+        <linea>		"BARBARA",</linea>
+        <linea>		"ELIZABETH",</linea>
+        <linea>		"JENNIFER",</linea>
+        <linea>		"MARIA",</linea>
+        <linea>        /* ... */</linea>
+        <linea>        "BRODERICK",</linea>
+        <linea>		"ALONSO",</linea>
+        <linea>	};	</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>C</lenguaje>
+      <nivel_sol>1</nivel_sol>
+      <codigo>
+        <linea>#include &lt;stdio.h&gt;</linea>
+        <linea>#include &lt;stdlib.h&gt;</linea>
+        <linea>#include &lt;string.h&gt;</linea>
+        <linea>#include &lt;assert.h&gt;</linea>
+        <linea/>
+        <linea>static int compare(const void *x, const void *y);</linea>
+        <linea/>
+        <linea>int main(void)</linea>
+        <linea>{</linea>
+        <linea>  int count = 0;</linea>
+        <linea>  FILE *fp;</linea>
+        <linea>  char path[] = "names.txt";</linea>
+        <linea>  char **names;</linea>
+        <linea>  int i;</linea>
+        <linea>  int sum = 0;</linea>
+        <linea/>
+        <linea>  fp = fopen(path, "r");</linea>
+        <linea>  if (!fp) {</linea>
+        <linea>    perror(path);</linea>
+        <linea>    return 1;</linea>
+        <linea>  }</linea>
+        <linea/>
+        <linea>  /* parsear names.txt */</linea>
+        <linea>  names = malloc(8192 * sizeof *names);</linea>
+        <linea>  names[count] = malloc(16);</linea>
+        <linea>  while (fscanf(fp, "\"%[^\"]\",", names[count]) != EOF) {</linea>
+        <linea>    names[++count] = malloc(16);</linea>
+        <linea>  }</linea>
+        <linea>  free(names[count]);</linea>
+        <linea>  fclose(fp);</linea>
+        <linea/>
+        <linea>  qsort(names, count, sizeof *names, compare);</linea>
+        <linea/>
+        <linea>  for (i = 0; i &lt; count; i++) {</linea>
+        <linea>    int j, s = 0;</linea>
+        <linea>    for (j = 0; names[i][j] != 0; j++) {</linea>
+        <linea>      s += names[i][j]-'A'+1;</linea>
+        <linea>    }</linea>
+        <linea>    sum += s * (i+1);</linea>
+        <linea/>
+        <linea>    free(names[i]);</linea>
+        <linea>  }</linea>
+        <linea>  free(names);</linea>
+        <linea/>
+        <linea>  printf("%d\n", sum);</linea>
+        <linea/>
+        <linea>  return 0;</linea>
+        <linea>}</linea>
+        <linea/>
+        <linea>int compare(const void *x, const void *y)</linea>
+        <linea>{</linea>
+        <linea>  return strcmp(*(char * const *)x, *(char * const *)y);</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>Python</lenguaje>
+      <nivel_sol>1</nivel_sol>
+      <codigo>
+        <linea>def worth(name): return sum(ord(letter) - ord('A') + 1 for letter in name)</linea>
+        <linea/>
+        <linea>names = open('names.txt').read().replace('"', '').split(',')</linea>
+        <linea>names.sort()</linea>
+        <linea/>
+        <linea>print sum((i+1) * worth(names[i]) for i in xrange(0, len(names)))</linea>
+      </codigo>
+    </solucion>
+  </ejercicio>
+  <ejercicio id="e23">
+    <enunciado>&lt;p&gt;Un número perfecto es un número para el cual la suma de sus divisores propios es exactamente igual a dicho número. Por ejemplo, la suma de los divisores propios de 28 sería 1 + 2 + 4 + 7 + 14 = 28, lo cual quiere decir que 28 es un número perfecto.&lt;/p&gt;&lt;p&gt;Un número&lt;span style="font-style: italic;"&gt; &lt;/span&gt;&lt;var&gt;n&lt;/var&gt; se llama defectivo cuando la suma de sus divisores propios es menor que &lt;var&gt;n&lt;/var&gt; y se llama abundante cuanto esta suma es mayor que&lt;span style="font-style: italic;"&gt; &lt;/span&gt;&lt;var&gt;n&lt;/var&gt;.&lt;/p&gt;&lt;p&gt;Ya que 12 es el menor número abundante, 1 + 2 + 3 + 4 + 6 = 16, el menor número que puede escribirse como la suma de dos números abundantes es 24. Mediante el análisis matemático, se puede demostrar que todos los enteros mayores que&amp;nbsp;28123 pueden ser escritos como la suma de dos números abundantes. Aun así, este límite superior no puede ser reducido de forma analítica a pesar de que se conoce que el mayor número que no puede expresarse como la suma de dos números abundantes es menor que este límite.&lt;/p&gt;&lt;p&gt;Encuentra la suma de todos los enteros positivos que no pueden ser escritos como la suma de dos números abundantes.&lt;/p&gt;</enunciado>
+    <nivel_en>1</nivel_en>
+    <orientadoALenguaje>true</orientadoALenguaje>
+    <solucion>
+      <lenguaje>Java</lenguaje>
+      <nivel_sol>1</nivel_sol>
+      <codigo>
+        <linea>public final class e23 {</linea>
+        <linea>	</linea>
+        <linea>	public static void main(String[] args) {</linea>
+        <linea>		System.out.println(new e23().run());</linea>
+        <linea>	}	</linea>
+        <linea>	</linea>
+        <linea>	private static final int LIMIT = 28123;	</linea>
+        <linea>	private boolean[] isAbundant = new boolean[LIMIT + 1];	</linea>
+        <linea>	public String run() {</linea>
+        <linea>		for (int i = 1; i &lt; isAbundant.length; i++)</linea>
+        <linea>			isAbundant[i] = isAbundant(i);</linea>
+        <linea>		</linea>
+        <linea>		int sum = 0;</linea>
+        <linea>		for (int i = 1; i &lt;= LIMIT; i++) {</linea>
+        <linea>			if (!isSumOf2Abundants(i))</linea>
+        <linea>				sum += i;</linea>
+        <linea>		}</linea>
+        <linea>		return Integer.toString(sum);</linea>
+        <linea>	}</linea>
+        <linea>		</linea>
+        <linea>	private boolean isSumOf2Abundants(int n) {</linea>
+        <linea>		for (int i = 0; i &lt;= n; i++) {</linea>
+        <linea>			if (isAbundant[i] &amp;&amp; isAbundant[n - i])</linea>
+        <linea>				return true;</linea>
+        <linea>		}</linea>
+        <linea>		return false;</linea>
+        <linea>	}</linea>
+        <linea>	</linea>
+        <linea>	private static boolean isAbundant(int n) {</linea>
+        <linea>		if (n &lt; 1)</linea>
+        <linea>			throw new IllegalArgumentException();</linea>
+        <linea>		</linea>
+        <linea>		int sum = 1;  // Suma de factores menores que n</linea>
+        <linea>		int end = Library.sqrt(n);</linea>
+        <linea>		for (int i = 2; i &lt;= end; i++) {</linea>
+        <linea>			if (n % i == 0)</linea>
+        <linea>				sum += i + n / i;</linea>
+        <linea>		}</linea>
+        <linea>		if (end * end == n)</linea>
+        <linea>			sum -= end;</linea>
+        <linea>		return sum &gt; n;</linea>
+        <linea>	}	</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>C</lenguaje>
+      <nivel_sol>1</nivel_sol>
+      <codigo>
+        <linea>#include &lt;stdio.h&gt;</linea>
+        <linea>#include &lt;stdlib.h&gt;</linea>
+        <linea/>
+        <linea>static int is_abundant(int n);</linea>
+        <linea/>
+        <linea>int main(void)</linea>
+        <linea>{</linea>
+        <linea>  int i, j;</linea>
+        <linea>  const int upper_limit = 28123;</linea>
+        <linea>  int *abundants, abundants_count = 0;</linea>
+        <linea>  char *expressed;</linea>
+        <linea>  int sum = 0;</linea>
+        <linea/>
+        <linea>  for (i = 1; i &lt; upper_limit; i++) {</linea>
+        <linea>    if (is_abundant(i)) {</linea>
+        <linea>      abundants_count++;</linea>
+        <linea>    }</linea>
+        <linea>  }</linea>
+        <linea/>
+        <linea>  abundants = malloc(abundants_count * sizeof *abundants);</linea>
+        <linea>  j = 0;</linea>
+        <linea>  for (i = 1; i &lt; upper_limit; i++) {</linea>
+        <linea>    if (is_abundant(i)) {</linea>
+        <linea>      abundants[j++] = i;</linea>
+        <linea>    }</linea>
+        <linea>  }</linea>
+        <linea/>
+        <linea>  expressed = calloc(upper_limit, sizeof *expressed);</linea>
+        <linea>  for (i = 0; i &lt; abundants_count; i++) {</linea>
+        <linea>    for (j = i; j &lt; abundants_count; j++) {</linea>
+        <linea>      int k = abundants[i] + abundants[j];</linea>
+        <linea>      if (k &gt;= upper_limit) {</linea>
+        <linea>        break;</linea>
+        <linea>      }</linea>
+        <linea>      expressed[k-1] = 1;</linea>
+        <linea>    }</linea>
+        <linea>  }</linea>
+        <linea/>
+        <linea>  for (i = 1; i &lt; upper_limit; i++) {</linea>
+        <linea>    if (!expressed[i-1]) {</linea>
+        <linea>      sum += i;</linea>
+        <linea>    }</linea>
+        <linea>  }</linea>
+        <linea>  printf("%d\n", sum);</linea>
+        <linea/>
+        <linea>  free(abundants);</linea>
+        <linea>  free(expressed);</linea>
+        <linea/>
+        <linea>  return 0;</linea>
+        <linea>}</linea>
+        <linea/>
+        <linea>int is_abundant(int n)</linea>
+        <linea>{</linea>
+        <linea>  int sum = 1;</linea>
+        <linea>  int i, k = n;</linea>
+        <linea>  for (i = 2; i &lt;= k; i++) {</linea>
+        <linea>    int p = 1;</linea>
+        <linea>    while (k % i == 0) {</linea>
+        <linea>      p *= i;</linea>
+        <linea>      k /= i;</linea>
+        <linea>    } </linea>
+        <linea>    sum *= (p*i - 1)/(i-1);</linea>
+        <linea>  }</linea>
+        <linea>  return 2*n &lt; sum;</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>Python</lenguaje>
+      <nivel_sol>1</nivel_sol>
+      <codigo>
+        <linea>import prime</linea>
+        <linea/>
+        <linea>MAX = 28124</linea>
+        <linea>prime._refresh(MAX/2)</linea>
+        <linea>abundants = [n for n in xrange(1, MAX) if sum(prime.all_factors(n)) &gt; n+n]</linea>
+        <linea>abundants_dict = dict.fromkeys(abundants, 1)</linea>
+        <linea/>
+        <linea>total = 0</linea>
+        <linea>for n in xrange(1, MAX):</linea>
+        <linea>    sum_of_abundants = 0</linea>
+        <linea>    for a in abundants:</linea>
+        <linea>        if a &gt; n: break</linea>
+        <linea>        if abundants_dict.get(n - a):</linea>
+        <linea>            sum_of_abundants = 1</linea>
+        <linea>            break</linea>
+        <linea>    if not sum_of_abundants:</linea>
+        <linea>        total = total + n</linea>
+        <linea/>
+        <linea>print total</linea>
+      </codigo>
+    </solucion>
+  </ejercicio>
+  <ejercicio id="e24">
+    <enunciado>&lt;p&gt;Una permutación es una disposición ordenada de objetos. Por ejemplo, 3124 es una posible permutación de los dígitos 1, 2, 3 y 4. Si todas las permutaciones se listan ordenadas numérica o alfabéticamente, al resultado lo llamamos orden lexicográfico. Las permutaciones lexicográficas de 0, 1 y 2 son:&lt;/p&gt;&lt;p style="text-align:center;"&gt;012&amp;nbsp; &amp;nbsp;021&amp;nbsp; &amp;nbsp;102&amp;nbsp; &amp;nbsp;120&amp;nbsp; &amp;nbsp;201&amp;nbsp; &amp;nbsp;210&lt;/p&gt;&lt;p&gt;¿Cuál es la millonésima permutación lexicográfica de los dígitos 0, 1, 2, 3, 4, 5, 6, 7, 8 y 9?&lt;/p&gt;</enunciado>
+    <nivel_en>1</nivel_en>
+    <orientadoALenguaje>true</orientadoALenguaje>
+    <solucion>
+      <lenguaje>Java</lenguaje>
+      <nivel_sol>1</nivel_sol>
+      <codigo>
+        <linea>public final class e24 {</linea>
+        <linea>	</linea>
+        <linea>	public static void main(String[] args) {</linea>
+        <linea>		System.out.println(new e24().run());</linea>
+        <linea>	}</linea>
+        <linea>	</linea>
+        <linea>	public String run() {</linea>
+        <linea>		// Inicializar</linea>
+        <linea>		int[] array = new int[10];</linea>
+        <linea>		for (int i = 0; i &lt; array.length; i++)</linea>
+        <linea>			array[i] = i;</linea>
+        <linea>		</linea>
+        <linea>		// Permutar</linea>
+        <linea>		for (int i = 0; i &lt; 999999; i++) {</linea>
+        <linea>			if (!Library.nextPermutation(array))</linea>
+        <linea>				throw new AssertionError();</linea>
+        <linea>		}</linea>
+        <linea>		</linea>
+        <linea>		// Formatear salida</linea>
+        <linea>		String ans = "";</linea>
+        <linea>		for (int i = 0; i &lt; array.length; i++)</linea>
+        <linea>			ans += array[i];</linea>
+        <linea>		return ans;</linea>
+        <linea>	}	</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>C</lenguaje>
+      <nivel_sol>1</nivel_sol>
+      <codigo>
+        <linea>#include &lt;iostream&gt;</linea>
+        <linea>#include &lt;algorithm&gt;</linea>
+        <linea/>
+        <linea>#define N 1000000</linea>
+        <linea/>
+        <linea>int main(void)</linea>
+        <linea>{</linea>
+        <linea>  using namespace std;</linea>
+        <linea/>
+        <linea>  int a[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};</linea>
+        <linea>  int i;</linea>
+        <linea/>
+        <linea>  for (i = 0; i &lt;= N; i++) {</linea>
+        <linea>    next_permutation(a, a + sizeof a/sizeof *a);</linea>
+        <linea>  }</linea>
+        <linea>  for (i = 0; i &lt; 10; i++) {</linea>
+        <linea>    cout &lt;&lt; a[i];</linea>
+        <linea>  }</linea>
+        <linea>  cout &lt;&lt; endl;</linea>
+        <linea/>
+        <linea>  return 0;</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>Python</lenguaje>
+      <nivel_sol>1</nivel_sol>
+      <codigo>
+        <linea>def fact(n):</linea>
+        <linea>    f = 1</linea>
+        <linea>    for x in xrange(1, n+1): f = f * x</linea>
+        <linea>    return f</linea>
+        <linea/>
+        <linea>def permutation(orig_nums, n):</linea>
+        <linea>    nums = list(orig_nums)</linea>
+        <linea>    perm = []</linea>
+        <linea>    while len(nums):</linea>
+        <linea>        divider = fact(len(nums)-1)</linea>
+        <linea>        pos = n / divider</linea>
+        <linea>        n = n % divider</linea>
+        <linea>        perm.append(nums[pos])</linea>
+        <linea>        nums = nums[0:pos] + nums[pos+1:]</linea>
+        <linea>    return perm</linea>
+        <linea/>
+        <linea>print ''.join(str(x) for x in permutation(range(0,10), 999999))</linea>
+      </codigo>
+    </solucion>
+  </ejercicio>
+  <ejercicio id="e25">
+    <enunciado>&lt;p&gt;La secuencia de Fibonacci se define mediante la siguiente relación de recurrencia:&lt;/p&gt;&lt;blockquote&gt;F&lt;sub&gt;&lt;i&gt;n&lt;/i&gt;&lt;/sub&gt; = F&lt;sub&gt;&lt;i&gt;n&lt;/i&gt;−1&lt;/sub&gt; + F&lt;sub&gt;&lt;i&gt;n&lt;/i&gt;−2&lt;/sub&gt;, donde F&lt;sub&gt;1&lt;/sub&gt; = 1 y F&lt;sub&gt;2&lt;/sub&gt; = 1.&lt;/blockquote&gt;&lt;p&gt;Así los primeros 12 términos de dicha secuencia son:&lt;/p&gt;&lt;blockquote&gt;F&lt;sub&gt;1&lt;/sub&gt; = 1&lt;br&gt;F&lt;sub&gt;2&lt;/sub&gt; = 1&lt;br&gt;F&lt;sub&gt;3&lt;/sub&gt; = 2&lt;br&gt;F&lt;sub&gt;4&lt;/sub&gt; = 3&lt;br&gt;F&lt;sub&gt;5&lt;/sub&gt; = 5&lt;br&gt;F&lt;sub&gt;6&lt;/sub&gt; = 8&lt;br&gt;F&lt;sub&gt;7&lt;/sub&gt; = 13&lt;br&gt;F&lt;sub&gt;8&lt;/sub&gt; = 21&lt;br&gt;F&lt;sub&gt;9&lt;/sub&gt; = 34&lt;br&gt;F&lt;sub&gt;10&lt;/sub&gt; = 55&lt;br&gt;F&lt;sub&gt;11&lt;/sub&gt; = 89&lt;br&gt;F&lt;sub&gt;12&lt;/sub&gt; = 144&lt;/blockquote&gt;&lt;p&gt;El doceavo término, F&lt;sub&gt;12&lt;/sub&gt;, es el primero en contener tres dígitos.&lt;/p&gt;&lt;p&gt;¿Cuál es el primer término de la secuencia de Fibonacci en contener 1000 dígitos?&lt;/p&gt;</enunciado>
+    <nivel_en>2</nivel_en>
+    <orientadoALenguaje>true</orientadoALenguaje>
+    <solucion>
+      <lenguaje>Java</lenguaje>
+      <nivel_sol>2</nivel_sol>
+      <codigo>
+        <linea>import java.math.BigInteger;</linea>
+        <linea></linea>
+        <linea>public final class e25 implements EulerSolution {</linea>
+        <linea>	</linea>
+        <linea>	public static void main(String[] args) {</linea>
+        <linea>		System.out.println(new e25().run());</linea>
+        <linea>	}	</linea>
+        <linea>	</linea>
+        <linea>	private static final int DIGITS = 1000;	</linea>
+        <linea>	public String run() {</linea>
+        <linea>		BigInteger lowerthres = BigInteger.TEN.pow(DIGITS - 1);</linea>
+        <linea>		BigInteger upperthres = BigInteger.TEN.pow(DIGITS);</linea>
+        <linea>		BigInteger prev = BigInteger.ONE;</linea>
+        <linea>		BigInteger cur = BigInteger.ZERO;</linea>
+        <linea>		int i = 0;</linea>
+        <linea>		while (true) {</linea>
+        <linea>			// En este punto, prev = fibonacci(i - 1) y cur = fibonacci(i)</linea>
+        <linea>			if (cur.compareTo(lowerthres) &gt;= 0)</linea>
+        <linea>				return Integer.toString(i);</linea>
+        <linea>			else if (cur.compareTo(upperthres) &gt;= 0)</linea>
+        <linea>				throw new RuntimeException("No encontrado");</linea>
+        <linea>			</linea>
+        <linea>			BigInteger temp = cur.add(prev);</linea>
+        <linea>			prev = cur;</linea>
+        <linea>			cur = temp;</linea>
+        <linea>			i++;</linea>
+        <linea>		}</linea>
+        <linea>	}	</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>C</lenguaje>
+      <nivel_sol>2</nivel_sol>
+      <codigo>
+        <linea>#include &lt;stdio.h&gt;</linea>
+        <linea>#include &lt;stdlib.h&gt;</linea>
+        <linea>#include &lt;string.h&gt;</linea>
+        <linea>#include &lt;gmp.h&gt;</linea>
+        <linea></linea>
+        <linea>int main(void)</linea>
+        <linea>{</linea>
+        <linea>  mpz_t n;</linea>
+        <linea>  int i = 1;</linea>
+        <linea></linea>
+        <linea>  mpz_init(n);</linea>
+        <linea></linea>
+        <linea>  for (i = 1;; i++) {</linea>
+        <linea>    char *str;</linea>
+        <linea>    size_t len;</linea>
+        <linea></linea>
+        <linea>    mpz_fib_ui(n, i);</linea>
+        <linea>    str = mpz_get_str(NULL, 10, n);</linea>
+        <linea>    len = strlen(str);</linea>
+        <linea>    free(str);</linea>
+        <linea>    if (len == 1000) {</linea>
+        <linea>      printf("%d\n", i);</linea>
+        <linea>      break;</linea>
+        <linea>    }</linea>
+        <linea>  }</linea>
+        <linea></linea>
+        <linea>  mpz_clear(n);</linea>
+        <linea></linea>
+        <linea>  return 0;</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>Python</lenguaje>
+      <nivel_sol>2</nivel_sol>
+      <codigo>
+        <linea>import math</linea>
+        <linea>phi = (1 + pow(5, 0.5)) / 2</linea>
+        <linea>c = math.log10(5) / 2</linea>
+        <linea>logphi = math.log10(phi)</linea>
+        <linea>n = 1</linea>
+        <linea>while True:</linea>
+        <linea>    if n * logphi - c &gt;= 999:</linea>
+        <linea>        print n</linea>
+        <linea>        break</linea>
+        <linea>    n = n + 1</linea>
+      </codigo>
+    </solucion>
+  </ejercicio>
+</ejercicios>

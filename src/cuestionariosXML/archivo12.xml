@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ejercicios xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../preguntas.xsd">
+  <ejercicio id="p01">
+    <enunciado>&lt;p&gt;Diseñe el algoritmo de Dijkstra.&lt;br&gt;&lt;/p&gt;&lt;p&gt;La idea subyacente en este algoritmo consiste en ir explorando todos los&#13;
+ caminos más cortos que parten del vértice origen y que llevan a todos &#13;
+los demás vértices; cuando se obtiene el camino más corto desde el &#13;
+vértice origen, al resto de vértices que componen el grafo, el algoritmo&#13;
+ se detiene. El algoritmo es una especialización de la búsqueda de costo&#13;
+ uniforme, y como tal, no funciona en grafos con aristas de coste &#13;
+negativo (al elegir siempre el nodo con distancia menor, pueden quedar &#13;
+excluidos de la búsqueda nodos que en próximas iteraciones bajarían el &#13;
+costo general del camino al pasar por una arista con costo negativo).&lt;/p&gt;</enunciado>
+    <nivel_en>1</nivel_en>
+    <orientadoALenguaje>false</orientadoALenguaje>
+    <solucion>
+      <lenguaje>Pseudocodigo</lenguaje>
+      <nivel_sol>1</nivel_sol>
+      <codigo>
+        <linea>función Dijkstra (Grafo G, nodo_salida s)</linea>
+        <linea>  //Usaremos un vector para guardar las distancias del nodo salida al resto</linea>
+        <linea>  entero distancia[n] </linea>
+        <linea>  //Inicializamos el vector con distancias iniciales</linea>
+        <linea>  booleano visto[n] </linea>
+        <linea>  //vector de boleanos para controlar los vértices de los que ya tenemos la distancia mínima</linea>
+        <linea>  para cada w ∈ V[G] hacer</linea>
+        <linea>     Si (no existe arista entre s y w) entonces</linea>
+        <linea>         distancia[w] = Infinito //puedes marcar la casilla con un -1 por ejemplo</linea>
+        <linea>     Si_no</linea>
+        <linea>         distancia[w] = peso (s, w)</linea>
+        <linea>     fin si </linea>
+        <linea>  fin para</linea>
+        <linea>  distancia[s] = 0</linea>
+        <linea>  visto[s] = cierto</linea>
+        <linea>  //n es el número de vértices que tiene el Grafo</linea>
+        <linea>  mientras que (no_estén_vistos_todos) hacer </linea>
+        <linea>     vértice = coger_el_mínimo_del_vector distancia y que no esté visto;</linea>
+        <linea>     visto[vértice] = cierto;</linea>
+        <linea>     para cada w ∈ sucesores (G, vértice) hacer</linea>
+        <linea>         si distancia[w]&gt;distancia[vértice]+peso (vértice, w) entonces</linea>
+        <linea>            distancia[w] = distancia[vértice]+peso (vértice, w)</linea>
+        <linea>         fin si</linea>
+        <linea>     fin para </linea>
+        <linea>  fin mientras</linea>
+        <linea>fin función.</linea>
+      </codigo>
+    </solucion>
+  </ejercicio>
+  <ejercicio id="p02">
+    <enunciado>Diseñar un algoritmo de búsqueda en profundidad para grafos.&lt;br&gt;</enunciado>
+    <nivel_en>1</nivel_en>
+    <orientadoALenguaje>false</orientadoALenguaje>
+    <solucion>
+      <lenguaje>Pseudocodigo</lenguaje>
+      <nivel_sol>1</nivel_sol>
+      <codigo>
+        <linea>DFS(grafo G)</linea>
+        <linea>     PARA CADA vertice u ∈ V[G] HACER</linea>
+        <linea>             estado[u] ← NO_VISITADO</linea>
+        <linea>             padre[u] ← NULO</linea>
+        <linea>     tiempo ← 0</linea>
+        <linea>     PARA CADA vertice u ∈ V[G] HACER</linea>
+        <linea>             SI estado[u] = NO_VISITADO ENTONCES</linea>
+        <linea>                     DFS_Visitar(u,tiempo)</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>Pseudocodigo</lenguaje>
+      <nivel_sol>1</nivel_sol>
+      <codigo>
+        <linea>DFS_Visitar(nodo u, int tiempo)</linea>
+        <linea>     estado[u] ← VISITADO</linea>
+        <linea>     tiempo ← tiempo + 1</linea>
+        <linea>     d[u] ← tiempo</linea>
+        <linea>     PARA CADA v ∈ Vecinos[u] HACER</linea>
+        <linea>             SI estado[v] = NO_VISITADO ENTONCES</linea>
+        <linea>                     padre[v] ← u</linea>
+        <linea>                     DFS_Visitar(v,tiempo)</linea>
+        <linea>     estado[u] ← TERMINADO</linea>
+        <linea>     tiempo ← tiempo + 1</linea>
+        <linea>     f[u] ← tiempo</linea>
+      </codigo>
+    </solucion>
+  </ejercicio>
+  <ejercicio id="p03">
+    <enunciado>&lt;p&gt;Diseña el algoritmo de Ford-Fulkerson.&lt;/p&gt;&lt;p&gt;El &lt;b&gt;algoritmo de Ford-Fulkerson&lt;/b&gt; propone buscar &lt;span class="mw-disambig"&gt;caminos&lt;/span&gt; en los que se pueda aumentar el flujo, hasta que se alcance el flujo máximo. Es aplicable a los &lt;span class="mw-redirect"&gt;Flujos maximales&lt;/span&gt;.&#13;
+ La idea es encontrar una ruta de penetración con un flujo positivo neto&#13;
+ que una los nodos origen y destino. Su nombre viene dado por sus &#13;
+creadores, &lt;span class="new"&gt;L. R. Ford, Jr.&lt;/span&gt; y &lt;span class="mw-redirect"&gt;D. R. Fulkerson&lt;/span&gt;.&lt;/p&gt;</enunciado>
+    <nivel_en>1</nivel_en>
+    <orientadoALenguaje>false</orientadoALenguaje>
+    <solucion>
+      <lenguaje>Pseudocodigo</lenguaje>
+      <nivel_sol>1</nivel_sol>
+      <codigo>
+        <linea>Ford-Fulkerson(G,s,t)</linea>
+        <linea> { </linea>
+        <linea>  for (cada arco (u,v) de E) </linea>
+        <linea>  { </linea>
+        <linea>   f[u,v]= 0; </linea>
+        <linea>   f[v,u]= 0; </linea>
+        <linea>  } </linea>
+        <linea>  while (exista un camino p desde s a t en la red residual Gf) </linea>
+        <linea>  { </linea>
+        <linea>    cf(p) = min{cf(u,v): (u,v) está sobre p};</linea>
+        <linea>    for (cada arco (u,v) en p) </linea>
+        <linea>    { </linea>
+        <linea>      f[u,v]= f[u,v] + cf(p); </linea>
+        <linea>      f[v,u]= - f[u,v]; </linea>
+        <linea>    }  </linea>
+        <linea>  } </linea>
+        <linea> }</linea>
+      </codigo>
+    </solucion>
+  </ejercicio>
+  <ejercicio id="p04">
+    <enunciado>Diseñe la búsqueda en anchura sobre un grafo.&lt;br&gt;</enunciado>
+    <nivel_en>1</nivel_en>
+    <orientadoALenguaje>false</orientadoALenguaje>
+    <solucion>
+      <lenguaje>Pseudocodigo</lenguaje>
+      <nivel_sol>2</nivel_sol>
+      <codigo>
+        <linea>/* Q = Estructura de datos cola */</linea>
+        <linea/>
+        <linea>BFS(grafo G, nodo_fuente s) </linea>
+        <linea>  { </linea>
+        <linea>     // recorremos todos los vértices del grafo inicializándolos a NO_VISITADO,</linea>
+        <linea>     // distancia INFINITA y padre de cada nodo NULL</linea>
+        <linea>     for u ∈ V[G] do</linea>
+        <linea>     {</linea>
+        <linea>        estado[u] = NO_VISITADO;</linea>
+        <linea>        distancia[u] = INFINITO; /* distancia infinita si el nodo no es alcanzable */</linea>
+        <linea>        padre[u] = NULL;</linea>
+        <linea>     }</linea>
+        <linea>     estado[s] = VISITADO;</linea>
+        <linea>     distancia[s] = 0;</linea>
+        <linea>     padre[s] = NULL;</linea>
+        <linea>     CrearCola(Q); /* nos aseguramos que la cola está vacía */</linea>
+        <linea>     Encolar(Q, s);</linea>
+        <linea>     while !vacia(Q) do</linea>
+        <linea>     {</linea>
+        <linea>        // extraemos el nodo u de la cola Q y exploramos todos sus nodos adyacentes</linea>
+        <linea>        u = extraer(Q);</linea>
+        <linea>        for  v ∈ adyacencia[u]  do</linea>
+        <linea>        {</linea>
+        <linea>           if estado[v] == NO_VISITADO then</linea>
+        <linea>           {</linea>
+        <linea>                estado[v] = VISITADO;</linea>
+        <linea>                distancia[v] = distancia[u] + 1;</linea>
+        <linea>                padre[v] = u;</linea>
+        <linea>                Encolar(Q, v);</linea>
+        <linea>           }</linea>
+        <linea>        }</linea>
+        <linea>     }</linea>
+        <linea>  }</linea>
+      </codigo>
+    </solucion>
+  </ejercicio>
+  <ejercicio id="p05">
+    <enunciado>&lt;p&gt;Implementa un ejemplo del algoritma de la panadería de Lamport.&lt;br&gt;&lt;/p&gt;&lt;p&gt;El algoritmo de la panadería toma su nombre de la costumbre de las &#13;
+panaderías y tiendas en general, donde las personas al entrar al local &#13;
+obtienen un número de turno (único) y lo utilizan para que el &#13;
+dependiente les vaya atendiendo en orden de llegada. El cliente obtiene &#13;
+su número de turno usando una cinta de papel que ofrece boletos con &#13;
+números consecutivos.&lt;/p&gt;&#13;
+&lt;p&gt;El dependiente sólo puede atender a una persona al mismo tiempo, lo &#13;
+que concuerda con el uso de un recurso de forma exclusiva: el recurso es&#13;
+ el dependiente y la sección crítica de un cliente es lo que realiza mientras es atendido.&lt;/p&gt;&#13;
+&lt;p&gt;El sistema mantiene un número (variable&#13;
+ global) que refleja el número de turno del cliente que se está &#13;
+atendiendo en el instante actual. Los clientes deben esperar en una cola&#13;
+ hasta que llega su turno. Una vez que se acaba con un cliente, la &#13;
+variable global se incrementa en uno y el cliente que tenga un boleto &#13;
+con ese número pasa a ser atendido. Cuando termina una compra, el &#13;
+cliente se desprende de su boleto y se dedica a realizar cualquier otra &#13;
+actividad libremente (guardar el dinero en la billetera, retirarse, &#13;
+etc.), ya que no se encuentra más en su sección crítica. Si más tarde &#13;
+quiere volver a comprar, tendrá que obtener un nuevo número.&lt;/p&gt;&#13;
+&lt;p&gt;En el modelo algorítmico que se propone, cada cliente es un &lt;span class="mw-redirect"&gt;hilo&lt;/span&gt;, identificado con un número único &lt;i&gt;i&lt;/i&gt;. Los hilos se deben coordinar para decidir en cada momento qué hilo tiene derecho a ejecutar su código de sección crítica.&lt;/p&gt;&#13;
+&lt;p&gt;En la vida real, el sistema de los boletos funciona perfectamente, &#13;
+pero en un sistema informático la obtención del boleto es problemática: &#13;
+varios hilos pueden obtener el mismo número de turno. En el algoritmo de&#13;
+ Lamport se permite que varios hilos obtengan el mismo número. En este &#13;
+caso, se aplica un algoritmo de &lt;i&gt;desempate&lt;/i&gt;, que garantiza que sólo&#13;
+ un hilo entra en sección crítica. El desempate se realiza así: si dos o&#13;
+ más hilos tienen el mismo número de turno, tiene más prioridad el hilo &#13;
+que tenga el identificador con un número más bajo. Como no puede haber &#13;
+dos hilos con el mismo identificador, nunca se da el caso de que dos &#13;
+hilos evalúen al mismo tiempo que tienen derecho a ejecutar su sección &#13;
+crítica.&lt;/p&gt;</enunciado>
+    <nivel_en>1</nivel_en>
+    <orientadoALenguaje>false</orientadoALenguaje>
+    <solucion>
+      <lenguaje>Pseudocodigo</lenguaje>
+      <nivel_sol>1</nivel_sol>
+      <codigo>
+        <linea>/* N es el número de hilos que hay en el sistema.</linea>
+        <linea>    Si número[i] = 0 significa que el hilo i no está interesado en entrar en sección crítica. */</linea>
+        <linea></linea>
+        <linea>  /* Variables globales */</linea>
+        <linea>  Número: vector [1..N] de enteros  = {todos a 0};</linea>
+        <linea>  Eligiendo: vector [1..N] de booleanos = {todos a falso};</linea>
+        <linea>    </linea>
+        <linea>  /* Código del hilo i */</linea>
+        <linea>  Hilo(i) {</linea>
+        <linea>      loop {</linea>
+        <linea></linea>
+        <linea>          /* Calcula el número de turno */</linea>
+        <linea>          Eligiendo[i] = cierto;</linea>
+        <linea>          Número[i] = 1 + max(Número[1],..., Número[N]);</linea>
+        <linea>          Eligiendo[i] = falso;</linea>
+        <linea>          </linea>
+        <linea>          /* Compara con todos los hilos */</linea>
+        <linea>          for j in 1..N {                     </linea>
+        <linea></linea>
+        <linea>               /* Si el hilo j está calculando su número, espera a que termine */</linea>
+        <linea>               while ( Eligiendo[j] ) { /* nada */ }       </linea>
+        <linea></linea>
+        <linea>               /* Si el hilo j tiene más prioridad, espera a que ponga su número a cero */</linea>
+        <linea>               /* j tiene más prioridad si su número de turno es más bajo que el de i,  */</linea>
+        <linea>               /*  o bien si es el mismo número y además j es menor que i               */</linea>
+        <linea>               while ( (Número[j] != 0) &amp;&amp; ((Número[j], j) &lt; (Número[i], i)) ) { /* nada */ }  </linea>
+        <linea>          }</linea>
+        <linea></linea>
+        <linea>          /* Sección crítica */</linea>
+        <linea>         ...</linea>
+        <linea>          /* Fin de sección crítica */</linea>
+        <linea></linea>
+        <linea>          Número[i] = 0;</linea>
+        <linea></linea>
+        <linea>          /* Código restante */</linea>
+        <linea>      }</linea>
+        <linea>  }</linea>
+      </codigo>
+    </solucion>
+  </ejercicio>
+</ejercicios>

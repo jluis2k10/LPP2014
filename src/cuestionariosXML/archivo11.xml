@@ -1,0 +1,2112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ejercicios xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../preguntas.xsd">
+  <ejercicio id="e51">
+    <enunciado>&lt;p&gt;Reemplazando el 1er dígito de un número de de 2 dígitos *3, resulta que seis de los nueve posibles valores, 13, 23, 43, 53, 73, y 83, son primos.&lt;/p&gt;&lt;p&gt;Reemplazando el 3º y 4º dígito de 56**3 con el mismo dígito, este número de 5 dígitos es el primer ejemplo en tener siete primos entre los diez números generados: 56003, 56113, 56333, 56443, 56663, 56773, y 56993. Consecuentemente, 56003, siendo el primer número de la familia, es el menor primo con esta propiedad.&lt;/p&gt;&lt;p&gt;Encuentra el menor primo el cual, reemplazando parte de sus dígitos (no necesariamente adyacentes) con el mismo dígito, sea parte de una familia de 8 números primos.&lt;/p&gt;</enunciado>
+    <nivel_en>4</nivel_en>
+    <orientadoALenguaje>true</orientadoALenguaje>
+    <solucion>
+      <lenguaje>Java</lenguaje>
+      <nivel_sol>4</nivel_sol>
+      <codigo>
+        <linea>import java.util.Arrays;</linea>
+        <linea/>
+        <linea>public final class e51 implements EulerSolution {</linea>
+        <linea>	</linea>
+        <linea>	public static void main(String[] args) {</linea>
+        <linea>		System.out.println(new e51().run());</linea>
+        <linea>	}</linea>
+        <linea>	</linea>
+        <linea>	public String run() {</linea>
+        <linea>		boolean[] isPrime = Library.listPrimality(1000000);</linea>
+        <linea>		for (int i = 0; i &lt; isPrime.length; i++) {</linea>
+        <linea>			if (isPrime[i]) {</linea>
+        <linea>				int[] n = toDigits(i);</linea>
+        <linea>				for (int mask = 0; mask &lt; (1 &lt;&lt; n.length); mask++) {</linea>
+        <linea>					int[] digits = doMask(n, mask);</linea>
+        <linea>					int count = 0;</linea>
+        <linea>					for (int j = 0; j &lt; 10; j++) {</linea>
+        <linea>						if (digits[0] != 0 &amp;&amp; isPrime[toNumber(digits)])</linea>
+        <linea>							count++;</linea>
+        <linea>						digits = addMask(digits, mask);</linea>
+        <linea>					}</linea>
+        <linea>					</linea>
+        <linea>					if (count == 8) {</linea>
+        <linea>						digits = doMask(n, mask);</linea>
+        <linea>						for (int j = 0; j &lt; 10; j++) {</linea>
+        <linea>							if (digits[0] != 0 &amp;&amp; isPrime[toNumber(digits)])</linea>
+        <linea>								return Integer.toString(toNumber(digits));</linea>
+        <linea>							digits = addMask(digits, mask);</linea>
+        <linea>						}</linea>
+        <linea>					}</linea>
+        <linea>				}</linea>
+        <linea>			}</linea>
+        <linea>		}</linea>
+        <linea>		throw new RuntimeException("No encontrado");</linea>
+        <linea>	}</linea>
+        <linea>	</linea>
+        <linea>	private static int[] toDigits(int n) {</linea>
+        <linea>		int[] temp = new int[10];</linea>
+        <linea>		int len = 0;</linea>
+        <linea>		do {</linea>
+        <linea>			temp[temp.length - 1 - len] = n % 10;</linea>
+        <linea>			n /= 10;</linea>
+        <linea>			len++;</linea>
+        <linea>		} while (n != 0);</linea>
+        <linea>		return Arrays.copyOfRange(temp, temp.length - len, temp.length);</linea>
+        <linea>	}</linea>
+        <linea>	</linea>
+        <linea>	private static int[] doMask(int[] digits, int mask) {</linea>
+        <linea>		int[] result = new int[digits.length];</linea>
+        <linea>		for (int i = 0; i &lt; digits.length; i++)</linea>
+        <linea>			result[i] = digits[i] * (~mask &gt;&gt;&gt; i &amp; 1);</linea>
+        <linea>		return result;</linea>
+        <linea>	}	</linea>
+        <linea/>
+        <linea>	private static int[] addMask(int[] digits, int mask) {</linea>
+        <linea>		int[] result = new int[digits.length];</linea>
+        <linea>		for (int i = 0; i &lt; digits.length; i++)</linea>
+        <linea>			result[i] = digits[i] + (mask &gt;&gt;&gt; i &amp; 1);</linea>
+        <linea>		return result;</linea>
+        <linea>	}</linea>
+        <linea>	</linea>
+        <linea>	private static int toNumber(int[] digits) {</linea>
+        <linea>		int result = 0;</linea>
+        <linea>		for (int x : digits)</linea>
+        <linea>			result = result * 10 + x;</linea>
+        <linea>		return result;</linea>
+        <linea>	}	</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>Python</lenguaje>
+      <nivel_sol>4</nivel_sol>
+      <codigo>
+        <linea>import prime</linea>
+        <linea>from combinatorics import uniqueCombinations</linea>
+        <linea/>
+        <linea>cache = {}</linea>
+        <linea>def prime_family_length(n, digits):</linea>
+        <linea>    if cache.has_key((n, digits)): return cache[n, digits]</linea>
+        <linea/>
+        <linea>    num, nums, count = list(str(n)), [], 0</linea>
+        <linea>    if len(dict.fromkeys(num[d] for d in digits).keys()) &gt; 1:</linea>
+        <linea>        return cache.setdefault((n, digits), 0)                                # Los dígitos deben tener el mismo número</linea>
+        <linea/>
+        <linea>    for d in range(0 in digits and 1 or 0, 10):                                 # Asegurarse de que 0 no es el primer dígito</linea>
+        <linea>        for x in digits: num[x] = str(d)</linea>
+        <linea>        n = int(''.join(num))</linea>
+        <linea>        if prime.isprime(n): count += 1</linea>
+        <linea>        nums.append(n)</linea>
+        <linea>    for n in nums: cache[n, digits] = count</linea>
+        <linea>    return count</linea>
+        <linea/>
+        <linea>prime._refresh(100000)</linea>
+        <linea/>
+        <linea>n, max, max_count, combos = 10, 0, 0, {}</linea>
+        <linea>while max_count &lt; 8:</linea>
+        <linea>    p = prime.prime(n)</linea>
+        <linea>    digits = range(0, len(str(p)))</linea>
+        <linea>    for size in xrange(1, len(digits)):</linea>
+        <linea>        patterns = combos.setdefault((len(digits), size),</linea>
+        <linea>            tuple(tuple(sorted(p)) for p in uniqueCombinations(digits, size)))</linea>
+        <linea>        for pat in patterns:</linea>
+        <linea>            count = prime_family_length(p, pat)</linea>
+        <linea>            if count &gt; max_count: max, max_count = p, count</linea>
+        <linea>    n += 1</linea>
+        <linea/>
+        <linea>print p</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>Perl</lenguaje>
+      <nivel_sol>4</nivel_sol>
+      <codigo>
+        <linea>$primecount = 0;</linea>
+        <linea>while ($primecount &lt; 8) {</linea>
+        <linea>  $i++;</linea>
+        <linea>  print "$i\n" if ($i % 10000 == 0);</linea>
+        <linea>  next if (! (isprime($i)));</linea>
+        <linea>  $primecount = countprimes($i);</linea>
+        <linea>}</linea>
+        <linea>print "Stopped at $i (primecount = $primecount)\n";</linea>
+        <linea>exit;</linea>
+        <linea/>
+        <linea>sub countprimes {</linea>
+        <linea>  my $x = shift;</linea>
+        <linea>  my @crossed = ();</linea>
+        <linea>  my $c = 1;</linea>
+        <linea>  for ($j = 0; $j &lt; length($x); $j++) {</linea>
+        <linea>    $m = substr($x,$j,1);</linea>
+        <linea>    next if ($crossed[$m] || ($x !~ $m));</linea>
+        <linea>	$crossed[$m] = 1;</linea>
+        <linea>	$d = 1;</linea>
+        <linea>	for ($k = 0; $k &lt; 10; $k++) {</linea>
+        <linea>	  next if ($k == $m);</linea>
+        <linea>	  $n = $x;</linea>
+        <linea>	  $n =~ s/$m/$k/g;</linea>
+        <linea>	  $d++; if (isprime($n) &amp;&amp; $n eq int($n));</linea>
+        <linea>	}</linea>
+        <linea>	$c = $d if ($d &gt; $c);</linea>
+        <linea>  }</linea>
+        <linea>  return $c;</linea>
+        <linea>}</linea>
+        <linea/>
+        <linea>sub isprime {</linea>
+        <linea>    my $num = $_[0];</linea>
+        <linea>    my $val = 'prime';</linea>
+        <linea>    if ($num =~ /^\d+$/ &amp;&amp; $num &gt;= 2) {</linea>
+        <linea>        my $mod = 2;</linea>
+        <linea>        my $div = int sqrt $num;</linea>
+        <linea>        while ($mod &lt;= $div) {</linea>
+        <linea>            ($num % $mod) == 0 ? ($val = 'composite', last) : $mod++;</linea>
+        <linea>        }</linea>
+        <linea>    } else { $val = 'neither'; }</linea>
+        <linea>    if ($val eq 'prime') {</linea>
+        <linea>      return 1;</linea>
+        <linea>    } else {</linea>
+        <linea>      return 0;</linea>
+        <linea>    }</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+  </ejercicio>
+  <ejercicio id="e52">
+    <enunciado>&lt;p&gt;Se puede observar que el número 125874 y su doble, 251748, contienen los mismos dígitos, pero en diferente orden.&lt;/p&gt;&lt;p&gt;Encuentra el entero más pequeño positivo, &lt;span style="font-style: italic;"&gt;x&lt;/span&gt;, de modo que 2&lt;i&gt;x&lt;/i&gt;, 3&lt;i&gt;x&lt;/i&gt;, 4&lt;i&gt;x&lt;/i&gt;, 5&lt;i&gt;x&lt;/i&gt;, y 6&lt;i&gt;x&lt;/i&gt;, contengan los mismos dígitos.&lt;/p&gt;</enunciado>
+    <nivel_en>4</nivel_en>
+    <orientadoALenguaje>true</orientadoALenguaje>
+    <solucion>
+      <lenguaje>Java</lenguaje>
+      <nivel_sol>3</nivel_sol>
+      <codigo>
+        <linea>import java.util.Arrays;</linea>
+        <linea/>
+        <linea>public final class e52 {</linea>
+        <linea>	</linea>
+        <linea>	public static void main(String[] args) {</linea>
+        <linea>		System.out.println(new e52().run());</linea>
+        <linea>	}</linea>
+        <linea>	</linea>
+        <linea>	public String run() {</linea>
+        <linea>		outer:</linea>
+        <linea>		for (int i = 1; ; i++) {</linea>
+        <linea>			for (int j = 2; j &lt; 6; j++) {</linea>
+        <linea>				if (!hasSameDigits(i * j, i * (j + 1)))</linea>
+        <linea>					continue outer;</linea>
+        <linea>			}</linea>
+        <linea>			return Integer.toString(i);</linea>
+        <linea>		}</linea>
+        <linea>	}</linea>
+        <linea>	</linea>
+        <linea>	private static boolean hasSameDigits(int x, int y) {</linea>
+        <linea>		char[] xdigits = Integer.toString(x).toCharArray();</linea>
+        <linea>		char[] ydigits = Integer.toString(y).toCharArray();</linea>
+        <linea>		Arrays.sort(xdigits);</linea>
+        <linea>		Arrays.sort(ydigits);</linea>
+        <linea>		return Arrays.equals(xdigits, ydigits);</linea>
+        <linea>	}	</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>Python</lenguaje>
+      <nivel_sol>2</nivel_sol>
+      <codigo>
+        <linea>def multiples_have_same_digits(n):</linea>
+        <linea>    digit_keys = dict.fromkeys(list(str(n)))</linea>
+        <linea>    for x in xrange(2, 4):</linea>
+        <linea>        for d in list(str(x * n)):</linea>
+        <linea>            if not digit_keys.has_key(d): return False</linea>
+        <linea>    return True</linea>
+        <linea/>
+        <linea>n = 0</linea>
+        <linea>while True:</linea>
+        <linea>    n = n + 9                           # n must be a multiple of 9 for this to happen</linea>
+        <linea>    if multiples_have_same_digits(n):</linea>
+        <linea>        print n</linea>
+        <linea>        break</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>Perl</lenguaje>
+      <nivel_sol>3</nivel_sol>
+      <codigo>
+        <linea>$n = 1;</linea>
+        <linea/>
+        <linea>while (! $ok) {</linea>
+        <linea>	%p1 = %{d($n)};</linea>
+        <linea>	%p2 = %{d($n * 2)};</linea>
+        <linea>	%p3 = %{d($n * 3)};</linea>
+        <linea>	%p4 = %{d($n * 4)};</linea>
+        <linea>	%p5 = %{d($n * 5)};</linea>
+        <linea>	%p6 = %{d($n * 6)};</linea>
+        <linea>	$ok = c(\%p1,\%p2) &amp;&amp; c(\%p2,\%p3) &amp;&amp; c(\%p3,\%p4) &amp;&amp; c(\%p4,\%p5) &amp;&amp; c(\%p5,\%p6);</linea>
+        <linea>	$n++;</linea>
+        <linea>}</linea>
+        <linea>print '' . ($n - 1) . "\n";</linea>
+        <linea/>
+        <linea>sub c</linea>
+        <linea>{</linea>
+        <linea>	my ($q,$r) = @_;</linea>
+        <linea>	%a = %{$q};</linea>
+        <linea>	%b = %{$r};</linea>
+        <linea>	$ok = 1;</linea>
+        <linea>	if (length(keys(%a)) != length(keys(%a))) {</linea>
+        <linea>		$ok = 0;</linea>
+        <linea>		return 0;</linea>
+        <linea>	} else {</linea>
+        <linea>		foreach $k (keys(%a)) {</linea>
+        <linea>		  if ($b{$k} != 1) {</linea>
+        <linea>			$ok = 0;</linea>
+        <linea>		    return 0;</linea>
+        <linea>		  }</linea>
+        <linea>		}</linea>
+        <linea>	}</linea>
+        <linea>	return $ok;</linea>
+        <linea>}</linea>
+        <linea/>
+        <linea>sub d</linea>
+        <linea>{</linea>
+        <linea>	my ($j) = @_;</linea>
+        <linea>	%digits = ();</linea>
+        <linea>	for ($i = 0; $i &lt; length($j); $i++) {</linea>
+        <linea>	  $digits{substr($j,$i,1)} = 1;</linea>
+        <linea>	}</linea>
+        <linea>	return \%digits;</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+  </ejercicio>
+  <ejercicio id="e53">
+    <enunciado>&lt;p&gt;Existen exactamente diez maneras de elegir tres de cinco, 12345:&lt;/p&gt;&lt;p style="text-align:center;"&gt;123, 124, 125, 134, 135, 145, 234, 235, 245, y 345&lt;/p&gt;&lt;p&gt;En combinatoria, se utiliza la notación &lt;sup&gt;5&lt;/sup&gt;C&lt;sub&gt;3&lt;/sub&gt; = 10.&lt;/p&gt;&lt;p&gt;En general,&lt;/p&gt;&lt;div style="text-align:center;"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td&gt;&lt;sup&gt;&lt;var&gt;n&lt;/var&gt;&lt;/sup&gt;C&lt;sub&gt;&lt;var&gt;r&lt;/var&gt;&lt;/sub&gt; = &lt;/td&gt;&lt;td&gt;&lt;div style="text-align:center;"&gt;&lt;var&gt;n&lt;/var&gt;!&lt;br&gt;&lt;span style="border-top:1px solid #000;"&gt;&lt;var&gt;r&lt;/var&gt;!(&lt;var&gt;n−r&lt;/var&gt;)!&lt;/span&gt;&lt;/div&gt;&lt;/td&gt;&lt;td&gt;, donde &lt;var&gt;r&lt;/var&gt; ≤ &lt;var&gt;n&lt;/var&gt;, &lt;var&gt;n&lt;/var&gt;! = &lt;var&gt;n&lt;/var&gt;×(&lt;var&gt;n&lt;/var&gt;−1)×...×3×2×1, y 0! = 1.&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;&lt;p&gt;No es hasta que &lt;var&gt;n&lt;/var&gt; = 23 que un valor supera el millón: &lt;sup&gt;23&lt;/sup&gt;C&lt;sub&gt;10&lt;/sub&gt; = 1144066.&lt;/p&gt;&lt;p&gt;¿Cuántos valores, no necesariamente distintos, de &lt;sup&gt;&lt;var&gt;n&lt;/var&gt;&lt;/sup&gt;C&lt;sub&gt;&lt;var&gt;r&lt;/var&gt;&lt;/sub&gt;, para 1 ≤ &lt;var&gt;n&lt;/var&gt; ≤ 100, son mayores que un millón?&lt;/p&gt;</enunciado>
+    <nivel_en>4</nivel_en>
+    <orientadoALenguaje>true</orientadoALenguaje>
+    <solucion>
+      <lenguaje>Java</lenguaje>
+      <nivel_sol>2</nivel_sol>
+      <codigo>
+        <linea>import java.math.BigInteger;</linea>
+        <linea/>
+        <linea/>
+        <linea>public final class e53 {</linea>
+        <linea>	</linea>
+        <linea>	public static void main(String[] args) {</linea>
+        <linea>		System.out.println(new e53().run());</linea>
+        <linea>	}</linea>
+        <linea>	</linea>
+        <linea>	public String run() {</linea>
+        <linea>		BigInteger MILLION = BigInteger.TEN.pow(6);</linea>
+        <linea>		int count = 0;</linea>
+        <linea>		for (int n = 1; n &lt;= 100; n++) {</linea>
+        <linea>			for (int r = 0; r &lt;= n; r++) {</linea>
+        <linea>				if (Library.binomial(n, r).compareTo(MILLION) &gt; 0)</linea>
+        <linea>					count++;</linea>
+        <linea>			}</linea>
+        <linea>		}</linea>
+        <linea>		return Integer.toString(count);</linea>
+        <linea>	}	</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>Python</lenguaje>
+      <nivel_sol>2</nivel_sol>
+      <codigo>
+        <linea>fact_c = { 0: 1, 1: 1 }</linea>
+        <linea>def fact(n): return fact_c.has_key(n) and fact_c[n] or fact_c.setdefault(n, n * fact(n-1))</linea>
+        <linea/>
+        <linea>count = 0</linea>
+        <linea>for n in xrange(1, 101):</linea>
+        <linea>    for r in xrange(0, n):</linea>
+        <linea>        ncr = fact(n) / fact(r) / fact(n-r)</linea>
+        <linea>        if ncr &gt; 1000000: count += 1</linea>
+        <linea>print count</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>C#</lenguaje>
+      <nivel_sol>4</nivel_sol>
+      <codigo>
+        <linea>using System;</linea>
+        <linea>using System.Diagnostics;</linea>
+        <linea>using System.Numerics;</linea>
+        <linea/>
+        <linea>namespace euler {</linea>
+        <linea>    class Problem53 {</linea>
+        <linea>        /* 4 formas diferentes de resolver el problema */</linea>
+        <linea>        public static void Main(string[] args) {</linea>
+        <linea>            new Problem53().BruteForce();</linea>
+        <linea>            new Problem53().SolveWithCaching();</linea>
+        <linea>            new Problem53().SolveWithPascalTriangle();</linea>
+        <linea>            new Problem53().SolveWithOptimizedPascalTriangle();</linea>
+        <linea>        }</linea>
+        <linea>       </linea>
+        <linea>        public void BruteForce() {</linea>
+        <linea>            Stopwatch clock = Stopwatch.StartNew();</linea>
+        <linea/>
+        <linea>            int result = 0;</linea>
+        <linea>            const int limit = 1000000;</linea>
+        <linea>            const int nlimit = 100;</linea>
+        <linea/>
+        <linea>            for (int n = 1; n &lt;= nlimit; n++) {</linea>
+        <linea>                for (int r = 0; r &lt;= n; r++) {</linea>
+        <linea>                    if(factorial(n) / (factorial(r)*factorial(n-r)) &gt;= limit) result++;</linea>
+        <linea>                }                </linea>
+        <linea>            }</linea>
+        <linea>                           </linea>
+        <linea>            clock.Stop();</linea>
+        <linea>            Console.WriteLine("El número de valores por encima de 1000000 es {0}", result);</linea>
+        <linea>            Console.WriteLine("Solución encontrada en {0} ms", clock.ElapsedMilliseconds);</linea>
+        <linea>        }</linea>
+        <linea/>
+        <linea/>
+        <linea>        public void SolveWithCaching() {</linea>
+        <linea>            Stopwatch clock = Stopwatch.StartNew();</linea>
+        <linea/>
+        <linea>            int result = 0;</linea>
+        <linea>            const int limit = 100000;</linea>
+        <linea>            const int nlimit = 100;</linea>
+        <linea>            BigInteger[] fac = factorials(nlimit);</linea>
+        <linea>            </linea>
+        <linea>            for (int n = 1; n &lt;= nlimit; n++) {</linea>
+        <linea>                for (int r = 1; r &lt; n; r ++) {</linea>
+        <linea>                    if (fac[n] / (fac[r] * fac[n-r]) &gt;= limit) result++;</linea>
+        <linea>                }</linea>
+        <linea>            }</linea>
+        <linea>            </linea>
+        <linea>            clock.Stop();</linea>
+        <linea>            Console.WriteLine("El número de valores por encima de 1000000 es {0}", result);</linea>
+        <linea>            Console.WriteLine("Solución encontrada en {0} ms", clock.ElapsedMilliseconds);</linea>
+        <linea>        }</linea>
+        <linea/>
+        <linea>        public void SolveWithPascalTriangle() {</linea>
+        <linea>            Stopwatch clock = Stopwatch.StartNew();</linea>
+        <linea/>
+        <linea>            int result = 0;</linea>
+        <linea>            const int limit = 1000000;</linea>
+        <linea>            const int nlimit = 100;</linea>
+        <linea/>
+        <linea>            int[,] pascalTriangle = new int[nlimit+1, nlimit+1];</linea>
+        <linea>            for (int n = 0; n &lt;= nlimit; n++) {</linea>
+        <linea>                pascalTriangle[n, 0] = 1;            </linea>
+        <linea>            }</linea>
+        <linea>            </linea>
+        <linea>            for (int n = 1; n &lt;= nlimit; n++) {</linea>
+        <linea>                for (int r = 1; r &lt;= n; r++) {</linea>
+        <linea>                    pascalTriangle[n, r] = pascalTriangle[n - 1, r] + pascalTriangle[n - 1, r - 1];</linea>
+        <linea>                    if (pascalTriangle[n, r] &gt; limit) {</linea>
+        <linea>                        pascalTriangle[n, r] = limit;</linea>
+        <linea>                        result++;</linea>
+        <linea>                    }                    </linea>
+        <linea>                }</linea>
+        <linea>            }</linea>
+        <linea>            </linea>
+        <linea>            clock.Stop();</linea>
+        <linea>            Console.WriteLine("El número de valores por encima de 1000000 es {0}", result);</linea>
+        <linea>            Console.WriteLine("Solución encontrada en {0} ms", clock.ElapsedMilliseconds);</linea>
+        <linea>        }</linea>
+        <linea/>
+        <linea>        public void SolveWithOptimizedPascalTriangle() {</linea>
+        <linea>            Stopwatch clock = Stopwatch.StartNew();</linea>
+        <linea/>
+        <linea>            int result = 0;</linea>
+        <linea>            const int limit = 1000000;</linea>
+        <linea>            const int nlimit = 100;</linea>
+        <linea>            </linea>
+        <linea>            int[,] pascalTriangle = new int[nlimit + 1, nlimit/2 + 1];</linea>
+        <linea>            for (int n = 0; n &lt;= nlimit; n++) {</linea>
+        <linea>                pascalTriangle[n, 0] = 1;</linea>
+        <linea>            }</linea>
+        <linea>            </linea>
+        <linea>            for (int n = 1; n &lt;= nlimit; n++) {               </linea>
+        <linea>                for (int r = 1; r &lt;= n/2; r++) {</linea>
+        <linea>                    pascalTriangle[n, r] = pascalTriangle[n - 1, r] + pascalTriangle[n - 1, r - 1];                    </linea>
+        <linea>                    if (r == n / 2 &amp;&amp; n % 2 == 0) pascalTriangle[n, r] += pascalTriangle[n - 1, r - 1];</linea>
+        <linea>                </linea>
+        <linea>                    if (pascalTriangle[n, r] &gt; limit) {</linea>
+        <linea>                        pascalTriangle[n, r] = limit;</linea>
+        <linea>                        result += n - 2 * r + 1;</linea>
+        <linea>                        break;</linea>
+        <linea>                    }</linea>
+        <linea>                }</linea>
+        <linea>            }</linea>
+        <linea/>
+        <linea>            clock.Stop();</linea>
+        <linea>            Console.WriteLine("El número de valores por encima de 1000000 es {0}", result);</linea>
+        <linea>            Console.WriteLine("Solución encontrada en {0} ms", clock.ElapsedMilliseconds);</linea>
+        <linea>        }</linea>
+        <linea/>
+        <linea/>
+        <linea/>
+        <linea>        private BigInteger factorial(int x) {                        </linea>
+        <linea>            BigInteger y = 1;</linea>
+        <linea>            for (int i = 2; i &lt;= x; i++) {</linea>
+        <linea>                y *= i;</linea>
+        <linea>            }</linea>
+        <linea>            return y;</linea>
+        <linea>        }</linea>
+        <linea/>
+        <linea>        private BigInteger[] factorials(int x) {</linea>
+        <linea>            if (x &lt; 0) return null;</linea>
+        <linea>            </linea>
+        <linea>            BigInteger[] y = new BigInteger[x+1];</linea>
+        <linea>            y[0] = 1;</linea>
+        <linea>                       </linea>
+        <linea>            for (int i = 1; i &lt;= x; i++) {</linea>
+        <linea>                y[i] = y[i-1]*i;                </linea>
+        <linea>            }</linea>
+        <linea/>
+        <linea>            return y;</linea>
+        <linea>        }</linea>
+        <linea>     </linea>
+        <linea>    }</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+  </ejercicio>
+  <ejercicio id="e54">
+    <enunciado>&lt;p&gt;En el juego del poker, una jugada consiste en 5 cartas clasificadas, de menor a mayor, de la siguiente manera:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;&lt;b&gt;Carta más alta&lt;/b&gt;: La carta con valor más alto.&lt;/li&gt;&lt;li&gt;&lt;b&gt;Parejas&lt;/b&gt;: Dos cartas con el mismo valor.&lt;/li&gt;&lt;li&gt;&lt;b&gt;Dobles parejas&lt;/b&gt;: Dos parejas diferentes.&lt;/li&gt;&lt;li&gt;&lt;b&gt;Trío&lt;/b&gt;: Tres cartas con el mismo valor.&lt;/li&gt;&lt;li&gt;&lt;b&gt;Escalera&lt;/b&gt;: Todas las cartas con valores consecutivos.&lt;/li&gt;&lt;li&gt;&lt;b&gt;Color&lt;/b&gt;: Todas las cartas del mismo palo.&lt;/li&gt;&lt;li&gt;&lt;b&gt;Full&lt;/b&gt;: Un trío y una pareja.&lt;/li&gt;&lt;li&gt;&lt;b&gt;Poker&lt;/b&gt;: Cuatro cartas con el mismo valor.&lt;/li&gt;&lt;li&gt;&lt;b&gt;Escalera de color&lt;/b&gt;: Todas las cartas con valores consecutivos y del mismo palo.&lt;/li&gt;&lt;li&gt;&lt;b&gt;Escalera Real&lt;/b&gt;: Diez, Sota, Reina, Rey, As, del mismo palo.&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Las cartas se valoran, de menor a mayor, en el siguiente orden:&lt;br&gt;2, 3, 4, 5, 6, 7, 8, 9, 10, Sota, Reina, Rey, As.&lt;/p&gt;&lt;p&gt;Si dos jugadores tienen la misma jugada, entonces el que tenga la mano con las cartas más altas de los dos gana; por ejemplo, una pareja de ochos gana a una pareja de sietes. Si además ambas jugadas son iguales, por ejemplo ambos jugadores tienen una pareja de reinas, entonces se comparan las cartas más altas de cada mano.&lt;/p&gt;&lt;p&gt;Considera las siguientes manos repartidas a dos jugadores:&lt;/p&gt;&lt;div style="text-align:center;"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td&gt;&lt;b&gt;Mano&lt;/b&gt;&lt;/td&gt;&lt;td&gt;&amp;nbsp;&lt;/td&gt;&lt;td&gt;&lt;b&gt;Jugador 1&lt;/b&gt;&lt;/td&gt;&lt;td&gt;&amp;nbsp;&lt;/td&gt;&lt;td&gt;&lt;b&gt;Jugador 2&lt;/b&gt;&lt;/td&gt;&lt;td&gt;&amp;nbsp;&lt;/td&gt;&lt;td&gt;&lt;b&gt;Ganador&lt;/b&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="vertical-align:top;"&gt;&lt;b&gt;1&lt;/b&gt;&lt;/td&gt;&lt;td&gt;&amp;nbsp;&lt;/td&gt;&lt;td&gt;5H 5C 6S 7S KD&lt;br&gt;&lt;div class="note"&gt;Pareja de cincos&lt;br&gt;&lt;/div&gt;&lt;/td&gt;&lt;td&gt;&amp;nbsp;&lt;/td&gt;&lt;td&gt;2C 3S 8S 8D TD&lt;br&gt;&lt;div class="note"&gt;Pareja de ochos&lt;br&gt;&lt;/div&gt;&lt;/td&gt;&lt;td&gt;&amp;nbsp;&lt;/td&gt;&lt;td style="vertical-align:top;"&gt;Jugador 2&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="vertical-align:top;"&gt;&lt;b&gt;2&lt;/b&gt;&lt;/td&gt;&lt;td&gt;&amp;nbsp;&lt;/td&gt;&lt;td&gt;5D 8C 9S JS AC&lt;br&gt;&lt;div class="note"&gt;Carta más alta As&lt;br&gt;&lt;/div&gt;&lt;/td&gt;&lt;td&gt;&amp;nbsp;&lt;/td&gt;&lt;td&gt;2C 5C 7D 8S QH&lt;br&gt;&lt;div class="note"&gt;Carta más alta Reina&lt;br&gt;&lt;/div&gt;&lt;/td&gt;&lt;td&gt;&amp;nbsp;&lt;/td&gt;&lt;td style="vertical-align:top;"&gt;Jugador 1&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="vertical-align:top;"&gt;&lt;b&gt;3&lt;/b&gt;&lt;/td&gt;&lt;td&gt;&amp;nbsp;&lt;/td&gt;&lt;td&gt;2D 9C AS AH AC&lt;br&gt;&lt;div class="note"&gt;Trío de Ases&lt;br&gt;&lt;/div&gt;&lt;/td&gt;&lt;td&gt;&amp;nbsp;&lt;/td&gt;&lt;td&gt;3D 6D 7D TD QD&lt;br&gt;&lt;div class="note"&gt;Color de Diamantes&lt;br&gt;&lt;/div&gt;&lt;/td&gt;&lt;td&gt;&amp;nbsp;&lt;/td&gt;&lt;td style="vertical-align:top;"&gt;Jugador 2&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="vertical-align:top;"&gt;&lt;b&gt;4&lt;/b&gt;&lt;/td&gt;&lt;td&gt;&amp;nbsp;&lt;/td&gt;&lt;td&gt;4D 6S 9H QH QC&lt;br&gt;&lt;div class="note"&gt;Pareja de Reinas&lt;br&gt;Carta más alta Nueve&lt;br&gt;&lt;/div&gt;&lt;/td&gt;&lt;td&gt;&amp;nbsp;&lt;/td&gt;&lt;td&gt;3D 6D 7H QD QS&lt;br&gt;&lt;div class="note"&gt;Pareja de Reinas&lt;br&gt;Carta más alta Siete&lt;br&gt;&lt;/div&gt;&lt;/td&gt;&lt;td&gt;&amp;nbsp;&lt;/td&gt;&lt;td style="vertical-align:top;"&gt;Jugador 1&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="vertical-align:top;"&gt;&lt;b&gt;5&lt;/b&gt;&lt;/td&gt;&lt;td&gt;&amp;nbsp;&lt;/td&gt;&lt;td&gt;2H 2D 4C 4D 4S&lt;br&gt;&lt;div class="note"&gt;Full Cuatros Doses&lt;br&gt;&lt;br&gt;&lt;/div&gt;&lt;/td&gt;&lt;td&gt;&amp;nbsp;&lt;/td&gt;&lt;td&gt;3C 3D 3S 9S 9D&lt;br&gt;&lt;div class="note"&gt;Full Treses Nueves&lt;br&gt;&lt;br&gt;&lt;/div&gt;&lt;/td&gt;&lt;td&gt;&amp;nbsp;&lt;/td&gt;&lt;td style="vertical-align:top;"&gt;Jugador 1&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;&lt;p&gt;El archivo &lt;a href="https://projecteuler.net/project/resources/p054_poker.txt"&gt;poker.txt&lt;/a&gt;, contiene mil manos aleatorias repartidas a dos jugadores. Cada línea del fichero contiene diez cartas separadas por un espacio: las primeras cinco son las cartas del Jugador 1 y las cinco últimas son las del Jugador 2. Puedes asumir que todas las manos son válidas (no hay caracteres erróneos o cartas repetidas), cada mano no tiene un orden en concreto, y cada una tiene un ganador claro.&lt;/p&gt;&lt;p&gt;¿Cuántas manos gana el Jugador 1?&lt;/p&gt;</enunciado>
+    <nivel_en>4</nivel_en>
+    <orientadoALenguaje>true</orientadoALenguaje>
+    <solucion>
+      <lenguaje>Java</lenguaje>
+      <nivel_sol>4</nivel_sol>
+      <codigo>
+        <linea>public final class e54 {</linea>
+        <linea>	</linea>
+        <linea>	public static void main(String[] args) {</linea>
+        <linea>		System.out.println(new e54().run());</linea>
+        <linea>	}</linea>
+        <linea>		</linea>
+        <linea>	public String run() {</linea>
+        <linea>		int count = 0;</linea>
+        <linea>		for (String hand : HANDS) {</linea>
+        <linea>			String[] cards = hand.split(" ");</linea>
+        <linea>			if (cards.length != 10)</linea>
+        <linea>				throw new AssertionError();</linea>
+        <linea>			</linea>
+        <linea>			Card[] player1 = new Card[5];</linea>
+        <linea>			Card[] player2 = new Card[5];</linea>
+        <linea>			for (int i = 0; i &lt; 5; i++) {</linea>
+        <linea>				player1[i] = new Card(cards[i + 0]);</linea>
+        <linea>				player2[i] = new Card(cards[i + 5]);</linea>
+        <linea>			}</linea>
+        <linea>			</linea>
+        <linea>			if (getScore(player1) &gt; getScore(player2))</linea>
+        <linea>				count++;</linea>
+        <linea>		}</linea>
+        <linea>		return Integer.toString(count);</linea>
+        <linea>	}</linea>
+        <linea>		</linea>
+        <linea>	private static int getScore(Card[] hand) {</linea>
+        <linea>		if (hand.length != 5)</linea>
+        <linea>			throw new IllegalArgumentException();</linea>
+        <linea>		</linea>
+        <linea>		int[] rankCounts = new int[13];</linea>
+        <linea>		int flushSuit = hand[0].suit;</linea>
+        <linea>		for (Card card : hand) {</linea>
+        <linea>			rankCounts[card.rank]++;</linea>
+        <linea>			if (card.suit != flushSuit)</linea>
+        <linea>				flushSuit = -1;</linea>
+        <linea>		}</linea>
+        <linea>		</linea>
+        <linea>		int[] rankCountHist = new int[6];</linea>
+        <linea>		for (int i = 0; i &lt; rankCounts.length; i++)</linea>
+        <linea>			rankCountHist[rankCounts[i]]++;</linea>
+        <linea>		</linea>
+        <linea>		int bestCards = get5FrequentHighestCards(rankCounts, rankCountHist);</linea>
+        <linea>		int straightHighRank = getStraightHighRank(rankCounts);</linea>
+        <linea>		</linea>
+        <linea>		if      (straightHighRank != -1 &amp;&amp; flushSuit != -1     ) return 8 &lt;&lt; 20 | straightHighRank;  // Escalera de Color</linea>
+        <linea>		else if (rankCountHist[4] == 1                         ) return 7 &lt;&lt; 20 | bestCards;         // Poker</linea>
+        <linea>		else if (rankCountHist[3] == 1 &amp;&amp; rankCountHist[2] == 1) return 6 &lt;&lt; 20 | bestCards;         // Full</linea>
+        <linea>		else if (flushSuit != -1                               ) return 5 &lt;&lt; 20 | bestCards;         // Color</linea>
+        <linea>		else if (straightHighRank != -1                        ) return 4 &lt;&lt; 20 | straightHighRank;  // Escalera</linea>
+        <linea>		else if (rankCountHist[3] == 1                         ) return 3 &lt;&lt; 20 | bestCards;         // Trío</linea>
+        <linea>		else if (rankCountHist[2] == 2                         ) return 2 &lt;&lt; 20 | bestCards;         // Dobles Parejas</linea>
+        <linea>		else if (rankCountHist[2] == 1                         ) return 1 &lt;&lt; 20 | bestCards;         // Parejas</linea>
+        <linea>		else                                                     return 0 &lt;&lt; 20 | bestCards;         // Carta más alta</linea>
+        <linea>	}</linea>
+        <linea>		</linea>
+        <linea>	private static int get5FrequentHighestCards(int[] ranks, int[] ranksHist) {</linea>
+        <linea>		int result = 0;</linea>
+        <linea>		int count = 0;</linea>
+        <linea>		</linea>
+        <linea>		for (int i = ranksHist.length - 1; i &gt;= 0; i--) {</linea>
+        <linea>			for (int j = ranks.length - 1; j &gt;= 0; j--) {</linea>
+        <linea>				if (ranks[j] == i) {</linea>
+        <linea>					for (int k = 0; k &lt; i &amp;&amp; count &lt; 5; k++, count++)</linea>
+        <linea>						result = result &lt;&lt; 4 | j;</linea>
+        <linea>				}</linea>
+        <linea>			}</linea>
+        <linea>		}</linea>
+        <linea>		</linea>
+        <linea>		if (count != 5)</linea>
+        <linea>			throw new IllegalArgumentException();</linea>
+        <linea>		return result;</linea>
+        <linea>	}</linea>
+        <linea>		</linea>
+        <linea>	private static int getStraightHighRank(int[] ranks) {</linea>
+        <linea>		outer:</linea>
+        <linea>		for (int i = ranks.length - 1; i &gt;= 3; i--) {</linea>
+        <linea>			for (int j = 0; j &lt; 5; j++) {</linea>
+        <linea>				if (ranks[(i - j + 13) % 13] == 0)</linea>
+        <linea>					continue outer;</linea>
+        <linea>			}</linea>
+        <linea>			return i;</linea>
+        <linea>		}</linea>
+        <linea>		return -1;</linea>
+        <linea>	}</linea>
+        <linea>	</linea>
+        <linea>	private static final class Card {		</linea>
+        <linea>		public final int rank;</linea>
+        <linea>		public final int suit;</linea>
+        <linea>				</linea>
+        <linea>		public Card(int rank, int suit) {</linea>
+        <linea>			if (rank &lt; 0 || rank &gt;= 13 || suit &lt; 0 || suit &gt;= 4)</linea>
+        <linea>				throw new IllegalArgumentException();</linea>
+        <linea>			this.rank = rank;</linea>
+        <linea>			this.suit = suit;</linea>
+        <linea>		}</linea>
+        <linea>				</linea>
+        <linea>		public Card(String str) {</linea>
+        <linea>			this("23456789TJQKA".indexOf(str.charAt(0)), "SHCD".indexOf(str.charAt(1)));</linea>
+        <linea>		}</linea>
+        <linea>				</linea>
+        <linea>		public boolean equals(Object obj) {</linea>
+        <linea>			if (!(obj instanceof Card))</linea>
+        <linea>				return false;</linea>
+        <linea>			Card other = (Card)obj;</linea>
+        <linea>			return rank == other.rank &amp;&amp; suit == other.suit;</linea>
+        <linea>		}</linea>
+        <linea>				</linea>
+        <linea>		public int hashCode() {</linea>
+        <linea>			return rank * 4 + suit;</linea>
+        <linea>		}		</linea>
+        <linea>	}</linea>
+        <linea>		</linea>
+        <linea>	private static String[] HANDS = {</linea>
+        <linea>		"8C TS KC 9H 4S 7D 2S 5D 3S AC",</linea>
+        <linea>		"5C AD 5D AC 9C 7C 5H 8D TD KS",</linea>
+        <linea>		"3H 7H 6S KC JS QH TD JC 2D 8S",</linea>
+        <linea>		"TH 8H 5C QS TC 9H 4D JC KS JS",</linea>
+        <linea>		"7C 5H KC QH JD AS KH 4C AD 4S",</linea>
+        <linea>		"5H KS 9C 7D 9H 8D 3S 5D 5C AH",</linea>
+        <linea>		"6H 4H 5C 3H 2H 3S QH 5S 6S AS",</linea>
+        <linea>		"TD 8C 4H 7C TC KC 4C 3H 7S KS",</linea>
+        <linea>		"7C 9C 6D KD 3H 4C QS QC AC KH",</linea>
+        <linea>		"JC 6S 5H 2H 2D KD 9D 7C AS JS",</linea>
+        <linea>		"AD QH TH 9D 8H TS 6D 3S AS AC",</linea>
+        <linea>		"2H 4S 5C 5S TC KC JD 6C TS 3C",</linea>
+        <linea>		"QD AS 6H JS 2C 3D 9H KC 4H 8S",</linea>
+        <linea>		"KD 8S 9S 7C 2S 3S 6D 6S 4H KC",</linea>
+        <linea>		"3C 8C 2D 7D 4D 9S 4S QH 4H JD",</linea>
+        <linea>		"8C KC 7S TC 2D TS 8H QD AC 5C",</linea>
+        <linea>		"3D KH QD 6C 6S AD AS 8H 2H QS",</linea>
+        <linea>		"6S 8D 4C 8S 6C QH TC 6D 7D 9D",</linea>
+        <linea>		"2S 8D 8C 4C TS 9S 9D 9C AC 3D",</linea>
+        <linea>		"3C QS 2S 4H JH 3D 2D TD 8S 9H",</linea>
+        <linea>		"5H QS 8S 6D 3C 8C JD AS 7H 7D",</linea>
+        <linea>		"6H TD 9D AS JH 6C QC 9S KD JC",</linea>
+        <linea>		"AH 8S QS 4D TH AC TS 3C 3D 5C",</linea>
+        <linea>		"5S 4D JS 3D 8H 6C TS 3S AD 8C",</linea>
+        <linea>		"6D 7C 5D 5H 3S 5C JC 2H 5S 3D",</linea>
+        <linea>		"5H 6H 2S KS 3D 5D JD 7H JS 8H",</linea>
+        <linea>		"KH 4H AS JS QS QC TC 6D 7C KS",</linea>
+        <linea>		"3D QS TS 2H JS 4D AS 9S JC KD",</linea>
+        <linea>		"QD 5H 4D 5D KH 7H 3D JS KD 4H",</linea>
+        <linea>		"2C 9H 6H 5C 9D 6C JC 2D TH 9S",</linea>
+        <linea>		"7D 6D AS QD JH 4D JS 7C QS 5C",</linea>
+        <linea>		"3H KH QD AD 8C 8H 3S TH 9D 5S",</linea>
+        <linea>		"AH 9S 4D 9D 8S 4H JS 3C TC 8D",</linea>
+        <linea>		"2C KS 5H QD 3S TS 9H AH AD 8S",</linea>
+        <linea>		"5C 7H 5D KD 9H 4D 3D 2D KS AD",</linea>
+        <linea>		"KS KC 9S 6D 2C QH 9D 9H TS TC",</linea>
+        <linea>		"9C 6H 5D QH 4D AD 6D QC JS KH",</linea>
+        <linea>		"9S 3H 9D JD 5C 4D 9H AS TC QH",</linea>
+        <linea>		"2C 6D JC 9C 3C AD 9S KH 9D 7D",</linea>
+        <linea>		"KC 9C 7C JC JS KD 3H AS 3C 7D",</linea>
+        <linea>		"QD KH QS 2C 3S 8S 8H 9H 9C JC",</linea>
+        <linea>		"QH 8D 3C KC 4C 4H 6D AD 9H 9D",</linea>
+        <linea>		"3S KS QS 7H KH 7D 5H 5D JD AD",</linea>
+        <linea>		"2H 2C 6H TH TC 7D 8D 4H 8C AS",</linea>
+        <linea>		"4S 2H AC QC 3S 6D TH 4D 4C KH",</linea>
+        <linea>		"4D TC KS AS 7C 3C 6D 2D 9H 6C",</linea>
+        <linea>		"8C TD 5D QS 2C 7H 4C 9C 3H 9H",</linea>
+        <linea>		"5H JH TS 7S TD 6H AD QD 8H 8S",</linea>
+        <linea>		"5S AD 9C 8C 7C 8D 5H 9D 8S 2S",</linea>
+        <linea>		"4H KH KS 9S 2S KC 5S AD 4S 7D",</linea>
+        <linea>		"QS 9C QD 6H JS 5D AC 8D 2S AS",</linea>
+        <linea>		"KH AC JC 3S 9D 9S 3C 9C 5S JS",</linea>
+        <linea>		"AD 3C 3D KS 3S 5C 9C 8C TS 4S",</linea>
+        <linea>		"JH 8D 5D 6H KD QS QD 3D 6C KC",</linea>
+        <linea>		"8S JD 6C 3S 8C TC QC 3C QH JS",</linea>
+        <linea>		"KC JC 8H 2S 9H 9C JH 8S 8C 9S",</linea>
+        <linea>		"8S 2H QH 4D QC 9D KC AS TH 3C",</linea>
+        <linea>		"8S 6H TH 7C 2H 6S 3C 3H AS 7S",</linea>
+        <linea>		"QH 5S JS 4H 5H TS 8H AH AC JC",</linea>
+        <linea>		"9D 8H 2S 4S TC JC 3C 7H 3H 5C",</linea>
+        <linea>		"3D AD 3C 3S 4C QC AS 5D TH 8C",</linea>
+        <linea>		"6S 9D 4C JS KH AH TS JD 8H AD",</linea>
+        <linea>		"4C 6S 9D 7S AC 4D 3D 3S TC JD",</linea>
+        <linea>		"AD 7H 6H 4H JH KC TD TS 7D 6S",</linea>
+        <linea>		"8H JH TC 3S 8D 8C 9S 2C 5C 4D",</linea>
+        <linea>		"2C 9D KC QH TH QS JC 9C 4H TS",</linea>
+        <linea>		"QS 3C QD 8H KH 4H 8D TD 8S AC",</linea>
+        <linea>		"7C 3C TH 5S 8H 8C 9C JD TC KD",</linea>
+        <linea>		"QC TC JD TS 8C 3H 6H KD 7C TD",</linea>
+        <linea>		"JH QS KS 9C 6D 6S AS 9H KH 6H",</linea>
+        <linea>		"2H 4D AH 2D JH 6H TD 5D 4H JD",</linea>
+        <linea>		"KD 8C 9S JH QD JS 2C QS 5C 7C",</linea>
+        <linea>		"4S TC 7H 8D 2S 6H 7S 9C 7C KC",</linea>
+        <linea>		"8C 5D 7H 4S TD QC 8S JS 4H KS",</linea>
+        <linea>		"AD 8S JH 6D TD KD 7C 6C 2D 7D",</linea>
+        <linea>		"JC 6H 6S JS 4H QH 9H AH 4C 3C",</linea>
+        <linea>		"6H 5H AS 7C 7S 3D KH KC 5D 5C",</linea>
+        <linea>		"JC 3D TD AS 4D 6D 6S QH JD KS",</linea>
+        <linea>		"8C 7S 8S QH 2S JD 5C 7H AH QD",</linea>
+        <linea>		"8S 3C 6H 6C 2C 8D TD 7D 4C 4D",</linea>
+        <linea>		"5D QH KH 7C 2S 7H JS 6D QC QD",</linea>
+        <linea>		"AD 6C 6S 7D TH 6H 2H 8H KH 4H",</linea>
+        <linea>		"KS JS KD 5D 2D KH 7D 9C 8C 3D",</linea>
+        <linea>		"9C 6D QD 3C KS 3S 7S AH JD 2D",</linea>
+        <linea>		"AH QH AS JC 8S 8H 4C KC TH 7D",</linea>
+        <linea>		"JC 5H TD 7C 5D KD 4C AD 8H JS",</linea>
+        <linea>		"KC 2H AC AH 7D JH KH 5D 7S 6D",</linea>
+        <linea>		"9S 5S 9C 6H 8S TD JD 9H 6C AC",</linea>
+        <linea>		"7D 8S 6D TS KD 7H AC 5S 7C 5D",</linea>
+        <linea>		"AH QC JC 4C TC 8C 2H TS 2C 7D",</linea>
+        <linea>		"KD KC 6S 3D 7D 2S 8S 3H 5S 5C",</linea>
+        <linea>		"8S 5D 8H 4C 6H KC 3H 7C 5S KD",</linea>
+        <linea>		"JH 8C 3D 3C 6C KC TD 7H 7C 4C",</linea>
+        <linea>		"JC KC 6H TS QS TD KS 8H 8C 9S",</linea>
+        <linea>		"6C 5S 9C QH 7D AH KS KC 9S 2C",</linea>
+        <linea>		"4D 4S 8H TD 9C 3S 7D 9D AS TH",</linea>
+        <linea>		"6S 7D 3C 6H 5D KD 2C 5C 9D 9C",</linea>
+        <linea>		"2H KC 3D AD 3H QD QS 8D JC 4S",</linea>
+        <linea>		"8C 3H 9C 7C AD 5D JC 9D JS AS",</linea>
+        <linea>		"5D 9H 5C 7H 6S 6C QC JC QD 9S",</linea>
+        <linea>		"JC QS JH 2C 6S 9C QC 3D 4S TC",</linea>
+        <linea>		"4H 5S 8D 3D 4D 2S KC 2H JS 2C",</linea>
+        <linea>		"TD 3S TH KD 4D 7H JH JS KS AC",</linea>
+        <linea>		"7S 8C 9S 2D 8S 7D 5C AD 9D AS",</linea>
+        <linea>		"8C 7H 2S 6C TH 3H 4C 3S 8H AC",</linea>
+        <linea>		"KD 5H JC 8H JD 2D 4H TD JH 5C",</linea>
+        <linea>		"3D AS QH KS 7H JD 8S 5S 6D 5H",</linea>
+        <linea>		"9S 6S TC QS JC 5C 5D 9C TH 8C",</linea>
+        <linea>		"5H 3S JH 9H 2S 2C 6S 7S AS KS",</linea>
+        <linea>		"8C QD JC QS TC QC 4H AC KH 6C",</linea>
+        <linea>		"TC 5H 7D JH 4H 2H 8D JC KS 4D",</linea>
+        <linea>		"5S 9C KH KD 9H 5C TS 3D 7D 2D",</linea>
+        <linea>		"5H AS TC 4D 8C 2C TS 9D 3H 8D",</linea>
+        <linea>		"6H 8D 2D 9H JD 6C 4S 5H 5S 6D",</linea>
+        <linea>		"AD 9C JC 7D 6H 9S 6D JS 9H 3C",</linea>
+        <linea>		"AD JH TC QS 4C 5D 9S 7C 9C AH",</linea>
+        <linea>		"KD 6H 2H TH 8S QD KS 9D 9H AS",</linea>
+        <linea>		"4H 8H 8D 5H 6C AH 5S AS AD 8S",</linea>
+        <linea>		"QS 5D 4S 2H TD KS 5H AC 3H JC",</linea>
+        <linea>		"9C 7D QD KD AC 6D 5H QH 6H 5S",</linea>
+        <linea>		"KC AH QH 2H 7D QS 3H KS 7S JD",</linea>
+        <linea>		"6C 8S 3H 6D KS QD 5D 5C 8H TC",</linea>
+        <linea>		"9H 4D 4S 6S 9D KH QC 4H 6C JD",</linea>
+        <linea>		"TD 2D QH 4S 6H JH KD 3C QD 8C",</linea>
+        <linea>		"4S 6H 7C QD 9D AS AH 6S AD 3C",</linea>
+        <linea>		"2C KC TH 6H 8D AH 5C 6D 8S 5D",</linea>
+        <linea>		"TD TS 7C AD JC QD 9H 3C KC 7H",</linea>
+        <linea>		"5D 4D 5S 8H 4H 7D 3H JD KD 2D",</linea>
+        <linea>		"JH TD 6H QS 4S KD 5C 8S 7D 8H",</linea>
+        <linea>		"AC 3D AS 8C TD 7H KH 5D 6C JD",</linea>
+        <linea>		"9D KS 7C 6D QH TC JD KD AS KC",</linea>
+        <linea>		"JH 8S 5S 7S 7D AS 2D 3D AD 2H",</linea>
+        <linea>		"2H 5D AS 3C QD KC 6H 9H 9S 2C",</linea>
+        <linea>		"9D 5D TH 4C JH 3H 8D TC 8H 9H",</linea>
+        <linea>		"6H KD 2C TD 2H 6C 9D 2D JS 8C",</linea>
+        <linea>		"KD 7S 3C 7C AS QH TS AD 8C 2S",</linea>
+        <linea>		"QS 8H 6C JS 4C 9S QC AD TD TS",</linea>
+        <linea>		"2H 7C TS TC 8C 3C 9H 2D 6D JC",</linea>
+        <linea>		"TC 2H 8D JH KS 6D 3H TD TH 8H",</linea>
+        <linea>		"9D TD 9H QC 5D 6C 8H 8C KC TS",</linea>
+        <linea>		"2H 8C 3D AH 4D TH TC 7D 8H KC",</linea>
+        <linea>		"TS 5C 2D 8C 6S KH AH 5H 6H KC",</linea>
+        <linea>		"5S 5D AH TC 4C JD 8D 6H 8C 6C",</linea>
+        <linea>		"KC QD 3D 8H 2D JC 9H 4H AD 2S",</linea>
+        <linea>		"TD 6S 7D JS KD 4H QS 2S 3S 8C",</linea>
+        <linea>		"4C 9H JH TS 3S 4H QC 5S 9S 9C",</linea>
+        <linea>		"2C KD 9H JS 9S 3H JC TS 5D AC",</linea>
+        <linea>		"AS 2H 5D AD 5H JC 7S TD JS 4C",</linea>
+        <linea>		"2D 4S 8H 3D 7D 2C AD KD 9C TS",</linea>
+        <linea>		"7H QD JH 5H JS AC 3D TH 4C 8H",</linea>
+        <linea>		"6D KH KC QD 5C AD 7C 2D 4H AC",</linea>
+        <linea>		"3D 9D TC 8S QD 2C JC 4H JD AH",</linea>
+        <linea>		"6C TD 5S TC 8S AH 2C 5D AS AC",</linea>
+        <linea>		"TH 7S 3D AS 6C 4C 7H 7D 4H AH",</linea>
+        <linea>		"5C 2H KS 6H 7S 4H 5H 3D 3C 7H",</linea>
+        <linea>		"3C 9S AC 7S QH 2H 3D 6S 3S 3H",</linea>
+        <linea>		"2D 3H AS 2C 6H TC JS 6S 9C 6C",</linea>
+        <linea>		"QH KD QD 6D AC 6H KH 2C TS 8C",</linea>
+        <linea>		"8H 7D 3S 9H 5D 3H 4S QC 9S 5H",</linea>
+        <linea>		"2D 9D 7H 6H 3C 8S 5H 4D 3S 4S",</linea>
+        <linea>		"KD 9S 4S TC 7S QC 3S 8S 2H 7H",</linea>
+        <linea>		"TC 3D 8C 3H 6C 2H 6H KS KD 4D",</linea>
+        <linea>		"KC 3D 9S 3H JS 4S 8H 2D 6C 8S",</linea>
+        <linea>		"6H QS 6C TC QD 9H 7D 7C 5H 4D",</linea>
+        <linea>		"TD 9D 8D 6S 6C TC 5D TS JS 8H",</linea>
+        <linea>		"4H KC JD 9H TC 2C 6S 5H 8H AS",</linea>
+        <linea>		"JS 9C 5C 6S 9D JD 8H KC 4C 6D",</linea>
+        <linea>		"4D 8D 8S 6C 7C 6H 7H 8H 5C KC",</linea>
+        <linea>		"TC 3D JC 6D KS 9S 6H 7S 9C 2C",</linea>
+        <linea>		"6C 3S KD 5H TS 7D 9H 9S 6H KH",</linea>
+        <linea>		"3D QD 4C 6H TS AC 3S 5C 2H KD",</linea>
+        <linea>		"4C AS JS 9S 7C TS 7H 9H JC KS",</linea>
+        <linea>		"4H 8C JD 3H 6H AD 9S 4S 5S KS",</linea>
+        <linea>		"4C 2C 7D 3D AS 9C 2S QS KC 6C",</linea>
+        <linea>		"8S 5H 3D 2S AC 9D 6S 3S 4D TD",</linea>
+        <linea>		"QD TH 7S TS 3D AC 7H 6C 5D QC",</linea>
+        <linea>		"TC QD AD 9C QS 5C 8D KD 3D 3C",</linea>
+        <linea>		"9D 8H AS 3S 7C 8S JD 2D 8D KC",</linea>
+        <linea>		"4C TH AC QH JS 8D 7D 7S 9C KH",</linea>
+        <linea>		"9D 8D 4C JH 2C 2S QD KD TS 4H",</linea>
+        <linea>		"4D 6D 5D 2D JH 3S 8S 3H TC KH",</linea>
+        <linea>		"AD 4D 2C QS 8C KD JH JD AH 5C",</linea>
+        <linea>		"5C 6C 5H 2H JH 4H KS 7C TC 3H",</linea>
+        <linea>		"3C 4C QC 5D JH 9C QD KH 8D TC",</linea>
+        <linea>		"3H 9C JS 7H QH AS 7C 9H 5H JC",</linea>
+        <linea>		"2D 5S QD 4S 3C KC 6S 6C 5C 4C",</linea>
+        <linea>		"5D KH 2D TS 8S 9C AS 9S 7C 4C",</linea>
+        <linea>		"7C AH 8C 8D 5S KD QH QS JH 2C",</linea>
+        <linea>		"8C 9D AH 2H AC QC 5S 8H 7H 2C",</linea>
+        <linea>		"QD 9H 5S QS QC 9C 5H JC TH 4H",</linea>
+        <linea>		"6C 6S 3H 5H 3S 6H KS 8D AC 7S",</linea>
+        <linea>		"AC QH 7H 8C 4S KC 6C 3D 3S TC",</linea>
+        <linea>		"9D 3D JS TH AC 5H 3H 8S 3S TC",</linea>
+        <linea>		"QD KH JS KS 9S QC 8D AH 3C AC",</linea>
+        <linea>		"5H 6C KH 3S 9S JH 2D QD AS 8C",</linea>
+        <linea>		"6C 4D 7S 7H 5S JC 6S 9H 4H JH",</linea>
+        <linea>		"AH 5S 6H 9S AD 3S TH 2H 9D 8C",</linea>
+        <linea>		"4C 8D 9H 7C QC AD 4S 9C KC 5S",</linea>
+        <linea>		"9D 6H 4D TC 4C JH 2S 5D 3S AS",</linea>
+        <linea>		"2H 6C 7C KH 5C AD QS TH JD 8S",</linea>
+        <linea>		"3S 4S 7S AH AS KC JS 2S AD TH",</linea>
+        <linea>		"JS KC 2S 7D 8C 5C 9C TS 5H 9D",</linea>
+        <linea>		"7S 9S 4D TD JH JS KH 6H 5D 2C",</linea>
+        <linea>		"JD JS JC TH 2D 3D QD 8C AC 5H",</linea>
+        <linea>		"7S KH 5S 9D 5D TD 4S 6H 3C 2D",</linea>
+        <linea>		"4S 5D AC 8D 4D 7C AD AS AH 9C",</linea>
+        <linea>		"6S TH TS KS 2C QC AH AS 3C 4S",</linea>
+        <linea>		"2H 8C 3S JC 5C 7C 3H 3C KH JH",</linea>
+        <linea>		"7S 3H JC 5S 6H 4C 2S 4D KC 7H",</linea>
+        <linea>		"4D 7C 4H 9S 8S 6S AD TC 6C JC",</linea>
+        <linea>		"KH QS 3S TC 4C 8H 8S AC 3C TS",</linea>
+        <linea>		"QD QS TH 3C TS 7H 7D AH TD JC",</linea>
+        <linea>		"TD JD QC 4D 9S 7S TS AD 7D AC",</linea>
+        <linea>		"AH 7H 4S 6D 7C 2H 9D KS JC TD",</linea>
+        <linea>		"7C AH JD 4H 6D QS TS 2H 2C 5C",</linea>
+        <linea>		"TC KC 8C 9S 4C JS 3C JC 6S AH",</linea>
+        <linea>		"AS 7D QC 3D 5S JC JD 9D TD KH",</linea>
+        <linea>		"TH 3C 2S 6H AH AC 5H 5C 7S 8H",</linea>
+        <linea>		"QC 2D AC QD 2S 3S JD QS 6S 8H",</linea>
+        <linea>		"KC 4H 3C 9D JS 6H 3S 8S AS 8C",</linea>
+        <linea>		"7H KC 7D JD 2H JC QH 5S 3H QS",</linea>
+        <linea>		"9H TD 3S 8H 7S AC 5C 6C AH 7C",</linea>
+        <linea>		"8D 9H AH JD TD QS 7D 3S 9C 8S",</linea>
+        <linea>		"AH QH 3C JD KC 4S 5S 5D TD KS",</linea>
+        <linea>		"9H 7H 6S JH TH 4C 7C AD 5C 2D",</linea>
+        <linea>		"7C KD 5S TC 9D 6S 6C 5D 2S TH",</linea>
+        <linea>		"KC 9H 8D 5H 7H 4H QC 3D 7C AS",</linea>
+        <linea>		"6S 8S QC TD 4S 5C TH QS QD 2S",</linea>
+        <linea>		"8S 5H TH QC 9H 6S KC 7D 7C 5C",</linea>
+        <linea>		"7H KD AH 4D KH 5C 4S 2D KC QH",</linea>
+        <linea>		"6S 2C TD JC AS 4D 6C 8C 4H 5S",</linea>
+        <linea>		"JC TC JD 5S 6S 8D AS 9D AD 3S",</linea>
+        <linea>		"6D 6H 5D 5S TC 3D 7D QS 9D QD",</linea>
+        <linea>		"4S 6C 8S 3S 7S AD KS 2D 7D 7C",</linea>
+        <linea>		"KC QH JC AC QD 5D 8D QS 7H 7D",</linea>
+        <linea>		"JS AH 8S 5H 3D TD 3H 4S 6C JH",</linea>
+        <linea>		"4S QS 7D AS 9H JS KS 6D TC 5C",</linea>
+        <linea>		"2D 5C 6H TC 4D QH 3D 9H 8S 6C",</linea>
+        <linea>		"6D 7H TC TH 5S JD 5C 9C KS KD",</linea>
+        <linea>		"8D TD QH 6S 4S 6C 8S KC 5C TC",</linea>
+        <linea>		"5S 3D KS AC 4S 7D QD 4C TH 2S",</linea>
+        <linea>		"TS 8H 9S 6S 7S QH 3C AH 7H 8C",</linea>
+        <linea>		"4C 8C TS JS QC 3D 7D 5D 7S JH",</linea>
+        <linea>		"8S 7S 9D QC AC 7C 6D 2H JH KC",</linea>
+        <linea>		"JS KD 3C 6S 4S 7C AH QC KS 5H",</linea>
+        <linea>		"KS 6S 4H JD QS TC 8H KC 6H AS",</linea>
+        <linea>		"KH 7C TC 6S TD JC 5C 7D AH 3S",</linea>
+        <linea>		"3H 4C 4H TC TH 6S 7H 6D 9C QH",</linea>
+        <linea>		"7D 5H 4S 8C JS 4D 3D 8S QH KC",</linea>
+        <linea>		"3H 6S AD 7H 3S QC 8S 4S 7S JS",</linea>
+        <linea>		"3S JD KH TH 6H QS 9C 6C 2D QD",</linea>
+        <linea>		"4S QH 4D 5H KC 7D 6D 8D TH 5S",</linea>
+        <linea>		"TD AD 6S 7H KD KH 9H 5S KC JC",</linea>
+        <linea>		"3H QC AS TS 4S QD KS 9C 7S KC",</linea>
+        <linea>		"TS 6S QC 6C TH TC 9D 5C 5D KD",</linea>
+        <linea>		"JS 3S 4H KD 4C QD 6D 9S JC 9D",</linea>
+        <linea>		"8S JS 6D 4H JH 6H 6S 6C KS KH",</linea>
+        <linea>		"AC 7D 5D TC 9S KH 6S QD 6H AS",</linea>
+        <linea>		"AS 7H 6D QH 8D TH 2S KH 5C 5H",</linea>
+        <linea>		"4C 7C 3D QC TC 4S KH 8C 2D JS",</linea>
+        <linea>		"6H 5D 7S 5H 9C 9H JH 8S TH 7H",</linea>
+        <linea>		"AS JS 2S QD KH 8H 4S AC 8D 8S",</linea>
+        <linea>		"3H 4C TD KD 8C JC 5C QS 2D JD",</linea>
+        <linea>		"TS 7D 5D 6C 2C QS 2H 3C AH KS",</linea>
+        <linea>		"4S 7C 9C 7D JH 6C 5C 8H 9D QD",</linea>
+        <linea>		"2S TD 7S 6D 9C 9S QS KH QH 5C",</linea>
+        <linea>		"JC 6S 9C QH JH 8D 7S JS KH 2H",</linea>
+        <linea>		"8D 5H TH KC 4D 4S 3S 6S 3D QS",</linea>
+        <linea>		"2D JD 4C TD 7C 6D TH 7S JC AH",</linea>
+        <linea>		"QS 7S 4C TH 9D TS AD 4D 3H 6H",</linea>
+        <linea>		"2D 3H 7D JD 3D AS 2S 9C QC 8S",</linea>
+        <linea>		"4H 9H 9C 2C 7S JH KD 5C 5D 6H",</linea>
+        <linea>		"TC 9H 8H JC 3C 9S 8D KS AD KC",</linea>
+        <linea>		"TS 5H JD QS QH QC 8D 5D KH AH",</linea>
+        <linea>		"5D AS 8S 6S 4C AH QC QD TH 7H",</linea>
+        <linea>		"3H 4H 7D 6S 4S 9H AS 8H JS 9D",</linea>
+        <linea>		"JD 8C 2C 9D 7D 5H 5S 9S JC KD",</linea>
+        <linea>		"KD 9C 4S QD AH 7C AD 9D AC TD",</linea>
+        <linea>		"6S 4H 4S 9C 8D KS TC 9D JH 7C",</linea>
+        <linea>		"5S JC 5H 4S QH AC 2C JS 2S 9S",</linea>
+        <linea>		"8C 5H AS QD AD 5C 7D 8S QC TD",</linea>
+        <linea>		"JC 4C 8D 5C KH QS 4D 6H 2H 2C",</linea>
+        <linea>		"TH 4S 2D KC 3H QD AC 7H AD 9D",</linea>
+        <linea>		"KH QD AS 8H TH KC 8D 7S QH 8C",</linea>
+        <linea>		"JC 6C 7D 8C KH AD QS 2H 6S 2D",</linea>
+        <linea>		"JC KH 2D 7D JS QC 5H 4C 5D AD",</linea>
+        <linea>		"TS 3S AD 4S TD 2D TH 6S 9H JH",</linea>
+        <linea>		"9H 2D QS 2C 4S 3D KH AS AC 9D",</linea>
+        <linea>		"KH 6S 8H 4S KD 7D 9D TS QD QC",</linea>
+        <linea>		"JH 5H AH KS AS AD JC QC 5S KH",</linea>
+        <linea>		"5D 7D 6D KS KD 3D 7C 4D JD 3S",</linea>
+        <linea>		"AC JS 8D 5H 9C 3H 4H 4D TS 2C",</linea>
+        <linea>		"6H KS KH 9D 7C 2S 6S 8S 2H 3D",</linea>
+        <linea>		"6H AC JS 7S 3S TD 8H 3H 4H TH",</linea>
+        <linea>		"9H TC QC KC 5C KS 6H 4H AC 8S",</linea>
+        <linea>		"TC 7D QH 4S JC TS 6D 6C AC KH",</linea>
+        <linea>		"QH 7D 7C JH QS QD TH 3H 5D KS",</linea>
+        <linea>		"3D 5S 8D JS 4C 2C KS 7H 9C 4H",</linea>
+        <linea>		"5H 8S 4H TD 2C 3S QD QC 3H KC",</linea>
+        <linea>		"QC JS KD 9C AD 5S 9D 7D 7H TS",</linea>
+        <linea>		"8C JC KH 7C 7S 6C TS 2C QD TH",</linea>
+        <linea>		"5S 9D TH 3C 7S QH 8S 9C 2H 5H",</linea>
+        <linea>		"5D 9H 6H 2S JS KH 3H 7C 2H 5S",</linea>
+        <linea>		"JD 5D 5S 2C TC 2S 6S 6C 3C 8S",</linea>
+        <linea>		"4D KH 8H 4H 2D KS 3H 5C 2S 9H",</linea>
+        <linea>		"3S 2D TD 7H 8S 6H JD KC 9C 8D",</linea>
+        <linea>		"6S QD JH 7C 9H 5H 8S 8H TH TD",</linea>
+        <linea>		"QS 7S TD 7D TS JC KD 7C 3C 2C",</linea>
+        <linea>		"3C JD 8S 4H 2D 2S TD AS 4D AC",</linea>
+        <linea>		"AH KS 6C 4C 4S 7D 8C 9H 6H AS",</linea>
+        <linea>		"5S 3C 9S 2C QS KD 4D 4S AC 5D",</linea>
+        <linea>		"2D TS 2C JS KH QH 5D 8C AS KC",</linea>
+        <linea>		"KD 3H 6C TH 8S 7S KH 6H 9S AC",</linea>
+        <linea>		"6H 7S 6C QS AH 2S 2H 4H 5D 5H",</linea>
+        <linea>		"5H JC QD 2C 2S JD AS QC 6S 7D",</linea>
+        <linea>		"6C TC AS KD 8H 9D 2C 7D JH 9S",</linea>
+        <linea>		"2H 4C 6C AH 8S TD 3H TH 7C TS",</linea>
+        <linea>		"KD 4S TS 6C QH 8D 9D 9C AH 7D",</linea>
+        <linea>		"6D JS 5C QD QC 9C 5D 8C 2H KD",</linea>
+        <linea>		"3C QH JH AD 6S AH KC 8S 6D 6H",</linea>
+        <linea>		"3D 7C 4C 7S 5S 3S 6S 5H JC 3C",</linea>
+        <linea>		"QH 7C 5H 3C 3S 8C TS 4C KD 9C",</linea>
+        <linea>		"QD 3S 7S 5H 7H QH JC 7C 8C KD",</linea>
+        <linea>		"3C KD KH 2S 4C TS AC 6S 2C 7C",</linea>
+        <linea>		"2C KH 3C 4C 6H 4D 5H 5S 7S QD",</linea>
+        <linea>		"4D 7C 8S QD TS 9D KS 6H KD 3C",</linea>
+        <linea>		"QS 4D TS 7S 4C 3H QD 8D 9S TC",</linea>
+        <linea>		"TS QH AC 6S 3C 9H 9D QS 8S 6H",</linea>
+        <linea>		"3S 7S 5D 4S JS 2D 6C QH 6S TH",</linea>
+        <linea>		"4C 4H AS JS 5D 3D TS 9C AC 8S",</linea>
+        <linea>		"6S 9C 7C 3S 5C QS AD AS 6H 3C",</linea>
+        <linea>		"9S 8C 7H 3H 6S 7C AS 9H JD KH",</linea>
+        <linea>		"3D 3H 7S 4D 6C 7C AC 2H 9C TH",</linea>
+        <linea>		"4H 5S 3H AC TC TH 9C 9H 9S 8D",</linea>
+        <linea>		"8D 9H 5H 4D 6C 2H QD 6S 5D 3S",</linea>
+        <linea>		"4C 5C JD QS 4D 3H TH AC QH 8C",</linea>
+        <linea>		"QC 5S 3C 7H AD 4C KS 4H JD 6D",</linea>
+        <linea>		"QS AH 3H KS 9H 2S JS JH 5H 2H",</linea>
+        <linea>		"2H 5S TH 6S TS 3S KS 3C 5H JS",</linea>
+        <linea>		"2D 9S 7H 3D KC JH 6D 7D JS TD",</linea>
+        <linea>		"AC JS 8H 2C 8C JH JC 2D TH 7S",</linea>
+        <linea>		"5D 9S 8H 2H 3D TC AH JC KD 9C",</linea>
+        <linea>		"9D QD JC 2H 6D KH TS 9S QH TH",</linea>
+        <linea>		"2C 8D 4S JD 5H 3H TH TC 9C KC",</linea>
+        <linea>		"AS 3D 9H 7D 4D TH KH 2H 7S 3H",</linea>
+        <linea>		"4H 7S KS 2S JS TS 8S 2H QD 8D",</linea>
+        <linea>		"5S 6H JH KS 8H 2S QC AC 6S 3S",</linea>
+        <linea>		"JC AS AD QS 8H 6C KH 4C 4D QD",</linea>
+        <linea>		"2S 3D TS TD 9S KS 6S QS 5C 8D",</linea>
+        <linea>		"3C 6D 4S QC KC JH QD TH KH AD",</linea>
+        <linea>		"9H AH 4D KS 2S 8D JH JC 7C QS",</linea>
+        <linea>		"2D 6C TH 3C 8H QD QH 2S 3S KS",</linea>
+        <linea>		"6H 5D 9S 4C TS TD JS QD 9D JD",</linea>
+        <linea>		"5H 8H KH 8S KS 7C TD AD 4S KD",</linea>
+        <linea>		"2C 7C JC 5S AS 6C 7D 8S 5H 9C",</linea>
+        <linea>		"6S QD 9S TS KH QS 5S QH 3C KC",</linea>
+        <linea>		"7D 3H 3C KD 5C AS JH 7H 6H JD",</linea>
+        <linea>		"9D 5C 9H KC 8H KS 4S AD 4D 2S",</linea>
+        <linea>		"3S JD QD 8D 2S 7C 5S 6S 5H TS",</linea>
+        <linea>		"6D 9S KC TD 3S 6H QD JD 5C 8D",</linea>
+        <linea>		"5H 9D TS KD 8D 6H TD QC 4C 7D",</linea>
+        <linea>		"6D 4S JD 9D AH 9S AS TD 9H QD",</linea>
+        <linea>		"2D 5S 2H 9C 6H 9S TD QC 7D TC",</linea>
+        <linea>		"3S 2H KS TS 2C 9C 8S JS 9D 7D",</linea>
+        <linea>		"3C KC 6D 5D 6C 6H 8S AS 7S QS",</linea>
+        <linea>		"JH 9S 2H 8D 4C 8H 9H AD TH KH",</linea>
+        <linea>		"QC AS 2S JS 5C 6H KD 3H 7H 2C",</linea>
+        <linea>		"QD 8H 2S 8D 3S 6D AH 2C TC 5C",</linea>
+        <linea>		"JD JS TS 8S 3H 5D TD KC JC 6H",</linea>
+        <linea>		"6S QS TC 3H 5D AH JC 7C 7D 4H",</linea>
+        <linea>		"7C 5D 8H 9C 2H 9H JH KH 5S 2C",</linea>
+        <linea>		"9C 7H 6S TH 3S QC QD 4C AC JD",</linea>
+        <linea>		"2H 5D 9S 7D KC 3S QS 2D AS KH",</linea>
+        <linea>		"2S 4S 2H 7D 5C TD TH QH 9S 4D",</linea>
+        <linea>		"6D 3S TS 6H 4H KS 9D 8H 5S 2D",</linea>
+        <linea>		"9H KS 4H 3S 5C 5D KH 6H 6S JS",</linea>
+        <linea>		"KC AS 8C 4C JC KH QC TH QD AH",</linea>
+        <linea>		"6S KH 9S 2C 5H TC 3C 7H JC 4D",</linea>
+        <linea>		"JD 4S 6S 5S 8D 7H 7S 4D 4C 2H",</linea>
+        <linea>		"7H 9H 5D KH 9C 7C TS TC 7S 5H",</linea>
+        <linea>		"4C 8D QC TS 4S 9H 3D AD JS 7C",</linea>
+        <linea>		"8C QS 5C 5D 3H JS AH KC 4S 9D",</linea>
+        <linea>		"TS JD 8S QS TH JH KH 2D QD JS",</linea>
+        <linea>		"JD QC 5D 6S 9H 3S 2C 8H 9S TS",</linea>
+        <linea>		"2S 4C AD 7H JC 5C 2D 6D 4H 3D",</linea>
+        <linea>		"7S JS 2C 4H 8C AD QD 9C 3S TD",</linea>
+        <linea>		"JD TS 4C 6H 9H 7D QD 6D 3C AS",</linea>
+        <linea>		"AS 7C 4C 6S 5D 5S 5C JS QC 4S",</linea>
+        <linea>		"KD 6S 9S 7C 3C 5S 7D JH QD JS",</linea>
+        <linea>		"4S 7S JH 2C 8S 5D 7H 3D QH AD",</linea>
+        <linea>		"TD 6H 2H 8D 4H 2D 7C AD KH 5D",</linea>
+        <linea>		"TS 3S 5H 2C QD AH 2S 5C KH TD",</linea>
+        <linea>		"KC 4D 8C 5D AS 6C 2H 2S 9H 7C",</linea>
+        <linea>		"KD JS QC TS QS KH JH 2C 5D AD",</linea>
+        <linea>		"3S 5H KC 6C 9H 3H 2H AD 7D 7S",</linea>
+        <linea>		"7S JS JH KD 8S 7D 2S 9H 7C 2H",</linea>
+        <linea>		"9H 2D 8D QC 6S AD AS 8H 5H 6C",</linea>
+        <linea>		"2S 7H 6C 6D 7D 8C 5D 9D JC 3C",</linea>
+        <linea>		"7C 9C 7H JD 2H KD 3S KH AD 4S",</linea>
+        <linea>		"QH AS 9H 4D JD KS KD TS KH 5H",</linea>
+        <linea>		"4C 8H 5S 3S 3D 7D TD AD 7S KC",</linea>
+        <linea>		"JS 8S 5S JC 8H TH 9C 4D 5D KC",</linea>
+        <linea>		"7C 5S 9C QD 2C QH JS 5H 8D KH",</linea>
+        <linea>		"TD 2S KS 3D AD KC 7S TC 3C 5D",</linea>
+        <linea>		"4C 2S AD QS 6C 9S QD TH QH 5C",</linea>
+        <linea>		"8C AD QS 2D 2S KC JD KS 6C JC",</linea>
+        <linea>		"8D 4D JS 2H 5D QD 7S 7D QH TS",</linea>
+        <linea>		"6S 7H 3S 8C 8S 9D QS 8H 6C 9S",</linea>
+        <linea>		"4S TC 2S 5C QD 4D QS 6D TH 6S",</linea>
+        <linea>		"3S 5C 9D 6H 8D 4C 7D TC 7C TD",</linea>
+        <linea>		"AH 6S AS 7H 5S KD 3H 5H AC 4C",</linea>
+        <linea>		"8D 8S AH KS QS 2C AD 6H 7D 5D",</linea>
+        <linea>		"6H 9H 9S 2H QS 8S 9C 5D 2D KD",</linea>
+        <linea>		"TS QC 5S JH 7D 7S TH 9S 9H AC",</linea>
+        <linea>		"7H 3H 6S KC 4D 6D 5C 4S QD TS",</linea>
+        <linea>		"TD 2S 7C QD 3H JH 9D 4H 7S 7H",</linea>
+        <linea>		"KS 3D 4H 5H TC 2S AS 2D 6D 7D",</linea>
+        <linea>		"8H 3C 7H TD 3H AD KC TH 9C KH",</linea>
+        <linea>		"TC 4C 2C 9S 9D 9C 5C 2H JD 3C",</linea>
+        <linea>		"3H AC TS 5D AD 8D 6H QC 6S 8C",</linea>
+        <linea>		"2S TS 3S JD 7H 8S QH 4C 5S 8D",</linea>
+        <linea>		"AC 4S 6C 3C KH 3D 7C 2D 8S 2H",</linea>
+        <linea>		"4H 6C 8S TH 2H 4S 8H 9S 3H 7S",</linea>
+        <linea>		"7C 4C 9C 2C 5C AS 5D KD 4D QH",</linea>
+        <linea>		"9H 4H TS AS 7D 8D 5D 9S 8C 2H",</linea>
+        <linea>		"QC KD AC AD 2H 7S AS 3S 2D 9S",</linea>
+        <linea>		"2H QC 8H TC 6D QD QS 5D KH 3C",</linea>
+        <linea>		"TH JD QS 4C 2S 5S AD 7H 3S AS",</linea>
+        <linea>		"7H JS 3D 6C 3S 6D AS 9S AC QS",</linea>
+        <linea>		"9C TS AS 8C TC 8S 6H 9D 8D 6C",</linea>
+        <linea>		"4D JD 9C KC 7C 6D KS 3S 8C AS",</linea>
+        <linea>		"3H 6S TC 8D TS 3S KC 9S 7C AS",</linea>
+        <linea>		"8C QC 4H 4S 8S 6C 3S TC AH AC",</linea>
+        <linea>		"4D 7D 5C AS 2H 6S TS QC AD TC",</linea>
+        <linea>		"QD QC 8S 4S TH 3D AH TS JH 4H",</linea>
+        <linea>		"5C 2D 9S 2C 3H 3C 9D QD QH 7D",</linea>
+        <linea>		"KC 9H 6C KD 7S 3C 4D AS TC 2D",</linea>
+        <linea>		"3D JS 4D 9D KS 7D TH QC 3H 3C",</linea>
+        <linea>		"8D 5S 2H 9D 3H 8C 4C 4H 3C TH",</linea>
+        <linea>		"JC TH 4S 6S JD 2D 4D 6C 3D 4C",</linea>
+        <linea>		"TS 3S 2D 4H AC 2C 6S 2H JH 6H",</linea>
+        <linea>		"TD 8S AD TC AH AC JH 9S 6S 7S",</linea>
+        <linea>		"6C KC 4S JD 8D 9H 5S 7H QH AH",</linea>
+        <linea>		"KD 8D TS JH 5C 5H 3H AD AS JS",</linea>
+        <linea>		"2D 4H 3D 6C 8C 7S AD 5D 5C 8S",</linea>
+        <linea>		"TD 5D 7S 9C 4S 5H 6C 8C 4C 8S",</linea>
+        <linea>		"JS QH 9C AS 5C QS JC 3D QC 7C",</linea>
+        <linea>		"JC 9C KH JH QS QC 2C TS 3D AD",</linea>
+        <linea>		"5D JH AC 5C 9S TS 4C JD 8C KS",</linea>
+        <linea>		"KC AS 2D KH 9H 2C 5S 4D 3D 6H",</linea>
+        <linea>		"TH AH 2D 8S JC 3D 8C QH 7S 3S",</linea>
+        <linea>		"8H QD 4H JC AS KH KS 3C 9S 6D",</linea>
+        <linea>		"9S QH 7D 9C 4S AC 7H KH 4D KD",</linea>
+        <linea>		"AH AD TH 6D 9C 9S KD KS QH 4H",</linea>
+        <linea>		"QD 6H 9C 7C QS 6D 6S 9D 5S JH",</linea>
+        <linea>		"AH 8D 5H QD 2H JC KS 4H KH 5S",</linea>
+        <linea>		"5C 2S JS 8D 9C 8C 3D AS KC AH",</linea>
+        <linea>		"JD 9S 2H QS 8H 5S 8C TH 5C 4C",</linea>
+        <linea>		"QC QS 8C 2S 2C 3S 9C 4C KS KH",</linea>
+        <linea>		"2D 5D 8S AH AD TD 2C JS KS 8C",</linea>
+        <linea>		"TC 5S 5H 8H QC 9H 6H JD 4H 9S",</linea>
+        <linea>		"3C JH 4H 9H AH 4S 2H 4C 8D AC",</linea>
+        <linea>		"8S TH 4D 7D 6D QD QS 7S TC 7C",</linea>
+        <linea>		"KH 6D 2D JD 5H JS QD JH 4H 4S",</linea>
+        <linea>		"9C 7S JH 4S 3S TS QC 8C TC 4H",</linea>
+        <linea>		"QH 9D 4D JH QS 3S 2C 7C 6C 2D",</linea>
+        <linea>		"4H 9S JD 5C 5H AH 9D TS 2D 4C",</linea>
+        <linea>		"KS JH TS 5D 2D AH JS 7H AS 8D",</linea>
+        <linea>		"JS AH 8C AD KS 5S 8H 2C 6C TH",</linea>
+        <linea>		"2H 5D AD AC KS 3D 8H TS 6H QC",</linea>
+        <linea>		"6D 4H TS 9C 5H JS JH 6S JD 4C",</linea>
+        <linea>		"JH QH 4H 2C 6D 3C 5D 4C QS KC",</linea>
+        <linea>		"6H 4H 6C 7H 6S 2S 8S KH QC 8C",</linea>
+        <linea>		"3H 3D 5D KS 4H TD AD 3S 4D TS",</linea>
+        <linea>		"5S 7C 8S 7D 2C KS 7S 6C 8C JS",</linea>
+        <linea>		"5D 2H 3S 7C 5C QD 5H 6D 9C 9H",</linea>
+        <linea>		"JS 2S KD 9S 8D TD TS AC 8C 9D",</linea>
+        <linea>		"5H QD 2S AC 8C 9H KS 7C 4S 3C",</linea>
+        <linea>		"KH AS 3H 8S 9C JS QS 4S AD 4D",</linea>
+        <linea>		"AS 2S TD AD 4D 9H JC 4C 5H QS",</linea>
+        <linea>		"5D 7C 4H TC 2D 6C JS 4S KC 3S",</linea>
+        <linea>		"4C 2C 5D AC 9H 3D JD 8S QS QH",</linea>
+        <linea>		"2C 8S 6H 3C QH 6D TC KD AC AH",</linea>
+        <linea>		"QC 6C 3S QS 4S AC 8D 5C AD KH",</linea>
+        <linea>		"5S 4C AC KH AS QC 2C 5C 8D 9C",</linea>
+        <linea>		"8H JD 3C KH 8D 5C 9C QD QH 9D",</linea>
+        <linea>		"7H TS 2C 8C 4S TD JC 9C 5H QH",</linea>
+        <linea>		"JS 4S 2C 7C TH 6C AS KS 7S JD",</linea>
+        <linea>		"JH 7C 9H 7H TC 5H 3D 6D 5D 4D",</linea>
+        <linea>		"2C QD JH 2H 9D 5S 3D TD AD KS",</linea>
+        <linea>		"JD QH 3S 4D TH 7D 6S QS KS 4H",</linea>
+        <linea>		"TC KS 5S 8D 8H AD 2S 2D 4C JH",</linea>
+        <linea>		"5S JH TC 3S 2D QS 9D 4C KD 9S",</linea>
+        <linea>		"AC KH 3H AS 9D KC 9H QD 6C 6S",</linea>
+        <linea>		"9H 7S 3D 5C 7D KC TD 8H 4H 6S",</linea>
+        <linea>		"3C 7H 8H TC QD 4D 7S 6S QH 6C",</linea>
+        <linea>		"6D AD 4C QD 6C 5D 7D 9D KS TS",</linea>
+        <linea>		"JH 2H JD 9S 7S TS KH 8D 5D 8H",</linea>
+        <linea>		"2D 9S 4C 7D 9D 5H QD 6D AC 6S",</linea>
+        <linea>		"7S 6D JC QD JH 4C 6S QS 2H 7D",</linea>
+        <linea>		"8C TD JH KD 2H 5C QS 2C JS 7S",</linea>
+        <linea>		"TC 5H 4H JH QD 3S 5S 5D 8S KH",</linea>
+        <linea>		"KS KH 7C 2C 5D JH 6S 9C 6D JC",</linea>
+        <linea>		"5H AH JD 9C JS KC 2H 6H 4D 5S",</linea>
+        <linea>		"AS 3C TH QC 6H 9C 8S 8C TD 7C",</linea>
+        <linea>		"KC 2C QD 9C KH 4D 7S 3C TS 9H",</linea>
+        <linea>		"9C QC 2S TS 8C TD 9S QD 3S 3C",</linea>
+        <linea>		"4D 9D TH JH AH 6S 2S JD QH JS",</linea>
+        <linea>		"QD 9H 6C KD 7D 7H 5D 6S 8H AH",</linea>
+        <linea>		"8H 3C 4S 2H 5H QS QH 7S 4H AC",</linea>
+        <linea>		"QS 3C 7S 9S 4H 3S AH KS 9D 7C",</linea>
+        <linea>		"AD 5S 6S 2H 2D 5H TC 4S 3C 8C",</linea>
+        <linea>		"QH TS 6S 4D JS KS JH AS 8S 6D",</linea>
+        <linea>		"2C 8S 2S TD 5H AS TC TS 6C KC",</linea>
+        <linea>		"KC TS 8H 2H 3H 7C 4C 5S TH TD",</linea>
+        <linea>		"KD AD KH 7H 7S 5D 5H 5S 2D 9C",</linea>
+        <linea>		"AD 9S 3D 7S 8C QC 7C 9C KD KS",</linea>
+        <linea>		"3C QC 9S 8C 4D 5C AS QD 6C 2C",</linea>
+        <linea>		"2H KC 8S JD 7S AC 8D 5C 2S 4D",</linea>
+        <linea>		"9D QH 3D 2S TC 3S KS 3C 9H TD",</linea>
+        <linea>		"KD 6S AC 2C 7H 5H 3S 6C 6H 8C",</linea>
+        <linea>		"QH TC 8S 6S KH TH 4H 5D TS 4D",</linea>
+        <linea>		"8C JS 4H 6H 2C 2H 7D AC QD 3D",</linea>
+        <linea>		"QS KC 6S 2D 5S 4H TD 3H JH 4C",</linea>
+        <linea>		"7S 5H 7H 8H KH 6H QS TH KD 7D",</linea>
+        <linea>		"5H AD KD 7C KH 5S TD 6D 3C 6C",</linea>
+        <linea>		"8C 9C 5H JD 7C KC KH 7H 2H 3S",</linea>
+        <linea>		"7S 4H AD 4D 8S QS TH 3D 7H 5S",</linea>
+        <linea>		"8D TC KS KD 9S 6D AD JD 5C 2S",</linea>
+        <linea>		"7H 8H 6C QD 2H 6H 9D TC 9S 7C",</linea>
+        <linea>		"8D 6D 4C 7C 6C 3C TH KH JS JH",</linea>
+        <linea>		"5S 3S 8S JS 9H AS AD 8H 7S KD",</linea>
+        <linea>		"JH 7C 2C KC 5H AS AD 9C 9S JS",</linea>
+        <linea>		"AD AC 2C 6S QD 7C 3H TH KS KD",</linea>
+        <linea>		"9D JD 4H 8H 4C KH 7S TS 8C KC",</linea>
+        <linea>		"3S 5S 2H 7S 6H 7D KS 5C 6D AD",</linea>
+        <linea>		"5S 8C 9H QS 7H 7S 2H 6C 7D TD",</linea>
+        <linea>		"QS 5S TD AC 9D KC 3D TC 2D 4D",</linea>
+        <linea>		"TD 2H 7D JD QD 4C 7H 5D KC 3D",</linea>
+        <linea>		"4C 3H 8S KD QH 5S QC 9H TC 5H",</linea>
+        <linea>		"9C QD TH 5H TS 5C 9H AH QH 2C",</linea>
+        <linea>		"4D 6S 3C AC 6C 3D 2C 2H TD TH",</linea>
+        <linea>		"AC 9C 5D QC 4D AD 8D 6D 8C KC",</linea>
+        <linea>		"AD 3C 4H AC 8D 8H 7S 9S TD JC",</linea>
+        <linea>		"4H 9H QH JS 2D TH TD TC KD KS",</linea>
+        <linea>		"5S 6S 9S 8D TH AS KH 5H 5C 8S",</linea>
+        <linea>		"JD 2S 9S 6S 5S 8S 5D 7S 7H 9D",</linea>
+        <linea>		"5D 8C 4C 9D AD TS 2C 7D KD TC",</linea>
+        <linea>		"8S QS 4D KC 5C 8D 4S KH JD KD",</linea>
+        <linea>		"AS 5C AD QH 7D 2H 9S 7H 7C TC",</linea>
+        <linea>		"2S 8S JD KH 7S 6C 6D AD 5D QC",</linea>
+        <linea>		"9H 6H 3S 8C 8H AH TC 4H JS TD",</linea>
+        <linea>		"2C TS 4D 7H 2D QC 9C 5D TH 7C",</linea>
+        <linea>		"6C 8H QC 5D TS JH 5C 5H 9H 4S",</linea>
+        <linea>		"2D QC 7H AS JS 8S 2H 4C 4H 8D",</linea>
+        <linea>		"JS 6S AC KD 3D 3C 4S 7H TH KC",</linea>
+        <linea>		"QH KH 6S QS 5S 4H 3C QD 3S 3H",</linea>
+        <linea>		"7H AS KH 8C 4H 9C 5S 3D 6S TS",</linea>
+        <linea>		"9C 7C 3H 5S QD 2C 3D AD AC 5H",</linea>
+        <linea>		"JH TD 2D 4C TS 3H KH AD 3S 7S",</linea>
+        <linea>		"AS 4C 5H 4D 6S KD JC 3C 6H 2D",</linea>
+        <linea>		"3H 6S 8C 2D TH 4S AH QH AD 5H",</linea>
+        <linea>		"7C 2S 9H 7H KC 5C 6D 5S 3H JC",</linea>
+        <linea>		"3C TC 9C 4H QD TD JH 6D 9H 5S",</linea>
+        <linea>		"7C 6S 5C 5D 6C 4S 7H 9H 6H AH",</linea>
+        <linea>		"AD 2H 7D KC 2C 4C 2S 9S 7H 3S",</linea>
+        <linea>		"TH 4C 8S 6S 3S AD KS AS JH TD",</linea>
+        <linea>		"5C TD 4S 4D AD 6S 5D TC 9C 7D",</linea>
+        <linea>		"8H 3S 4D 4S 5S 6H 5C AC 3H 3D",</linea>
+        <linea>		"9H 3C AC 4S QS 8S 9D QH 5H 4D",</linea>
+        <linea>		"JC 6C 5H TS AC 9C JD 8C 7C QD",</linea>
+        <linea>		"8S 8H 9C JD 2D QC QH 6H 3C 8D",</linea>
+        <linea>		"KS JS 2H 6H 5H QH QS 3H 7C 6D",</linea>
+        <linea>		"TC 3H 4S 7H QC 2H 3S 8C JS KH",</linea>
+        <linea>		"AH 8H 5S 4C 9H JD 3H 7S JC AC",</linea>
+        <linea>		"3C 2D 4C 5S 6C 4S QS 3S JD 3D",</linea>
+        <linea>		"5H 2D TC AH KS 6D 7H AD 8C 6H",</linea>
+        <linea>		"6C 7S 3C JD 7C 8H KS KH AH 6D",</linea>
+        <linea>		"AH 7D 3H 8H 8S 7H QS 5H 9D 2D",</linea>
+        <linea>		"JD AC 4H 7S 8S 9S KS AS 9D QH",</linea>
+        <linea>		"7S 2C 8S 5S JH QS JC AH KD 4C",</linea>
+        <linea>		"AH 2S 9H 4H 8D TS TD 6H QH JD",</linea>
+        <linea>		"4H JC 3H QS 6D 7S 9C 8S 9D 8D",</linea>
+        <linea>		"5H TD 4S 9S 4C 8C 8D 7H 3H 3D",</linea>
+        <linea>		"QS KH 3S 2C 2S 3C 7S TD 4S QD",</linea>
+        <linea>		"7C TD 4D 5S KH AC AS 7H 4C 6C",</linea>
+        <linea>		"2S 5H 6D JD 9H QS 8S 2C 2H TD",</linea>
+        <linea>		"2S TS 6H 9H 7S 4H JC 4C 5D 5S",</linea>
+        <linea>		"2C 5H 7D 4H 3S QH JC JS 6D 8H",</linea>
+        <linea>		"4C QH 7C QD 3S AD TH 8S 5S TS",</linea>
+        <linea>		"9H TC 2S TD JC 7D 3S 3D TH QH",</linea>
+        <linea>		"7D 4C 8S 5C JH 8H 6S 3S KC 3H",</linea>
+        <linea>		"JC 3H KH TC QH TH 6H 2C AC 5H",</linea>
+        <linea>		"QS 2H 9D 2C AS 6S 6C 2S 8C 8S",</linea>
+        <linea>		"9H 7D QC TH 4H KD QS AC 7S 3C",</linea>
+        <linea>		"4D JH 6S 5S 8H KS 9S QC 3S AS",</linea>
+        <linea>		"JD 2D 6S 7S TC 9H KC 3H 7D KD",</linea>
+        <linea>		"2H KH 7C 4D 4S 3H JS QD 7D KC",</linea>
+        <linea>		"4C JC AS 9D 3C JS 6C 8H QD 4D",</linea>
+        <linea>		"AH JS 3S 6C 4C 3D JH 6D 9C 9H",</linea>
+        <linea>		"9H 2D 8C 7H 5S KS 6H 9C 2S TC",</linea>
+        <linea>		"6C 8C AD 7H 6H 3D KH AS 5D TH",</linea>
+        <linea>		"KS 8C 3S TS 8S 4D 5S 9S 6C 4H",</linea>
+        <linea>		"9H 4S 4H 5C 7D KC 2D 2H 9D JH",</linea>
+        <linea>		"5C JS TC 9D 9H 5H 7S KH JC 6S",</linea>
+        <linea>		"7C 9H 8H 4D JC KH JD 2H TD TC",</linea>
+        <linea>		"8H 6C 2H 2C KH 6H 9D QS QH 5H",</linea>
+        <linea>		"AC 7D 2S 3D QD JC 2D 8D JD JH",</linea>
+        <linea>		"2H JC 2D 7H 2C 3C 8D KD TD 4H",</linea>
+        <linea>		"3S 4H 6D 8D TS 3H TD 3D 6H TH",</linea>
+        <linea>		"JH JC 3S AC QH 9H 7H 8S QC 2C",</linea>
+        <linea>		"7H TD QS 4S 8S 9C 2S 5D 4D 2H",</linea>
+        <linea>		"3D TS 3H 2S QC 8H 6H KC JC KS",</linea>
+        <linea>		"5D JD 7D TC 8C 6C 9S 3D 8D AC",</linea>
+        <linea>		"8H 6H JH 6C 5D 8D 8S 4H AD 2C",</linea>
+        <linea>		"9D 4H 2D 2C 3S TS AS TC 3C 5D",</linea>
+        <linea>		"4D TH 5H KS QS 6C 4S 2H 3D AD",</linea>
+        <linea>		"5C KC 6H 2C 5S 3C 4D 2D 9H 9S",</linea>
+        <linea>		"JD 4C 3H TH QH 9H 5S AH 8S AC",</linea>
+        <linea>		"7D 9S 6S 2H TD 9C 4H 8H QS 4C",</linea>
+        <linea>		"3C 6H 5D 4H 8C 9C KC 6S QD QS",</linea>
+        <linea>		"3S 9H KD TC 2D JS 8C 6S 4H 4S",</linea>
+        <linea>		"2S 4C 8S QS 6H KH 3H TH 8C 5D",</linea>
+        <linea>		"2C KH 5S 3S 7S 7H 6C 9D QD 8D",</linea>
+        <linea>		"8H KS AC 2D KH TS 6C JS KC 7H",</linea>
+        <linea>		"9C KS 5C TD QC AH 6C 5H 9S 7C",</linea>
+        <linea>		"5D 4D 3H 4H 6S 7C 7S AH QD TD",</linea>
+        <linea>		"2H 7D QC 6S TC TS AH 7S 9D 3H",</linea>
+        <linea>		"TH 5H QD 9S KS 7S 7C 6H 8C TD",</linea>
+        <linea>		"TH 2D 4D QC 5C 7D JD AH 9C 4H",</linea>
+        <linea>		"4H 3H AH 8D 6H QC QH 9H 2H 2C",</linea>
+        <linea>		"2D AD 4C TS 6H 7S TH 4H QS TD",</linea>
+        <linea>		"3C KD 2H 3H QS JD TC QC 5D 8H",</linea>
+        <linea>		"KS JC QD TH 9S KD 8D 8C 2D 9C",</linea>
+        <linea>		"3C QD KD 6D 4D 8D AH AD QC 8S",</linea>
+        <linea>		"8H 3S 9D 2S 3H KS 6H 4C 7C KC",</linea>
+        <linea>		"TH 9S 5C 3D 7D 6H AC 7S 4D 2C",</linea>
+        <linea>		"5C 3D JD 4D 2D 6D 5H 9H 4C KH",</linea>
+        <linea>		"AS 7H TD 6C 2H 3D QD KS 4C 4S",</linea>
+        <linea>		"JC 3C AC 7C JD JS 8H 9S QC 5D",</linea>
+        <linea>		"JD 6S 5S 2H AS 8C 7D 5H JH 3D",</linea>
+        <linea>		"8D TC 5S 9S 8S 3H JC 5H 7S AS",</linea>
+        <linea>		"5C TD 3D 7D 4H 8D 7H 4D 5D JS",</linea>
+        <linea>		"QS 9C KS TD 2S 8S 5C 2H 4H AS",</linea>
+        <linea>		"TH 7S 4H 7D 3H JD KD 5D 2S KC",</linea>
+        <linea>		"JD 7H 4S 8H 4C JS 6H QH 5S 4H",</linea>
+        <linea>		"2C QS 8C 5S 3H QC 2S 6C QD AD",</linea>
+        <linea>		"8C 3D JD TC 4H 2H AD 5S AC 2S",</linea>
+        <linea>		"5D 2C JS 2D AD 9D 3D 4C 4S JH",</linea>
+        <linea>		"8D 5H 5D 6H 7S 4D KS 9D TD JD",</linea>
+        <linea>		"3D 6D 9C 2S AS 7D 5S 5C 8H JD",</linea>
+        <linea>		"7C 8S 3S 6S 5H JD TC AD 7H 7S",</linea>
+        <linea>		"2S 9D TS 4D AC 8D 6C QD JD 3H",</linea>
+        <linea>		"9S KH 2C 3C AC 3D 5H 6H 8D 5D",</linea>
+        <linea>		"KS 3D 2D 6S AS 4C 2S 7C 7H KH",</linea>
+        <linea>		"AC 2H 3S JC 5C QH 4D 2D 5H 7S",</linea>
+        <linea>		"TS AS JD 8C 6H JC 8S 5S 2C 5D",</linea>
+        <linea>		"7S QH 7H 6C QC 8H 2D 7C JD 2S",</linea>
+        <linea>		"2C QD 2S 2H JC 9C 5D 2D JD JH",</linea>
+        <linea>		"7C 5C 9C 8S 7D 6D 8D 6C 9S JH",</linea>
+        <linea>		"2C AD 6S 5H 3S KS 7S 9D KH 4C",</linea>
+        <linea>		"7H 6C 2C 5C TH 9D 8D 3S QC AH",</linea>
+        <linea>		"5S KC 6H TC 5H 8S TH 6D 3C AH",</linea>
+        <linea>		"9C KD 4H AD TD 9S 4S 7D 6H 5D",</linea>
+        <linea>		"7H 5C 5H 6D AS 4C KD KH 4H 9D",</linea>
+        <linea>		"3C 2S 5C 6C JD QS 2H 9D 7D 3H",</linea>
+        <linea>		"AC 2S 6S 7S JS QD 5C QS 6H AD",</linea>
+        <linea>		"5H TH QC 7H TC 3S 7C 6D KC 3D",</linea>
+        <linea>		"4H 3D QC 9S 8H 2C 3S JC KS 5C",</linea>
+        <linea>		"4S 6S 2C 6H 8S 3S 3D 9H 3H JS",</linea>
+        <linea>		"4S 8C 4D 2D 8H 9H 7D 9D AH TS",</linea>
+        <linea>		"9S 2C 9H 4C 8D AS 7D 3D 6D 5S",</linea>
+        <linea>		"6S 4C 7H 8C 3H 5H JC AH 9D 9C",</linea>
+        <linea>		"2S 7C 5S JD 8C 3S 3D 4D 7D 6S",</linea>
+        <linea>		"3C KC 4S 5D 7D 3D JD 7H 3H 4H",</linea>
+        <linea>		"9C 9H 4H 4D TH 6D QD 8S 9S 7S",</linea>
+        <linea>		"2H AC 8S 4S AD 8C 2C AH 7D TC",</linea>
+        <linea>		"TS 9H 3C AD KS TC 3D 8C 8H JD",</linea>
+        <linea>		"QC 8D 2C 3C 7D 7C JD 9H 9C 6C",</linea>
+        <linea>		"AH 6S JS JH 5D AS QC 2C JD TD",</linea>
+        <linea>		"9H KD 2H 5D 2D 3S 7D TC AH TS",</linea>
+        <linea>		"TD 8H AS 5D AH QC AC 6S TC 5H",</linea>
+        <linea>		"KS 4S 7H 4D 8D 9C TC 2H 6H 3H",</linea>
+        <linea>		"3H KD 4S QD QH 3D 8H 8C TD 7S",</linea>
+        <linea>		"8S JD TC AH JS QS 2D KH KS 4D",</linea>
+        <linea>		"3C AD JC KD JS KH 4S TH 9H 2C",</linea>
+        <linea>		"QC 5S JS 9S KS AS 7C QD 2S JD",</linea>
+        <linea>		"KC 5S QS 3S 2D AC 5D 9H 8H KS",</linea>
+        <linea>		"6H 9C TC AD 2C 6D 5S JD 6C 7C",</linea>
+        <linea>		"QS KH TD QD 2C 3H 8S 2S QC AH",</linea>
+        <linea>		"9D 9H JH TC QH 3C 2S JS 5C 7H",</linea>
+        <linea>		"6C 3S 3D 2S 4S QD 2D TH 5D 2C",</linea>
+        <linea>		"2D 6H 6D 2S JC QH AS 7H 4H KH",</linea>
+        <linea>		"5H 6S KS AD TC TS 7C AC 4S 4H",</linea>
+        <linea>		"AD 3C 4H QS 8C 9D KS 2H 2D 4D",</linea>
+        <linea>		"4S 9D 6C 6D 9C AC 8D 3H 7H KD",</linea>
+        <linea>		"JC AH 6C TS JD 6D AD 3S 5D QD",</linea>
+        <linea>		"JC JH JD 3S 7S 8S JS QC 3H 4S",</linea>
+        <linea>		"JD TH 5C 2C AD JS 7H 9S 2H 7S",</linea>
+        <linea>		"8D 3S JH 4D QC AS JD 2C KC 6H",</linea>
+        <linea>		"2C AC 5H KD 5S 7H QD JH AH 2D",</linea>
+        <linea>		"JC QH 8D 8S TC 5H 5C AH 8C 6C",</linea>
+        <linea>		"3H JS 8S QD JH 3C 4H 6D 5C 3S",</linea>
+        <linea>		"6D 4S 4C AH 5H 5S 3H JD 7C 8D",</linea>
+        <linea>		"8H AH 2H 3H JS 3C 7D QC 4H KD",</linea>
+        <linea>		"6S 2H KD 5H 8H 2D 3C 8S 7S QD",</linea>
+        <linea>		"2S 7S KC QC AH TC QS 6D 4C 8D",</linea>
+        <linea>		"5S 9H 2C 3S QD 7S 6C 2H 7C 9D",</linea>
+        <linea>		"3C 6C 5C 5S JD JC KS 3S 5D TS",</linea>
+        <linea>		"7C KS 6S 5S 2S 2D TC 2H 5H QS",</linea>
+        <linea>		"AS 7H 6S TS 5H 9S 9D 3C KD 2H",</linea>
+        <linea>		"4S JS QS 3S 4H 7C 2S AC 6S 9D",</linea>
+        <linea>		"8C JH 2H 5H 7C 5D QH QS KH QC",</linea>
+        <linea>		"3S TD 3H 7C KC 8D 5H 8S KH 8C",</linea>
+        <linea>		"4H KH JD TS 3C 7H AS QC JS 5S",</linea>
+        <linea>		"AH 9D 2C 8D 4D 2D 6H 6C KC 6S",</linea>
+        <linea>		"2S 6H 9D 3S 7H 4D KH 8H KD 3D",</linea>
+        <linea>		"9C TC AC JH KH 4D JD 5H TD 3S",</linea>
+        <linea>		"7S 4H 9D AS 4C 7D QS 9S 2S KH",</linea>
+        <linea>		"3S 8D 8S KS 8C JC 5C KH 2H 5D",</linea>
+        <linea>		"8S QH 2C 4D KC JS QC 9D AC 6H",</linea>
+        <linea>		"8S 8C 7C JS JD 6S 4C 9C AC 4S",</linea>
+        <linea>		"QH 5D 2C 7D JC 8S 2D JS JH 4C",</linea>
+        <linea>		"JS 4C 7S TS JH KC KH 5H QD 4S",</linea>
+        <linea>		"QD 8C 8D 2D 6S TD 9D AC QH 5S",</linea>
+        <linea>		"QH QC JS 3D 3C 5C 4H KH 8S 7H",</linea>
+        <linea>		"7C 2C 5S JC 8S 3H QC 5D 2H KC",</linea>
+        <linea>		"5S 8D KD 6H 4H QD QH 6D AH 3D",</linea>
+        <linea>		"7S KS 6C 2S 4D AC QS 5H TS JD",</linea>
+        <linea>		"7C 2D TC 5D QS AC JS QC 6C KC",</linea>
+        <linea>		"2C KS 4D 3H TS 8S AD 4H 7S 9S",</linea>
+        <linea>		"QD 9H QH 5H 4H 4D KH 3S JC AD",</linea>
+        <linea>		"4D AC KC 8D 6D 4C 2D KH 2C JD",</linea>
+        <linea>		"2C 9H 2D AH 3H 6D 9C 7D TC KS",</linea>
+        <linea>		"8C 3H KD 7C 5C 2S 4S 5H AS AH",</linea>
+        <linea>		"TH JD 4H KD 3H TC 5C 3S AC KH",</linea>
+        <linea>		"6D 7H AH 7S QC 6H 2D TD JD AS",</linea>
+        <linea>		"JH 5D 7H TC 9S 7D JC AS 5S KH",</linea>
+        <linea>		"2H 8C AD TH 6H QD KD 9H 6S 6C",</linea>
+        <linea>		"QH KC 9D 4D 3S JS JH 4H 2C 9H",</linea>
+        <linea>		"TC 7H KH 4H JC 7D 9S 3H QS 7S",</linea>
+        <linea>		"AD 7D JH 6C 7H 4H 3S 3H 4D QH",</linea>
+        <linea>		"JD 2H 5C AS 6C QC 4D 3C TC JH",</linea>
+        <linea>		"AC JD 3H 6H 4C JC AD 7D 7H 9H",</linea>
+        <linea>		"4H TC TS 2C 8C 6S KS 2H JD 9S",</linea>
+        <linea>		"4C 3H QS QC 9S 9H 6D KC 9D 9C",</linea>
+        <linea>		"5C AD 8C 2C QH TH QD JC 8D 8H",</linea>
+        <linea>		"QC 2C 2S QD 9C 4D 3S 8D JH QS",</linea>
+        <linea>		"9D 3S 2C 7S 7C JC TD 3C TC 9H",</linea>
+        <linea>		"3C TS 8H 5C 4C 2C 6S 8D 7C 4H",</linea>
+        <linea>		"KS 7H 2H TC 4H 2C 3S AS AH QS",</linea>
+        <linea>		"8C 2D 2H 2C 4S 4C 6S 7D 5S 3S",</linea>
+        <linea>		"TH QC 5D TD 3C QS KD KC KS AS",</linea>
+        <linea>		"4D AH KD 9H KS 5C 4C 6H JC 7S",</linea>
+        <linea>		"KC 4H 5C QS TC 2H JC 9S AH QH",</linea>
+        <linea>		"4S 9H 3H 5H 3C QD 2H QC JH 8H",</linea>
+        <linea>		"5D AS 7H 2C 3D JH 6H 4C 6S 7D",</linea>
+        <linea>		"9C JD 9H AH JS 8S QH 3H KS 8H",</linea>
+        <linea>		"3S AC QC TS 4D AD 3D AH 8S 9H",</linea>
+        <linea>		"7H 3H QS 9C 9S 5H JH JS AH AC",</linea>
+        <linea>		"8D 3C JD 2H AC 9C 7H 5S 4D 8H",</linea>
+        <linea>		"7C JH 9H 6C JS 9S 7H 8C 9D 4H",</linea>
+        <linea>		"2D AS 9S 6H 4D JS JH 9H AD QD",</linea>
+        <linea>		"6H 7S JH KH AH 7H TD 5S 6S 2C",</linea>
+        <linea>		"8H JH 6S 5H 5S 9D TC 4C QC 9S",</linea>
+        <linea>		"7D 2C KD 3H 5H AS QD 7H JS 4D",</linea>
+        <linea>		"TS QH 6C 8H TH 5H 3C 3H 9C 9D",</linea>
+        <linea>		"AD KH JS 5D 3H AS AC 9S 5C KC",</linea>
+        <linea>		"2C KH 8C JC QS 6D AH 2D KC TC",</linea>
+        <linea>		"9D 3H 2S 7C 4D 6D KH KS 8D 7D",</linea>
+        <linea>		"9H 2S TC JH AC QC 3H 5S 3S 8H",</linea>
+        <linea>		"3S AS KD 8H 4C 3H 7C JH QH TS",</linea>
+        <linea>		"7S 6D 7H 9D JH 4C 3D 3S 6C AS",</linea>
+        <linea>		"4S 2H 2C 4C 8S 5H KC 8C QC QD",</linea>
+        <linea>		"3H 3S 6C QS QC 2D 6S 5D 2C 9D",</linea>
+        <linea>		"2H 8D JH 2S 3H 2D 6C 5C 7S AD",</linea>
+        <linea>		"9H JS 5D QH 8S TS 2H 7S 6S AD",</linea>
+        <linea>		"6D QC 9S 7H 5H 5C 7D KC JD 4H",</linea>
+        <linea>		"QC 5S 9H 9C 4D 6S KS 2S 4C 7C",</linea>
+        <linea>		"9H 7C 4H 8D 3S 6H 5C 8H JS 7S",</linea>
+        <linea>		"2D 6H JS TD 4H 4D JC TH 5H KC",</linea>
+        <linea>		"AC 7C 8D TH 3H 9S 2D 4C KC 4D",</linea>
+        <linea>		"KD QS 9C 7S 3D KS AD TS 4C 4H",</linea>
+        <linea>		"QH 9C 8H 2S 7D KS 7H 5D KD 4C",</linea>
+        <linea>		"9C 2S 2H JC 6S 6C TC QC JH 5C",</linea>
+        <linea>		"7S AC 8H KC 8S 6H QS JC 3D 6S",</linea>
+        <linea>		"JS 2D JH 8C 4S 6H 8H 6D 5D AD",</linea>
+        <linea>		"6H 7D 2S 4H 9H 7C AS AC 8H 5S",</linea>
+        <linea>		"3C JS 4S 6D 5H 2S QH 6S 9C 2C",</linea>
+        <linea>		"3D 5S 6S 9S 4C QS 8D QD 8S TC",</linea>
+        <linea>		"9C 3D AH 9H 5S 2C 7D AD JC 3S",</linea>
+        <linea>		"7H TC AS 3C 6S 6D 7S KH KC 9H",</linea>
+        <linea>		"3S TC 8H 6S 5H JH 8C 7D AC 2S",</linea>
+        <linea>		"QD 9D 9C 3S JC 8C KS 8H 5D 4D",</linea>
+        <linea>		"JS AH JD 6D 9D 8C 9H 9S 8H 3H",</linea>
+        <linea>		"2D 6S 4C 4D 8S AD 4S TC AH 9H",</linea>
+        <linea>		"TS AC QC TH KC 6D 4H 7S 8C 2H",</linea>
+        <linea>		"3C QD JS 9D 5S JC AH 2H TS 9H",</linea>
+        <linea>		"3H 4D QH 5D 9C 5H 7D 4S JC 3S",</linea>
+        <linea>		"8S TH 3H 7C 2H JD JS TS AC 8D",</linea>
+        <linea>		"9C 2H TD KC JD 2S 8C 5S AD 2C",</linea>
+        <linea>		"3D KD 7C 5H 4D QH QD TC 6H 7D",</linea>
+        <linea>		"7H 2C KC 5S KD 6H AH QC 7S QH",</linea>
+        <linea>		"6H 5C AC 5H 2C 9C 2D 7C TD 2S",</linea>
+        <linea>		"4D 9D AH 3D 7C JD 4H 8C 4C KS",</linea>
+        <linea>		"TH 3C JS QH 8H 4C AS 3D QS QC",</linea>
+        <linea>		"4D 7S 5H JH 6D 7D 6H JS KH 3C",</linea>
+        <linea>		"QD 8S 7D 2H 2C 7C JC 2S 5H 8C",</linea>
+        <linea>		"QH 8S 9D TC 2H AD 7C 8D QD 6S",</linea>
+        <linea>		"3S 7C AD 9H 2H 9S JD TS 4C 2D",</linea>
+        <linea>		"3S AS 4H QC 2C 8H 8S 7S TD TC",</linea>
+        <linea>		"JH TH TD 3S 4D 4H 5S 5D QS 2C",</linea>
+        <linea>		"8C QD QH TC 6D 4S 9S 9D 4H QC",</linea>
+        <linea>		"8C JS 9D 6H JD 3H AD 6S TD QC",</linea>
+        <linea>		"KC 8S 3D 7C TD 7D 8D 9H 4S 3S",</linea>
+        <linea>		"6C 4S 3D 9D KD TC KC KS AC 5S",</linea>
+        <linea>		"7C 6S QH 3D JS KD 6H 6D 2D 8C",</linea>
+        <linea>		"JD 2S 5S 4H 8S AC 2D 6S TS 5C",</linea>
+        <linea>		"5H 8C 5S 3C 4S 3D 7C 8D AS 3H",</linea>
+        <linea>		"AS TS 7C 3H AD 7D JC QS 6C 6H",</linea>
+        <linea>		"3S 9S 4C AC QH 5H 5D 9H TS 4H",</linea>
+        <linea>		"6C 5C 7H 7S TD AD JD 5S 2H 2S",</linea>
+        <linea>		"7D 6C KC 3S JD 8D 8S TS QS KH",</linea>
+        <linea>		"8S QS 8D 6C TH AC AH 2C 8H 9S",</linea>
+        <linea>		"7H TD KH QH 8S 3D 4D AH JD AS",</linea>
+        <linea>		"TS 3D 2H JC 2S JH KH 6C QC JS",</linea>
+        <linea>		"KC TH 2D 6H 7S 2S TC 8C 9D QS",</linea>
+        <linea>		"3C 9D 6S KH 8H 6D 5D TH 2C 2H",</linea>
+        <linea>		"6H TC 7D AD 4D 8S TS 9H TD 7S",</linea>
+        <linea>		"JS 6D JD JC 2H AC 6C 3D KH 8D",</linea>
+        <linea>		"KH JD 9S 5D 4H 4C 3H 7S QS 5C",</linea>
+        <linea>		"4H JD 5D 3S 3C 4D KH QH QS 7S",</linea>
+        <linea>		"JD TS 8S QD AH 4C 6H 3S 5S 2C",</linea>
+        <linea>		"QS 3D JD AS 8D TH 7C 6S QC KS",</linea>
+        <linea>		"7S 2H 8C QC 7H AC 6D 2D TH KH",</linea>
+        <linea>		"5S 6C 7H KH 7D AH 8C 5C 7S 3D",</linea>
+        <linea>		"3C KD AD 7D 6C 4D KS 2D 8C 4S",</linea>
+        <linea>		"7C 8D 5S 2D 2S AH AD 2C 9D TD",</linea>
+        <linea>		"3C AD 4S KS JH 7C 5C 8C 9C TH",</linea>
+        <linea>		"AS TD 4D 7C JD 8C QH 3C 5H 9S",</linea>
+        <linea>		"3H 9C 8S 9S 6S QD KS AH 5H JH",</linea>
+        <linea>		"QC 9C 5S 4H 2H TD 7D AS 8C 9D",</linea>
+        <linea>		"8C 2C 9D KD TC 7S 3D KH QC 3C",</linea>
+        <linea>		"4D AS 4C QS 5S 9D 6S JD QH KS",</linea>
+        <linea>		"6D AH 6C 4C 5H TS 9H 7D 3D 5S",</linea>
+        <linea>		"QS JD 7C 8D 9C AC 3S 6S 6C KH",</linea>
+        <linea>		"8H JH 5D 9S 6D AS 6S 3S QC 7H",</linea>
+        <linea>		"QD AD 5C JH 2H AH 4H AS KC 2C",</linea>
+        <linea>		"JH 9C 2C 6H 2D JS 5D 9H KC 6D",</linea>
+        <linea>		"7D 9D KD TH 3H AS 6S QC 6H AD",</linea>
+        <linea>		"JD 4H 7D KC 3H JS 3C TH 3D QS",</linea>
+        <linea>		"4C 3H 8C QD 5H 6H AS 8H AD JD",</linea>
+        <linea>		"TH 8S KD 5D QC 7D JS 5S 5H TS",</linea>
+        <linea>		"7D KC 9D QS 3H 3C 6D TS 7S AH",</linea>
+        <linea>		"7C 4H 7H AH QC AC 4D 5D 6D TH",</linea>
+        <linea>		"3C 4H 2S KD 8H 5H JH TC 6C JD",</linea>
+        <linea>		"4S 8C 3D 4H JS TD 7S JH QS KD",</linea>
+        <linea>		"7C QC KD 4D 7H 6S AD TD TC KH",</linea>
+        <linea>		"5H 9H KC 3H 4D 3D AD 6S QD 6H",</linea>
+        <linea>		"TH 7C 6H TS QH 5S 2C KC TD 6S",</linea>
+        <linea>		"7C 4D 5S JD JH 7D AC KD KH 4H",</linea>
+        <linea>		"7D 6C 8D 8H 5C JH 8S QD TH JD",</linea>
+        <linea>		"8D 7D 6C 7C 9D KD AS 5C QH JH",</linea>
+        <linea>		"9S 2C 8C 3C 4C KS JH 2D 8D 4H",</linea>
+        <linea>		"7S 6C JH KH 8H 3H 9D 2D AH 6D",</linea>
+        <linea>		"4D TC 9C 8D 7H TD KS TH KD 3C",</linea>
+        <linea>		"JD 9H 8D QD AS KD 9D 2C 2S 9C",</linea>
+        <linea>		"8D 3H 5C 7H KS 5H QH 2D 8C 9H",</linea>
+        <linea>		"2D TH 6D QD 6C KC 3H 3S AD 4C",</linea>
+        <linea>		"4H 3H JS 9D 3C TC 5H QH QC JC",</linea>
+        <linea>		"3D 5C 6H 3S 3C JC 5S 7S 2S QH",</linea>
+        <linea>		"AC 5C 8C 4D 5D 4H 2S QD 3C 3H",</linea>
+        <linea>		"2C TD AH 9C KD JS 6S QD 4C QC",</linea>
+        <linea>		"QS 8C 3S 4H TC JS 3H 7C JC AD",</linea>
+        <linea>		"5H 4D 9C KS JC TD 9S TS 8S 9H",</linea>
+        <linea>		"QD TS 7D AS AC 2C TD 6H 8H AH",</linea>
+        <linea>		"6S AD 8C 4S 9H 8D 9D KH 8S 3C",</linea>
+        <linea>		"QS 4D 2D 7S KH JS JC AD 4C 3C",</linea>
+        <linea>		"QS 9S 7H KC TD TH 5H JS AC JH",</linea>
+        <linea>		"6D AC 2S QS 7C AS KS 6S KH 5S",</linea>
+        <linea>		"6D 8H KH 3C QS 2H 5C 9C 9D 6C",</linea>
+        <linea>		"JS 2C 4C 6H 7D JC AC QD TD 3H",</linea>
+        <linea>		"4H QC 8H JD 4C KD KS 5C KC 7S",</linea>
+        <linea>		"6D 2D 3H 2S QD 5S 7H AS TH 6S",</linea>
+        <linea>		"AS 6D 8D 2C 8S TD 8H QD JC AH",</linea>
+        <linea>		"9C 9H 2D TD QH 2H 5C TC 3D 8H",</linea>
+        <linea>		"KC 8S 3D KH 2S TS TC 6S 4D JH",</linea>
+        <linea>		"9H 9D QS AC KC 6H 5D 4D 8D AH",</linea>
+        <linea>		"9S 5C QS 4H 7C 7D 2H 8S AD JS",</linea>
+        <linea>		"3D AC 9S AS 2C 2D 2H 3H JC KH",</linea>
+        <linea>		"7H QH KH JD TC KS 5S 8H 4C 8D",</linea>
+        <linea>		"2H 7H 3S 2S 5H QS 3C AS 9H KD",</linea>
+        <linea>		"AD 3D JD 6H 5S 9C 6D AC 9S 3S",</linea>
+        <linea>		"3D 5D 9C 2D AC 4S 2S AD 6C 6S",</linea>
+        <linea>		"QC 4C 2D 3H 6S KC QH QD 2H JH",</linea>
+        <linea>		"QC 3C 8S 4D 9S 2H 5C 8H QS QD",</linea>
+        <linea>		"6D KD 6S 7H 3S KH 2H 5C JC 6C",</linea>
+        <linea>		"3S 9S TC 6S 8H 2D AD 7S 8S TS",</linea>
+        <linea>		"3C 6H 9C 3H 5C JC 8H QH TD QD",</linea>
+        <linea>		"3C JS QD 5D TD 2C KH 9H TH AS",</linea>
+        <linea>		"9S TC JD 3D 5C 5H AD QH 9H KC",</linea>
+        <linea>		"TC 7H 4H 8H 3H TD 6S AC 7C 2S",</linea>
+        <linea>		"QS 9D 5D 3C JC KS 4D 6C JH 2S",</linea>
+        <linea>		"9S 6S 3C 7H TS 4C KD 6D 3D 9C",</linea>
+        <linea>		"2D 9H AH AC 7H 2S JH 3S 7C QC",</linea>
+        <linea>		"QD 9H 3C 2H AC AS 8S KD 8C KH",</linea>
+        <linea>		"2D 7S TD TH 6D JD 8D 4D 2H 5S",</linea>
+        <linea>		"8S QH KD JD QS JH 4D KC 5H 3S",</linea>
+        <linea>		"3C KH QC 6D 8H 3S AH 7D TD 2D",</linea>
+        <linea>		"5S 9H QH 4S 6S 6C 6D TS TH 7S",</linea>
+        <linea>		"6C 4C 6D QS JS 9C TS 3H 8D 8S",</linea>
+        <linea>		"JS 5C 7S AS 2C AH 2H AD 5S TC",</linea>
+        <linea>		"KD 6C 9C 9D TS 2S JC 4H 2C QD",</linea>
+        <linea>		"QS 9H TC 3H KC KS 4H 3C AD TH",</linea>
+        <linea>		"KH 9C 2H KD 9D TC 7S KC JH 2D",</linea>
+        <linea>		"7C 3S KC AS 8C 5D 9C 9S QH 3H",</linea>
+        <linea>		"2D 8C TD 4C 2H QC 5D TC 2C 7D",</linea>
+        <linea>		"KS 4D 6C QH TD KH 5D 7C AD 8D",</linea>
+        <linea>		"2S 9S 8S 4C 8C 3D 6H QD 7C 7H",</linea>
+        <linea>		"6C 8S QH 5H TS 5C 3C 4S 2S 2H",</linea>
+        <linea>		"8S 6S 2H JC 3S 3H 9D 8C 2S 7H",</linea>
+        <linea>		"QC 2C 8H 9C AC JD 4C 4H 6S 3S",</linea>
+        <linea>		"3H 3S 7D 4C 9S 5H 8H JC 3D TC",</linea>
+        <linea>		"QH 2S 2D 9S KD QD 9H AD 6D 9C",</linea>
+        <linea>		"8D 2D KS 9S JC 4C JD KC 4S TH",</linea>
+        <linea>		"KH TS 6D 4D 5C KD 5H AS 9H AD",</linea>
+        <linea>		"QD JS 7C 6D 5D 5C TH 5H QH QS",</linea>
+        <linea>		"9D QH KH 5H JH 4C 4D TC TH 6C",</linea>
+        <linea>		"KH AS TS 9D KD 9C 7S 4D 8H 5S",</linea>
+        <linea>		"KH AS 2S 7D 9D 4C TS TH AH 7C",</linea>
+        <linea>		"KS 4D AC 8S 9S 8D TH QH 9D 5C",</linea>
+        <linea>		"5D 5C 8C QS TC 4C 3D 3S 2C 8D",</linea>
+        <linea>		"9D KS 2D 3C KC 4S 8C KH 6C JC",</linea>
+        <linea>		"8H AH 6H 7D 7S QD 3C 4C 6C KC",</linea>
+        <linea>		"3H 2C QH 8H AS 7D 4C 8C 4H KC",</linea>
+        <linea>		"QD 5S 4H 2C TD AH JH QH 4C 8S",</linea>
+        <linea>		"3H QS 5S JS 8H 2S 9H 9C 3S 2C",</linea>
+        <linea>		"6H TS 7S JC QD AC TD KC 5S 3H",</linea>
+        <linea>		"QH AS QS 7D JC KC 2C 4C 5C 5S",</linea>
+        <linea>		"QH 3D AS JS 4H 8D 7H JC 2S 9C",</linea>
+        <linea>		"5D 4D 2S 4S 9D 9C 2D QS 8H 7H",</linea>
+        <linea>		"6D 7H 3H JS TS AC 2D JH 7C 8S",</linea>
+        <linea>		"JH 5H KC 3C TC 5S 9H 4C 8H 9D",</linea>
+        <linea>		"8S KC 5H 9H AD KS 9D KH 8D AH",</linea>
+        <linea>		"JC 2H 9H KS 6S 3H QC 5H AH 9C",</linea>
+        <linea>		"5C KH 5S AD 6C JC 9H QC 9C TD",</linea>
+        <linea>		"5S 5D JC QH 2D KS 8H QS 2H TS",</linea>
+        <linea>		"JH 5H 5S AH 7H 3C 8S AS TD KH",</linea>
+        <linea>		"6H 3D JD 2C 4C KC 7S AH 6C JH",</linea>
+        <linea>		"4C KS 9D AD 7S KC 7D 8H 3S 9C",</linea>
+        <linea>		"7H 5C 5H 3C 8H QC 3D KH 6D JC",</linea>
+        <linea>		"2D 4H 5D 7D QC AD AH 9H QH 8H",</linea>
+        <linea>		"KD 8C JS 9D 3S 3C 2H 5D 6D 2S",</linea>
+        <linea>		"8S 6S TS 3C 6H 8D 5S 3H TD 6C",</linea>
+        <linea>		"KS 3D JH 9C 7C 9S QS 5S 4H 6H",</linea>
+        <linea>		"7S 6S TH 4S KC KD 3S JC JH KS",</linea>
+        <linea>		"7C 3C 2S 6D QH 2C 7S 5H 8H AH",</linea>
+        <linea>		"KC 8D QD 6D KH 5C 7H 9D 3D 9C",</linea>
+        <linea>		"6H 2D 8S JS 9S 2S 6D KC 7C TC",</linea>
+        <linea>		"KD 9C JH 7H KC 8S 2S 7S 3D 6H",</linea>
+        <linea>		"4H 9H 2D 4C 8H 7H 5S 8S 2H 8D",</linea>
+        <linea>		"AD 7C 3C 7S 5S 4D 9H 3D JC KH",</linea>
+        <linea>		"5D AS 7D 6D 9C JC 4C QH QS KH",</linea>
+        <linea>		"KD JD 7D 3D QS QC 8S 6D JS QD",</linea>
+        <linea>		"6S 8C 5S QH TH 9H AS AC 2C JD",</linea>
+        <linea>		"QC KS QH 7S 3C 4C 5C KC 5D AH",</linea>
+        <linea>		"6C 4H 9D AH 2C 3H KD 3D TS 5C",</linea>
+        <linea>		"TD 8S QS AS JS 3H KD AC 4H KS",</linea>
+        <linea>		"7D 5D TS 9H 4H 4C 9C 2H 8C QC",</linea>
+        <linea>		"2C 7D 9H 4D KS 4C QH AD KD JS",</linea>
+        <linea>		"QD AD AH KH 9D JS 9H JC KD JD",</linea>
+        <linea>		"8S 3C 4S TS 7S 4D 5C 2S 6H 7C",</linea>
+        <linea>		"JS 7S 5C KD 6D QH 8S TD 2H 6S",</linea>
+        <linea>		"QH 6C TC 6H TD 4C 9D 2H QC 8H",</linea>
+        <linea>		"3D TS 4D 2H 6H 6S 2C 7H 8S 6C",</linea>
+        <linea>		"9H 9D JD JH 3S AH 2C 6S 3H 8S",</linea>
+        <linea>		"2C QS 8C 5S 3H 2S 7D 3C AD 4S",</linea>
+        <linea>		"5C QC QH AS TS 4S 6S 4C 5H JS",</linea>
+        <linea>		"JH 5C TD 4C 6H JS KD KH QS 4H",</linea>
+        <linea>		"TC KH JC 4D 9H 9D 8D KC 3C 8H",</linea>
+        <linea>		"2H TC 8S AD 9S 4H TS 7H 2C 5C",</linea>
+        <linea>		"4H 2S 6C 5S KS AH 9C 7C 8H KD",</linea>
+        <linea>		"TS QH TD QS 3C JH AH 2C 8D 7D",</linea>
+        <linea>		"5D KC 3H 5S AC 4S 7H QS 4C 2H",</linea>
+        <linea>		"3D 7D QC KH JH 6D 6C TD TH KD",</linea>
+        <linea>		"5S 8D TH 6C 9D 7D KH 8C 9S 6D",</linea>
+        <linea>		"JD QS 7S QC 2S QH JC 4S KS 8D",</linea>
+        <linea>		"7S 5S 9S JD KD 9C JC AD 2D 7C",</linea>
+        <linea>		"4S 5H AH JH 9C 5D TD 7C 2D 6S",</linea>
+        <linea>		"KC 6C 7H 6S 9C QD 5S 4H KS TD",</linea>
+        <linea>		"6S 8D KS 2D TH TD 9H JD TS 3S",</linea>
+        <linea>		"KH JS 4H 5D 9D TC TD QC JD TS",</linea>
+        <linea>		"QS QD AC AD 4C 6S 2D AS 3H KC",</linea>
+        <linea>		"4C 7C 3C TD QS 9C KC AS 8D AD",</linea>
+        <linea>		"KC 7H QC 6D 8H 6S 5S AH 7S 8C",</linea>
+        <linea>		"3S AD 9H JC 6D JD AS KH 6S JH",</linea>
+        <linea>		"AD 3D TS KS 7H JH 2D JS QD AC",</linea>
+        <linea>		"9C JD 7C 6D TC 6H 6C JC 3D 3S",</linea>
+        <linea>		"QC KC 3S JC KD 2C 8D AH QS TS",</linea>
+        <linea>		"AS KD 3D JD 8H 7C 8C 5C QD 6C"</linea>
+        <linea>	};</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>Python</lenguaje>
+      <nivel_sol>4</nivel_sol>
+      <codigo>
+        <linea>value = { '2':2,'3':3,'4':4,'5':5,'6':6,'7':7,'8':8,'9':9,'T':10,'J':11,'Q':12,'K':13,'A':14 }</linea>
+        <linea>all_kinds = tuple(reversed(sorted(value.values())))</linea>
+        <linea>all_suits = list('DCSH')</linea>
+        <linea/>
+        <linea>def make_hand(cards):</linea>
+        <linea>    hand = {}</linea>
+        <linea>    for card in cards:</linea>
+        <linea>        hand.setdefault(value[card[0]], {})[card[1]] = 1</linea>
+        <linea>        hand.setdefault(card[1], {})[value[card[0]]] = 1</linea>
+        <linea>    return hand</linea>
+        <linea/>
+        <linea>def get(hash, arr): return ((i, hash.get(i, {})) for i in arr)</linea>
+        <linea>def has(hash, arr): return not sum(1 for i in arr if i not in hash)</linea>
+        <linea/>
+        <linea>def rank(hand):</linea>
+        <linea>    # Escalera Real</linea>
+        <linea>    for suit, kinds in get(hand, all_suits):</linea>
+        <linea>        if has(kinds, tuple('TJQKA')):</linea>
+        <linea>            return (9,)</linea>
+        <linea/>
+        <linea>    # Escalera de Color</linea>
+        <linea>    for suit, kinds in get(hand, all_suits):</linea>
+        <linea>        kinds = sorted(kind for kind in kinds.keys())</linea>
+        <linea>        if len(kinds) == 5 and kinds[4] - kinds[0] == 4:</linea>
+        <linea>            return (8, kinds[0])</linea>
+        <linea/>
+        <linea>    # Poker</linea>
+        <linea>    for kind, suits in get(hand, all_kinds):</linea>
+        <linea>        if len(suits.keys()) == 4:</linea>
+        <linea>            return (7, kind)</linea>
+        <linea/>
+        <linea>    # Full</linea>
+        <linea>    for kind, suits in get(hand, all_kinds):</linea>
+        <linea>        if len(suits.keys()) == 3:</linea>
+        <linea>            for kind2, suits2 in get(hand, all_kinds):</linea>
+        <linea>                if len(suits2.keys()) == 2:</linea>
+        <linea>                    return (6, kind, kind2)</linea>
+        <linea/>
+        <linea>    # Color</linea>
+        <linea>    for suit, kinds in get(hand, all_suits):</linea>
+        <linea>        if len(kinds.keys()) == 5:</linea>
+        <linea>            return (5,)</linea>
+        <linea/>
+        <linea>    # Escalera</linea>
+        <linea>    kinds = sorted(kind for kind in all_kinds if hand.has_key(kind))</linea>
+        <linea>    if len(kinds) == 5 and kinds[4] - kinds[0] == 4:</linea>
+        <linea>        return (4, kinds[0])</linea>
+        <linea>    # Trío</linea>
+        <linea>    for kind, suits in get(hand, all_kinds):</linea>
+        <linea>        if len(suits.keys()) == 3:</linea>
+        <linea>            return (3, kind)</linea>
+        <linea>    # Dobles parejas</linea>
+        <linea>    for kind, suits in get(hand, all_kinds):</linea>
+        <linea>        if len(suits.keys()) == 2:</linea>
+        <linea>            for kind2, suits2 in get(hand, all_kinds):</linea>
+        <linea>                if kind != kind2 and len(suits2.keys()) == 2:</linea>
+        <linea>                    return (2, kind, kind2)</linea>
+        <linea/>
+        <linea>    # Parejas</linea>
+        <linea>    for kind, suits in get(hand, all_kinds):</linea>
+        <linea>        if len(suits.keys()) == 2:</linea>
+        <linea>            return (1, kind)</linea>
+        <linea/>
+        <linea>    for kind in all_kinds:</linea>
+        <linea>        if kind in hand:</linea>
+        <linea>            return (0, kind)</linea>
+        <linea/>
+        <linea>    return 0</linea>
+        <linea/>
+        <linea/>
+        <linea>count = 0</linea>
+        <linea>for hand in open('poker.txt'):</linea>
+        <linea>    hands = hand.split(' ')</linea>
+        <linea>    p1, p2 = make_hand(hands[0:5]), make_hand(hands[5:10])</linea>
+        <linea>    v1, v2 = rank(p1), rank(p2)</linea>
+        <linea>    if v1 &gt; v2: count += 1</linea>
+        <linea>print count</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>C#</lenguaje>
+      <nivel_sol>4</nivel_sol>
+      <codigo>
+        <linea>using System;</linea>
+        <linea>using System.Diagnostics;</linea>
+        <linea>using System.Numerics;</linea>
+        <linea>using System.IO;</linea>
+        <linea/>
+        <linea>namespace euler {</linea>
+        <linea>    class Problem54 {</linea>
+        <linea>        enum Suit { Heart, Spade, Club, Diamond };</linea>
+        <linea>             </linea>
+        <linea>        Card[] hand1 = new Card[5];</linea>
+        <linea>        Card[] hand2 = new Card[5];</linea>
+        <linea>        string filename = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) + "\\input.txt";</linea>
+        <linea>        StreamReader reader;</linea>
+        <linea/>
+        <linea>        public static void Main(string[] args) {</linea>
+        <linea>            new Problem54().BruteForce();</linea>
+        <linea>        }</linea>
+        <linea/>
+        <linea/>
+        <linea>        public void BruteForce() {</linea>
+        <linea>            Stopwatch clock = Stopwatch.StartNew();</linea>
+        <linea>            int result = 0;</linea>
+        <linea/>
+        <linea>            while (readHands()) {</linea>
+        <linea>                Array.Sort(hand1);</linea>
+        <linea>                Array.Sort(hand2);</linea>
+        <linea>                if (DidPlayer1Win(hand1, hand2)) result++;                </linea>
+        <linea>            }</linea>
+        <linea>            </linea>
+        <linea>            clock.Stop();</linea>
+        <linea>            Console.WriteLine("El Jugador 1 gana {0} partidas", result);</linea>
+        <linea>            Console.WriteLine("Solución encontrada en {0} ms", clock.ElapsedMilliseconds);</linea>
+        <linea>        }</linea>
+        <linea/>
+        <linea/>
+        <linea>        private bool DidPlayer1Win(Card[] hand1, Card[] hand2) {</linea>
+        <linea>            if (IsRoyalFlush(hand1) != IsRoyalFlush(hand2)) return IsRoyalFlush(hand1) &gt; IsRoyalFlush(hand2);            </linea>
+        <linea>            if (IsStraightFlush(hand1) != IsStraightFlush(hand2)) return IsStraightFlush(hand1) &gt; IsStraightFlush(hand2);                        </linea>
+        <linea>            if (IsFourOfAKind(hand1) != IsFourOfAKind(hand2)) return IsFourOfAKind(hand1) &gt; IsFourOfAKind(hand2);                        </linea>
+        <linea>            if (IsFullHouse(hand1, 1) != IsFullHouse(hand2, 1)) return IsFullHouse(hand1,1) &gt; IsFullHouse(hand2,1);            </linea>
+        <linea>            if (IsFullHouse(hand1,2) != IsFullHouse(hand2,2)) return IsFullHouse(hand1,2) &lt; IsFullHouse(hand2,2);                                      </linea>
+        <linea>            if (IsFlush(hand1) != IsFlush(hand2)) return IsFlush(hand1) &gt; IsFlush(hand2);            </linea>
+        <linea>            if (IsStraight(hand1) != IsStraight(hand2)) return IsStraight(hand1) &gt; IsStraight(hand2);                      </linea>
+        <linea>            if (IsThreeOfAKind(hand1) != IsThreeOfAKind(hand2)) return IsThreeOfAKind(hand1) &gt; IsThreeOfAKind(hand2);            </linea>
+        <linea>            if (IsTwoPairs(hand1, 1) != IsTwoPairs(hand2, 1)) return IsTwoPairs(hand1, 1) &gt; IsTwoPairs(hand2, 1);            </linea>
+        <linea>            if (IsTwoPairs(hand1, 2) != IsTwoPairs(hand2, 2)) return IsTwoPairs(hand1, 2) &gt; IsTwoPairs(hand2, 2);            </linea>
+        <linea>            if (IsOnePair(hand1) != IsOnePair(hand2)) return IsOnePair(hand1) &gt; IsOnePair(hand2);            </linea>
+        <linea>            if (IsHighCard(hand1,0) != IsHighCard(hand2,0)) return IsHighCard(hand1,0) &gt; IsHighCard(hand2,0);            </linea>
+        <linea>            if (IsHighCard(hand1,1) != IsHighCard(hand2,1)) return IsHighCard(hand1,1) &gt; IsHighCard(hand2,1);            </linea>
+        <linea>            if (IsHighCard(hand1,2) != IsHighCard(hand2,2)) return IsHighCard(hand1,2) &gt; IsHighCard(hand2,2);            </linea>
+        <linea>            if (IsHighCard(hand1,3) != IsHighCard(hand2,3)) return IsHighCard(hand1,3) &gt; IsHighCard(hand2,3);    </linea>
+        <linea/>
+        <linea>            return false;</linea>
+        <linea>        }</linea>
+        <linea>        </linea>
+        <linea>        private static int IsStraight(Card[] h) {                                               </linea>
+        <linea>            for (int i = 0; i &lt; 4; i++) {</linea>
+        <linea>                if (h[i].Value != h[i + 1].Value - 1) {</linea>
+        <linea>                    return -1;                    </linea>
+        <linea>                }</linea>
+        <linea>            }</linea>
+        <linea>            return h[4].Value;</linea>
+        <linea>        }</linea>
+        <linea/>
+        <linea>        private static int IsFlush(Card[] h) {</linea>
+        <linea>            for (int i = 0; i &lt; 4; i++) {</linea>
+        <linea>                if (h[i].Suit != h[i + 1].Suit) {</linea>
+        <linea>                    return -1;                    </linea>
+        <linea>                }</linea>
+        <linea>            }</linea>
+        <linea>            return h[4].Value;</linea>
+        <linea>        }</linea>
+        <linea/>
+        <linea>        private static int IsStraightFlush(Card[] h) {</linea>
+        <linea>            if (IsFlush(h) &gt; 0 &amp;&amp; IsStraight(h) &gt; 0) {</linea>
+        <linea>                return h[4].Value;</linea>
+        <linea>            }</linea>
+        <linea>            return -1;                     </linea>
+        <linea>        }</linea>
+        <linea/>
+        <linea>        private static int IsRoyalFlush(Card[] h) {</linea>
+        <linea>            if (IsFlush(h) == 14) return 14;</linea>
+        <linea>            return -1;</linea>
+        <linea>        }</linea>
+        <linea/>
+        <linea>        private static int IsFourOfAKind(Card[] h) {</linea>
+        <linea>            if (h[0].Value == h[1].Value &amp;&amp;</linea>
+        <linea>                h[1].Value == h[2].Value &amp;&amp;</linea>
+        <linea>                h[2].Value == h[3].Value)</linea>
+        <linea>                return h[0].Value;</linea>
+        <linea>            if (h[1].Value == h[2].Value &amp;&amp;</linea>
+        <linea>                h[2].Value == h[3].Value &amp;&amp;</linea>
+        <linea>                h[3].Value == h[4].Value)</linea>
+        <linea>                return h[1].Value;</linea>
+        <linea/>
+        <linea>            return -1;</linea>
+        <linea/>
+        <linea>        }</linea>
+        <linea/>
+        <linea>        private static int IsFullHouse(Card[] h, int set) {            </linea>
+        <linea>            if(set == 1 &amp;&amp;</linea>
+        <linea>               h[0].Value == h[1].Value &amp;&amp;</linea>
+        <linea>               h[1].Value == h[2].Value &amp;&amp;</linea>
+        <linea>               h[3].Value == h[4].Value)</linea>
+        <linea>                return h[0].Value;</linea>
+        <linea>            if (set == 2 &amp;&amp;</linea>
+        <linea>                h[0].Value == h[1].Value &amp;&amp;</linea>
+        <linea>               h[1].Value == h[2].Value &amp;&amp;</linea>
+        <linea>               h[3].Value == h[4].Value)</linea>
+        <linea>                return h[4].Value;</linea>
+        <linea>            if(set == 1 &amp;&amp;</linea>
+        <linea>               h[0].Value == h[1].Value &amp;&amp;</linea>
+        <linea>               h[2].Value == h[3].Value &amp;&amp;</linea>
+        <linea>               h[3].Value == h[4].Value)</linea>
+        <linea>                return h[4].Value;</linea>
+        <linea>            if (set == 2 &amp;&amp;</linea>
+        <linea>                h[0].Value == h[1].Value &amp;&amp;</linea>
+        <linea>               h[2].Value == h[3].Value &amp;&amp;</linea>
+        <linea>               h[3].Value == h[4].Value)</linea>
+        <linea>                return h[0].Value;</linea>
+        <linea>            return -1;</linea>
+        <linea>        }</linea>
+        <linea/>
+        <linea>        private static int IsThreeOfAKind(Card[] h) {</linea>
+        <linea>            if (h[0].Value == h[1].Value &amp;&amp;</linea>
+        <linea>               h[1].Value == h[2].Value)</linea>
+        <linea>                return h[0].Value;</linea>
+        <linea/>
+        <linea>            if (h[1].Value == h[2].Value &amp;&amp;</linea>
+        <linea>               h[2].Value == h[3].Value)</linea>
+        <linea>                return h[1].Value;</linea>
+        <linea/>
+        <linea>            if (h[2].Value == h[3].Value &amp;&amp;</linea>
+        <linea>               h[3].Value == h[4].Value)</linea>
+        <linea>                return h[2].Value;</linea>
+        <linea/>
+        <linea>            return -1;</linea>
+        <linea>        }</linea>
+        <linea/>
+        <linea>        private static int IsTwoPairs(Card[] h, int set) {</linea>
+        <linea>            if (set == 1 &amp;&amp;</linea>
+        <linea>                h[0].Value == h[1].Value &amp;&amp;</linea>
+        <linea>                h[2].Value == h[3].Value)</linea>
+        <linea>                return h[0].Value;</linea>
+        <linea>            if (set == 2 &amp;&amp;</linea>
+        <linea>                h[0].Value == h[1].Value &amp;&amp;</linea>
+        <linea>                h[2].Value == h[3].Value)</linea>
+        <linea>                return h[2].Value;                        </linea>
+        <linea>            if (set == 1 &amp;&amp;</linea>
+        <linea>                h[0].Value == h[1].Value &amp;&amp;</linea>
+        <linea>                h[3].Value == h[4].Value)</linea>
+        <linea>                return h[0].Value;</linea>
+        <linea>            if (set == 2 &amp;&amp;</linea>
+        <linea>                h[0].Value == h[1].Value &amp;&amp;</linea>
+        <linea>                h[3].Value == h[4].Value)</linea>
+        <linea>                return h[3].Value;</linea>
+        <linea/>
+        <linea>            if (set == 1 &amp;&amp;</linea>
+        <linea>                h[1].Value == h[2].Value &amp;&amp;</linea>
+        <linea>                h[3].Value == h[4].Value)</linea>
+        <linea>                return h[1].Value;</linea>
+        <linea>            if (set == 2 &amp;&amp;</linea>
+        <linea>                h[1].Value == h[2].Value &amp;&amp;</linea>
+        <linea>                h[3].Value == h[4].Value)</linea>
+        <linea>                return h[3].Value;</linea>
+        <linea>            return -1;</linea>
+        <linea>        }</linea>
+        <linea/>
+        <linea>        private static int IsOnePair(Card[] h) {</linea>
+        <linea>            if (h[0].Value == h[1].Value) return h[0].Value;</linea>
+        <linea>            if (h[1].Value == h[2].Value) return h[1].Value;</linea>
+        <linea>            if (h[2].Value == h[3].Value) return h[2].Value;</linea>
+        <linea>            if (h[3].Value == h[4].Value) return h[3].Value;</linea>
+        <linea>                        </linea>
+        <linea>            return -1;</linea>
+        <linea>        }</linea>
+        <linea/>
+        <linea>        private static int IsHighCard(Card[] h, int card) {            </linea>
+        <linea>            return h[4-card].Value;</linea>
+        <linea>        }</linea>
+        <linea>        </linea>
+        <linea>        private bool readHands() {</linea>
+        <linea>            if (reader == null) reader = new StreamReader(filename);</linea>
+        <linea/>
+        <linea/>
+        <linea>            string line;</linea>
+        <linea>            string[] linePieces;</linea>
+        <linea>            line = reader.ReadLine();</linea>
+        <linea>            if (line == null) return false;</linea>
+        <linea>            linePieces = line.Split(' ');</linea>
+        <linea/>
+        <linea>            for (int i = 0; i &lt; 5; i++) {</linea>
+        <linea>                hand1[i] = new Card();</linea>
+        <linea>                hand1[i].Value = getCardValue(linePieces[i].Substring(0, 1));</linea>
+        <linea>                hand1[i].Suit = getSuit(linePieces[i].Substring(1, 1));</linea>
+        <linea>            }</linea>
+        <linea/>
+        <linea>            for (int i = 0; i &lt; 5; i++) {</linea>
+        <linea>                hand2[i] = new Card();</linea>
+        <linea>                hand2[i].Value = getCardValue(linePieces[i + 5].Substring(0, 1));</linea>
+        <linea>                hand2[i].Suit = getSuit(linePieces[i + 5].Substring(1, 1));</linea>
+        <linea>            }</linea>
+        <linea/>
+        <linea>            return true;</linea>
+        <linea>        }</linea>
+        <linea/>
+        <linea>        private static Suit getSuit(string suit) {</linea>
+        <linea>            if (suit == "D") return Suit.Diamond;</linea>
+        <linea>            if (suit == "C") return Suit.Club;</linea>
+        <linea>            if (suit == "H") return Suit.Heart;</linea>
+        <linea>            return Suit.Spade;</linea>
+        <linea>        }</linea>
+        <linea/>
+        <linea>        private static int getCardValue(string value) {</linea>
+        <linea/>
+        <linea>            int intvalue;</linea>
+        <linea>            if (Int32.TryParse(value, out intvalue)) return intvalue;</linea>
+        <linea/>
+        <linea>            if (value == "T") return 10;</linea>
+        <linea>            if (value == "J") return 11;</linea>
+        <linea>            if (value == "Q") return 12;</linea>
+        <linea>            if (value == "K") return 13;</linea>
+        <linea>            if (value == "A") return 14;</linea>
+        <linea/>
+        <linea>            return 0;</linea>
+        <linea>        }</linea>
+        <linea/>
+        <linea>        private class Card : IComparable {</linea>
+        <linea>            public Suit Suit { get; set; }</linea>
+        <linea>            public int Value { get; set; }</linea>
+        <linea/>
+        <linea>            public int CompareTo(object o) {</linea>
+        <linea>                if (o is Card) {</linea>
+        <linea>                    Card c = (Card)o;</linea>
+        <linea>                    if (Value &lt; c.Value)</linea>
+        <linea>                        return -1;</linea>
+        <linea>                    else if (Value &gt; c.Value)</linea>
+        <linea>                        return 1;</linea>
+        <linea>                    return 0;</linea>
+        <linea>                }</linea>
+        <linea>                throw new ArgumentException("No es una carta");</linea>
+        <linea>            }</linea>
+        <linea>        }</linea>
+        <linea>    }</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+  </ejercicio>
+  <ejercicio id="e55">
+    <enunciado>&lt;p&gt;Si cogemos el 47, le damos la vuelta y le sumamos el reultado, 47 + 74 = 121, el cual es capicúa.&lt;/p&gt;&lt;p&gt;No todos los números generan capicúas tan rápidamente. Por ejemplo,&lt;/p&gt;&lt;p style="margin-left:50px;"&gt;349 + 943 = 1292,&lt;br&gt;1292 + 2921 = 4213&lt;br&gt;4213 + 3124 = 7337&lt;/p&gt;&lt;p&gt;Esto es, partiendo del 349, se han necesitado tres iteraciones hasta conseguir un capicúa.&lt;/p&gt;&lt;p&gt;Aunque no ha sido demostrado todavía, se piensa que algunos números, como el 196, nunca producirán un capicúa de esta manera. A un número que nunca genera un capicúa mediante este proceso de iteraciones se le llama número de Lychrel. Debido a la naturaleza teórico de estos números, y para el propósito de este problema, asumiremos que un número es de Lychrel hasta que se demuestre lo contrario. Además para cada número por debajo de diez mil, asumiremos que (i) o se convierte en capicúa en menos de cincuenta iteraciones, o (ii) nadie, con toda la potencia de cálculo existente, ha conseguido formar un capicúa a partir de él. De hecho, el 10677 es el primer número que se ve que requiere más de cincuenta iteraciones antes de llegar a un capicúa: 4668731596684224866951378664 (53 iteraciones, 28 dígitos).&lt;/p&gt;&lt;p&gt;Sorprendentemente, exiten números capicúa que son ellos mismos números de Lychrel; el primer ejemplo es el 4994.&lt;/p&gt;&lt;p&gt;¿Cúantos números de Lychrel existen por debajo del diez mil?&lt;/p&gt;</enunciado>
+    <nivel_en>4</nivel_en>
+    <orientadoALenguaje>true</orientadoALenguaje>
+    <solucion>
+      <lenguaje>Java</lenguaje>
+      <nivel_sol>2</nivel_sol>
+      <codigo>
+        <linea>import java.math.BigInteger;</linea>
+        <linea></linea>
+        <linea>public final class e55 {</linea>
+        <linea>	</linea>
+        <linea>	public static void main(String[] args) {</linea>
+        <linea>		System.out.println(new e55().run());</linea>
+        <linea>	}</linea>
+        <linea>	</linea>
+        <linea>	public String run() {</linea>
+        <linea>		int count = 0;</linea>
+        <linea>		for (int i = 0; i &lt; 10000; i++) {</linea>
+        <linea>			if (isLychrel(i))</linea>
+        <linea>				count++;</linea>
+        <linea>		}</linea>
+        <linea>		return Integer.toString(count);</linea>
+        <linea>	}</linea>
+        <linea>	</linea>
+        <linea>	private static boolean isLychrel(int n) {</linea>
+        <linea>		BigInteger temp = BigInteger.valueOf(n);</linea>
+        <linea>		for (int i = 0; i &lt; 49; i++) {</linea>
+        <linea>			temp = temp.add(new BigInteger(Library.reverse(temp.toString())));</linea>
+        <linea>			if (Library.isPalindrome(temp.toString()))</linea>
+        <linea>				return false;</linea>
+        <linea>		}</linea>
+        <linea>		return true;</linea>
+        <linea>	}	</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>Python</lenguaje>
+      <nivel_sol>3</nivel_sol>
+      <codigo>
+        <linea>def is_lychrel(n):</linea>
+        <linea>    n = str(n)</linea>
+        <linea>    for count in xrange(0, 50):</linea>
+        <linea>        n = str(int(n) + int(n[::-1]))</linea>
+        <linea>        if n == n[::-1]: return False</linea>
+        <linea>    return True</linea>
+        <linea></linea>
+        <linea>print sum(1 for n in xrange(0, 10000) if is_lychrel(n))</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>Perl</lenguaje>
+      <nivel_sol>3</nivel_sol>
+      <codigo>
+        <linea>$| = 1;</linea>
+        <linea></linea>
+        <linea>$count = 0;</linea>
+        <linea>for ($i = 0; $i &lt; 10000; $i++) {</linea>
+        <linea>  if (is_lychell($i,0)) {</linea>
+        <linea>    print "$i\n";</linea>
+        <linea>	$count++;</linea>
+        <linea>  }</linea>
+        <linea>}</linea>
+        <linea>print "Total: $count\n";</linea>
+        <linea>exit;</linea>
+        <linea></linea>
+        <linea>sub is_lychell {</linea>
+        <linea>  my ($n,$depth) = @_;</linea>
+        <linea>  $s = $n + reverse($n);</linea>
+        <linea>  if ($s eq reverse($s)) {</linea>
+        <linea>    return 0;</linea>
+        <linea>  } elsif ($depth == 49) {</linea>
+        <linea>    return 1;</linea>
+        <linea>  } else {</linea>
+        <linea>    return is_lychell($s,$depth+1);</linea>
+        <linea>  }</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>C#</lenguaje>
+      <nivel_sol>3</nivel_sol>
+      <codigo>
+        <linea>using System;</linea>
+        <linea>using System.Diagnostics;</linea>
+        <linea>using System.Numerics;</linea>
+        <linea>using System.Collections.Generic;</linea>
+        <linea></linea>
+        <linea>namespace euler {</linea>
+        <linea>    class Problem55 {</linea>
+        <linea></linea>
+        <linea>        /* Dos formas de resolverlo */</linea>
+        <linea>        public static void Main(string[] args) {</linea>
+        <linea>            new Problem55().BruteForce();</linea>
+        <linea>            new Problem55().SolveWithCache();</linea>
+        <linea>        }</linea>
+        <linea>       </linea>
+        <linea>        public void BruteForce() {</linea>
+        <linea>            Stopwatch clock = Stopwatch.StartNew();</linea>
+        <linea></linea>
+        <linea>            const int start = 10;</linea>
+        <linea>            const int limit = 10000;</linea>
+        <linea>            int result = 0;</linea>
+        <linea>            </linea>
+        <linea>            for (int i = start; i &lt; limit; i++) {</linea>
+        <linea>                if (IsLychrel(i)) result++;</linea>
+        <linea>            }</linea>
+        <linea>            </linea>
+        <linea>            clock.Stop();</linea>
+        <linea>            Console.WriteLine("Suma de los números de Lychrel menores que {0} es: {1}", limit, result);</linea>
+        <linea>            Console.WriteLine("Se tardó {0} ms", clock.ElapsedMilliseconds);</linea>
+        <linea>        }</linea>
+        <linea></linea>
+        <linea>        private bool IsLychrel(int number) {</linea>
+        <linea></linea>
+        <linea>            BigInteger testNumber = number;</linea>
+        <linea>            for (int i = 0; i &lt; 50; i++) {</linea>
+        <linea>                testNumber += ReverseNumber(testNumber);</linea>
+        <linea>                if (IsPalindrome(testNumber)) return false;</linea>
+        <linea>            }</linea>
+        <linea></linea>
+        <linea>            return true;</linea>
+        <linea>        }</linea>
+        <linea></linea>
+        <linea>        </linea>
+        <linea>        Dictionary&lt;BigInteger, bool&gt; cache;      </linea>
+        <linea>        public void SolveWithCache() {</linea>
+        <linea>            Stopwatch clock = Stopwatch.StartNew();</linea>
+        <linea></linea>
+        <linea>            cache = new Dictionary&lt;BigInteger, bool&gt;();</linea>
+        <linea></linea>
+        <linea>            const int start = 10;</linea>
+        <linea>            const int limit = 10000;</linea>
+        <linea>            int result = 0;</linea>
+        <linea></linea>
+        <linea>            for (int i = start; i &lt; limit; i++) {</linea>
+        <linea>                if (IsLychrelCache(i, 1)) result++;</linea>
+        <linea>            }</linea>
+        <linea></linea>
+        <linea>            clock.Stop();</linea>
+        <linea>            Console.WriteLine("Suma de los números de Lychrel menores que {0} es: {1}", limit, result);</linea>
+        <linea>            Console.WriteLine("Se tardó {0} ms", clock.ElapsedMilliseconds);</linea>
+        <linea>        }</linea>
+        <linea></linea>
+        <linea></linea>
+        <linea>        private bool IsLychrelCache(BigInteger number, int ite) {</linea>
+        <linea>            </linea>
+        <linea>            bool isLyc = false;</linea>
+        <linea>            if (cache.TryGetValue(number, out isLyc)) return isLyc;</linea>
+        <linea>            if (ite &gt;= 50) return true;</linea>
+        <linea>                      </linea>
+        <linea>            BigInteger reverse = ReverseNumber(number);</linea>
+        <linea>            BigInteger testNumber = number + reverse;</linea>
+        <linea>                       </linea>
+        <linea>            bool isPalindromic = IsPalindrome(testNumber);</linea>
+        <linea>            if (!isPalindromic) isLyc = IsLychrelCache(testNumber, ++ite);                        </linea>
+        <linea>            if (!isLyc || (isLyc &amp;&amp; ite == 1)) {</linea>
+        <linea>                if (!cache.ContainsKey(number)) cache.Add(number, isLyc);</linea>
+        <linea>                if (!cache.ContainsKey(reverse)) cache.Add(reverse, isLyc);</linea>
+        <linea>            }</linea>
+        <linea>            return isLyc;            </linea>
+        <linea>        }</linea>
+        <linea></linea>
+        <linea>        private BigInteger ReverseNumber(BigInteger number) {</linea>
+        <linea>            BigInteger reversed = 0;</linea>
+        <linea>            BigInteger k = number;</linea>
+        <linea></linea>
+        <linea>            while (k &gt; 0) {</linea>
+        <linea>                reversed = 10 * reversed + k % 10;</linea>
+        <linea>                k /= 10;</linea>
+        <linea>            }</linea>
+        <linea>            return reversed;</linea>
+        <linea>        }</linea>
+        <linea></linea>
+        <linea>        private bool IsPalindrome(BigInteger number) {</linea>
+        <linea>            return number == ReverseNumber(number);</linea>
+        <linea>        }</linea>
+        <linea></linea>
+        <linea>    }</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+  </ejercicio>
+</ejercicios>

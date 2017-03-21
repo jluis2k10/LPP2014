@@ -1,0 +1,554 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ejercicios xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../preguntas.xsd">
+  <ejercicio id="e16">
+    <enunciado>&lt;p&gt;2&lt;sup&gt;15&lt;/sup&gt; = 32768 y la suma de sus dígitos es 3 + 2 + 7 + 6 + 8 = 26.&lt;/p&gt;&lt;p&gt;¿Cuál es la suma de los dígitos del número 2&lt;sup&gt;1000&lt;/sup&gt;?&lt;/p&gt;</enunciado>
+    <nivel_en>1</nivel_en>
+    <orientadoALenguaje>true</orientadoALenguaje>
+    <solucion>
+      <lenguaje>Java</lenguaje>
+      <nivel_sol>1</nivel_sol>
+      <codigo>
+        <linea>import java.math.BigInteger;</linea>
+        <linea/>
+        <linea>public final class e16 {</linea>
+        <linea>	</linea>
+        <linea>	public static void main(String[] args) {</linea>
+        <linea>		System.out.println(new e16().run());</linea>
+        <linea>	}	</linea>
+        <linea>	</linea>
+        <linea>	public String run() {</linea>
+        <linea>		String temp = BigInteger.ONE.shiftLeft(1000).toString();</linea>
+        <linea>		int sum = 0;</linea>
+        <linea>		for (int i = 0; i &lt; temp.length(); i++)</linea>
+        <linea>			sum += temp.charAt(i) - '0';</linea>
+        <linea>		return Integer.toString(sum);</linea>
+        <linea>	}	</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>C</lenguaje>
+      <nivel_sol>1</nivel_sol>
+      <codigo>
+        <linea>#include &lt;stdio.h&gt;</linea>
+        <linea>#include &lt;stdlib.h&gt;</linea>
+        <linea>#include &lt;gmp.h&gt;</linea>
+        <linea/>
+        <linea>int main(void)</linea>
+        <linea>{</linea>
+        <linea>  mpz_t n;</linea>
+        <linea>  char *str;</linea>
+        <linea>  size_t len, i;</linea>
+        <linea>  unsigned sum = 0;</linea>
+        <linea/>
+        <linea>  mpz_init(n);</linea>
+        <linea>  mpz_ui_pow_ui(n, 2, 1000);</linea>
+        <linea/>
+        <linea>  str = mpz_get_str(NULL, 10, n);</linea>
+        <linea>  len = mpz_sizeinbase(n, 10);</linea>
+        <linea>  for (i = 0; i &lt; len; i++) {</linea>
+        <linea>    sum += str[i]-'0';</linea>
+        <linea>  }</linea>
+        <linea>  printf("%u\n", sum);</linea>
+        <linea/>
+        <linea>  free(str);</linea>
+        <linea>  mpz_clear(n);</linea>
+        <linea/>
+        <linea>  return 0;</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>Python</lenguaje>
+      <nivel_sol>1</nivel_sol>
+      <codigo>
+        <linea>def digits(n):</linea>
+        <linea>    s = 0</linea>
+        <linea>    while n &gt; 0:</linea>
+        <linea>        s = s + (n % 10)</linea>
+        <linea>        n = n / 10</linea>
+        <linea>    return s</linea>
+        <linea/>
+        <linea>print digits(pow(2,1000))</linea>
+      </codigo>
+    </solucion>
+  </ejercicio>
+  <ejercicio id="e17">
+    <enunciado>&lt;p&gt;Si los números del 1 al 5 se escriben con palabras (en inglés): one, two, three, four, five, entonces tenemos 3 + 3 + 5 + 4 + 4 = 19 letras en total.&lt;/p&gt;&lt;p&gt;Si todos los números del 1 al 1000 ambos incluídos estuvieran escritos con palabras, ¿cuántas letras tendríamos?&lt;/p&gt;&lt;p&gt;&lt;b&gt;NOTA:&lt;/b&gt; No cuentes espacios o símbolos de puntuación. Por ejemplo 342 (three hundred and forty-two) contiene 23 letras, y 115 (one hundred and fifteen) contiene 20 letras. El uso de la palabra "and" al escribir los números cumple con la normativa inglesa de uso.&lt;/p&gt;</enunciado>
+    <nivel_en>1</nivel_en>
+    <orientadoALenguaje>true</orientadoALenguaje>
+    <solucion>
+      <lenguaje>Java</lenguaje>
+      <nivel_sol>1</nivel_sol>
+      <codigo>
+        <linea>public final class e17 {</linea>
+        <linea>	</linea>
+        <linea>	public static void main(String[] args) {</linea>
+        <linea>		System.out.println(new e17().run());</linea>
+        <linea>	}</linea>
+        <linea>	</linea>
+        <linea>	public String run() {</linea>
+        <linea>		int sum = 0;</linea>
+        <linea>		for (int i = 1; i &lt;= 1000; i++)</linea>
+        <linea>			sum += toEnglish(i).length();</linea>
+        <linea>		return Integer.toString(sum);</linea>
+        <linea>	}</linea>
+        <linea>		</linea>
+        <linea>	private static String[] ONES = {"zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"};  // Requires 0 &lt;= n &lt;= 9</linea>
+        <linea>	private static String[] TEENS = {"ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"};</linea>
+        <linea>	private static String[] TENS = {"twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety"};</linea>
+        <linea>	</linea>
+        <linea>	</linea>
+        <linea>	// Requiere 0 &lt;= n &lt;= 99999</linea>
+        <linea>	private static String toEnglish(int n) {</linea>
+        <linea>		if (n &lt; 0 || n &gt; 99999)</linea>
+        <linea>			throw new IllegalArgumentException();</linea>
+        <linea>		</linea>
+        <linea>		if (n &lt; 100)</linea>
+        <linea>			return tens(n);</linea>
+        <linea>		else {</linea>
+        <linea>			String big = "";</linea>
+        <linea>			if (n &gt;= 1000)</linea>
+        <linea>				big += tens(n / 1000) + "thousand";</linea>
+        <linea>			if (n / 100 % 10 != 0)</linea>
+        <linea>				big += ONES[n / 100 % 10] + "hundred";</linea>
+        <linea>			</linea>
+        <linea>			return big + (n % 100 != 0 ? "and" + tens(n % 100) : "");</linea>
+        <linea>		}</linea>
+        <linea>	}</linea>
+        <linea>		</linea>
+        <linea>	// Requiere 0 &lt;= n &lt;= 99</linea>
+        <linea>	private static String tens(int n) {</linea>
+        <linea>		if (n &lt; 10)</linea>
+        <linea>			return ONES[n];</linea>
+        <linea>		else if (n &lt; 20)  // Teens</linea>
+        <linea>			return TEENS[n - 10];</linea>
+        <linea>		else</linea>
+        <linea>			return TENS[n / 10 - 2] + (n % 10 != 0 ? ONES[n % 10] : "");</linea>
+        <linea>	}	</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>C</lenguaje>
+      <nivel_sol>1</nivel_sol>
+      <codigo>
+        <linea>#include &lt;stdio.h&gt;</linea>
+        <linea/>
+        <linea>int main(void)</linea>
+        <linea>{</linea>
+        <linea>  /* * one two three four five six seven eight nine */</linea>
+        <linea>  unsigned s1[] = { 0, 3, 3, 5, 4, 4, 3, 5, 5, 4 };</linea>
+        <linea>  /* ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen */</linea>
+        <linea>  unsigned s2[] = { 3, 6, 6, 8, 8, 7, 7, 9, 8, 8 };</linea>
+        <linea>  /* * * twenty thirty forty fifty sixty seventy eighty ninety */</linea>
+        <linea>  unsigned s3[] = { 0, 0, 6, 6, 5, 5, 5, 7, 6, 6 };</linea>
+        <linea/>
+        <linea>  unsigned hundred = 7;</linea>
+        <linea>  unsigned and = 3;</linea>
+        <linea>  unsigned thousand = 8;</linea>
+        <linea/>
+        <linea>  unsigned i;</linea>
+        <linea>  unsigned sum = 0;</linea>
+        <linea/>
+        <linea>  /* from 1 to 9 */</linea>
+        <linea>  for (i = 1; i &lt; 10; i++) {</linea>
+        <linea>    sum += s1[i];</linea>
+        <linea>  }</linea>
+        <linea>  /* from 10 to 19 */</linea>
+        <linea>  for (i = 0; i &lt; 10; i++) {</linea>
+        <linea>    sum += s2[i];</linea>
+        <linea>  }</linea>
+        <linea>  /* from 20 to 99 */</linea>
+        <linea>  for (i = 20; i &lt; 100; i++) {</linea>
+        <linea>    sum += s3[i/10] + s1[i%10];</linea>
+        <linea>  }</linea>
+        <linea>  /* from 100 to 999 */</linea>
+        <linea>  for (i = 1; i &lt; 10; i++) {</linea>
+        <linea>    int j;</linea>
+        <linea/>
+        <linea>    /* just i hundred */</linea>
+        <linea>    sum += s1[i] + hundred;</linea>
+        <linea>    /* from i hundred and one to i hundred and nine */</linea>
+        <linea>    for (j = 1; j &lt; 10; j++) {</linea>
+        <linea>      sum += s1[i] + hundred + and + s1[j];</linea>
+        <linea>    }</linea>
+        <linea>    /* from i hundred and ten to i hundred and nineteen */</linea>
+        <linea>    for (j = 0; j &lt; 10; j++) {</linea>
+        <linea>      sum += s1[i] + hundred + and + s2[j];</linea>
+        <linea>    }</linea>
+        <linea>    /* from i hundred and twenty to i hundred and ninety-nine */</linea>
+        <linea>    for (j = 20; j &lt; 100; j++) {</linea>
+        <linea>      sum += s1[i] + hundred + and + s3[j/10] + s1[j%10];</linea>
+        <linea>    }</linea>
+        <linea>  }</linea>
+        <linea>  /* just 1000 */</linea>
+        <linea>  sum += s1[1] + thousand;</linea>
+        <linea/>
+        <linea>  printf("%u\n", sum);</linea>
+        <linea/>
+        <linea>  return 0;</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>Python</lenguaje>
+      <nivel_sol>1</nivel_sol>
+      <codigo>
+        <linea>words = [</linea>
+        <linea>    (   1,  'one'      , ''     ),</linea>
+        <linea>    (   2,  'two'      , ''     ),</linea>
+        <linea>    (   3,  'three'    , ''     ),</linea>
+        <linea>    (   4,  'four'     , ''     ),</linea>
+        <linea>    (   5,  'five'     , ''     ),</linea>
+        <linea>    (   6,  'six'      , ''     ),</linea>
+        <linea>    (   7,  'seven'    , ''     ),</linea>
+        <linea>    (   8,  'eight'    , ''     ),</linea>
+        <linea>    (   9,  'nine'     , ''     ),</linea>
+        <linea>    (  10,  'ten'      , ''     ),</linea>
+        <linea>    (  11,  'eleven'   , ''     ),</linea>
+        <linea>    (  12,  'twelve'   , ''     ),</linea>
+        <linea>    (  13,  'thirteen' , ''     ),</linea>
+        <linea>    (  14,  'fourteen' , ''     ),</linea>
+        <linea>    (  15,  'fifteen'  , ''     ),</linea>
+        <linea>    (  16,  'sixteen'  , ''     ),</linea>
+        <linea>    (  17,  'seventeen', ''     ),</linea>
+        <linea>    (  18,  'eighteen' , ''     ),</linea>
+        <linea>    (  19,  'nineteen' , ''     ),</linea>
+        <linea>    (  20,  'twenty'   , ''     ),</linea>
+        <linea>    (  30,  'thirty'   , ''     ),</linea>
+        <linea>    (  40,  'forty'    , ''     ),</linea>
+        <linea>    (  50,  'fifty'    , ''     ),</linea>
+        <linea>    (  60,  'sixty'    , ''     ),</linea>
+        <linea>    (  70,  'seventy'  , ''     ),</linea>
+        <linea>    (  80,  'eighty'   , ''     ),</linea>
+        <linea>    (  90,  'ninety'   , ''     ),</linea>
+        <linea>    ( 100,  'hundred'  , 'and'  ),</linea>
+        <linea>    (1000,  'thousand' , 'and'  ),</linea>
+        <linea>]</linea>
+        <linea>words.reverse()</linea>
+        <linea/>
+        <linea>def spell(n, words):</linea>
+        <linea>    word = []</linea>
+        <linea>    while n &gt; 0:</linea>
+        <linea>        for num in words:</linea>
+        <linea>            if num[0] &lt;= n:</linea>
+        <linea>                div = n / num[0]</linea>
+        <linea>                n = n % num[0]</linea>
+        <linea>                if num[2]: word.append(' '.join(spell(div, words)))</linea>
+        <linea>                word.append(num[1])</linea>
+        <linea>                if num[2] and n: word.append(num[2])</linea>
+        <linea>                break</linea>
+        <linea>    return word</linea>
+        <linea/>
+        <linea>print sum(len(word) for n in xrange(1, 1001) for word in spell(n, words))</linea>
+      </codigo>
+    </solucion>
+  </ejercicio>
+  <ejercicio id="e18">
+    <enunciado>&lt;p&gt;Empezando desde la parte superior del siguiente triángulo y moviéndose hacia números adyacentes de cada fila inferior, la suma máxima de arriba a abajo es 23.&lt;/p&gt;&lt;p style="text-align:center;font-family:courier new;font-size:12pt;"&gt;&lt;span style="color:#ff0000;"&gt;&lt;b&gt;3&lt;/b&gt;&lt;/span&gt;&lt;br&gt;&lt;span style="color:#ff0000;"&gt;&lt;b&gt;7&lt;/b&gt;&lt;/span&gt; 4&lt;br&gt;2 &lt;span style="color:#ff0000;"&gt;&lt;b&gt;4&lt;/b&gt;&lt;/span&gt; 6&lt;br&gt;8 5 &lt;span style="color:#ff0000;"&gt;&lt;b&gt;9&lt;/b&gt;&lt;/span&gt; 3&lt;/p&gt;&lt;p&gt;Esto es, 3 + 7 + 4 + 9 = 23.&lt;/p&gt;&lt;p&gt;Encontrar la suma máxima de arriba a abajo del siguiente triángulo:&lt;/p&gt;&lt;p style="text-align:center;font-family:courier new;"&gt;75&lt;br&gt;95 64&lt;br&gt;17 47 82&lt;br&gt;18 35 87 10&lt;br&gt;20 04 82 47 65&lt;br&gt;19 01 23 75 03 34&lt;br&gt;88 02 77 73 07 63 67&lt;br&gt;99 65 04 28 06 16 70 92&lt;br&gt;41 41 26 56 83 40 80 70 33&lt;br&gt;41 48 72 33 47 32 37 16 94 29&lt;br&gt;53 71 44 65 25 43 91 52 97 51 14&lt;br&gt;70 11 33 28 77 73 17 78 39 68 17 57&lt;br&gt;91 71 52 38 17 14 91 43 58 50 27 29 48&lt;br&gt;63 66 04 68 89 53 67 30 73 16 69 87 40 31&lt;br&gt;04 62 98 27 23 09 70 98 73 93 38 53 60 04 23&lt;/p&gt;&lt;p&gt;&lt;b&gt;NOTA:&lt;/b&gt; Ya que sólo hay 16384 rutas posibles, se puede resolver este problema probando cada una de ellas. Ten en cuenta que si fuera por ejemplo un triángulo de 100 filas, no sería posible resolverlo mediante la fuerza bruta y se necesitaría algún método más ingenioso.&lt;/p&gt;</enunciado>
+    <nivel_en>1</nivel_en>
+    <orientadoALenguaje>true</orientadoALenguaje>
+    <solucion>
+      <lenguaje>Java</lenguaje>
+      <nivel_sol>1</nivel_sol>
+      <codigo>
+        <linea>public final class e18 {</linea>
+        <linea>	</linea>
+        <linea>	public static void main(String[] args) {</linea>
+        <linea>		System.out.println(new e18().run());</linea>
+        <linea>	}</linea>
+        <linea>		</linea>
+        <linea>	public String run() {</linea>
+        <linea>		for (int i = triangle.length - 2; i &gt;= 0; i--) {</linea>
+        <linea>			for (int j = 0; j &lt; triangle[i].length; j++)</linea>
+        <linea>				triangle[i][j] += Math.max(triangle[i + 1][j], triangle[i + 1][j + 1]);  // Dinámico</linea>
+        <linea>		}</linea>
+        <linea>		return Integer.toString(triangle[0][0]);</linea>
+        <linea>	}</linea>
+        <linea>		</linea>
+        <linea>	private int[][] triangle = {</linea>
+        <linea>		{75},</linea>
+        <linea>		{95,64},</linea>
+        <linea>		{17,47,82},</linea>
+        <linea>		{18,35,87,10},</linea>
+        <linea>		{20,04,82,47,65},</linea>
+        <linea>		{19,01,23,75,03,34},</linea>
+        <linea>		{88,02,77,73,07,63,67},</linea>
+        <linea>		{99,65,04,28,06,16,70,92},</linea>
+        <linea>		{41,41,26,56,83,40,80,70,33},</linea>
+        <linea>		{41,48,72,33,47,32,37,16,94,29},</linea>
+        <linea>		{53,71,44,65,25,43,91,52,97,51,14},</linea>
+        <linea>		{70,11,33,28,77,73,17,78,39,68,17,57},</linea>
+        <linea>		{91,71,52,38,17,14,91,43,58,50,27,29,48},</linea>
+        <linea>		{63,66,04,68,89,53,67,30,73,16,69,87,40,31},</linea>
+        <linea>		{04,62,98,27,23, 9,70,98,73,93,38,53,60,04,23}</linea>
+        <linea>	};	</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>C</lenguaje>
+      <nivel_sol>1</nivel_sol>
+      <codigo>
+        <linea>#include &lt;stdio.h&gt;</linea>
+        <linea/>
+        <linea>#define N 15</linea>
+        <linea/>
+        <linea>static int findmax(const char triangle[][N], int row, int col);</linea>
+        <linea/>
+        <linea>int main(void)</linea>
+        <linea>{</linea>
+        <linea>  const char triangle[N][N] = {</linea>
+        <linea>    {75},</linea>
+        <linea>    {95,64},</linea>
+        <linea>    {17,47,82},</linea>
+        <linea>    {18,35,87,10},</linea>
+        <linea>    {20, 4,82,47,65},</linea>
+        <linea>    {19, 1,23,75, 3,34},</linea>
+        <linea>    {88, 2,77,73, 7,63,67},</linea>
+        <linea>    {99,65, 4,28, 6,16,70,92},</linea>
+        <linea>    {41,41,26,56,83,40,80,70,33},</linea>
+        <linea>    {41,48,72,33,47,32,37,16,94,29},</linea>
+        <linea>    {53,71,44,65,25,43,91,52,97,51,14},</linea>
+        <linea>    {70,11,33,28,77,73,17,78,39,68,17,57},</linea>
+        <linea>    {91,71,52,38,17,14,91,43,58,50,27,29,48},</linea>
+        <linea>    {63,66, 4,68,89,53,67,30,73,16,69,87,40,31},</linea>
+        <linea>    { 4,62,98,27,23, 9,70,98,73,93,38,53,60, 4,23},</linea>
+        <linea>  };</linea>
+        <linea/>
+        <linea>  printf("%d\n", findmax(triangle, 0, 0));</linea>
+        <linea/>
+        <linea>  return 0;</linea>
+        <linea>}</linea>
+        <linea/>
+        <linea>/* Recursivo */</linea>
+        <linea>int findmax(const char triangle[][N], int row, int col)</linea>
+        <linea>{</linea>
+        <linea>  int left, right;</linea>
+        <linea/>
+        <linea>  if (row == N) {</linea>
+        <linea>    return triangle[row][col];</linea>
+        <linea>  }</linea>
+        <linea>  left = findmax(triangle, row+1, col);</linea>
+        <linea>  right = findmax(triangle, row+1, col+1);</linea>
+        <linea/>
+        <linea>  return triangle[row][col] + (left &gt; right ? left : right);</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>Python</lenguaje>
+      <nivel_sol>1</nivel_sol>
+      <codigo>
+        <linea>triangle = (</linea>
+        <linea>    (75,                                                         ),</linea>
+        <linea>    (95, 64,                                                     ),</linea>
+        <linea>    (17, 47, 82,                                                 ),</linea>
+        <linea>    (18, 35, 87, 10,                                             ),</linea>
+        <linea>    (20,  4, 82, 47, 65,                                         ),</linea>
+        <linea>    (19,  1, 23, 75,  3, 34,                                     ),</linea>
+        <linea>    (88,  2, 77, 73,  7, 63, 67,                                 ),</linea>
+        <linea>    (99, 65,  4, 28,  6, 16, 70, 92,                             ),</linea>
+        <linea>    (41, 41, 26, 56, 83, 40, 80, 70, 33,                         ),</linea>
+        <linea>    (41, 48, 72, 33, 47, 32, 37, 16, 94, 29,                     ),</linea>
+        <linea>    (53, 71, 44, 65, 25, 43, 91, 52, 97, 51, 14,                 ),</linea>
+        <linea>    (70, 11, 33, 28, 77, 73, 17, 78, 39, 68, 17, 57,             ),</linea>
+        <linea>    (91, 71, 52, 38, 17, 14, 91, 43, 58, 50, 27, 29, 48,         ),</linea>
+        <linea>    (63, 66,  4, 68, 89, 53, 67, 30, 73, 16, 69, 87, 40, 31,     ),</linea>
+        <linea>    ( 4, 62, 98, 27, 23,  9, 70, 98, 73, 93, 38, 53, 60,  4, 23, ),</linea>
+        <linea>)</linea>
+        <linea/>
+        <linea>def path(triangle, num):</linea>
+        <linea>    s = triangle[0][0]</linea>
+        <linea>    col = 0</linea>
+        <linea>    for row in xrange(1, len(triangle)):</linea>
+        <linea>        if num % 2: col = col + 1</linea>
+        <linea>        num = num / 2</linea>
+        <linea>        s = s + triangle[row][col]</linea>
+        <linea>    return s</linea>
+        <linea/>
+        <linea>print max(path(triangle, n) for n in xrange(0, 16384))</linea>
+      </codigo>
+    </solucion>
+  </ejercicio>
+  <ejercicio id="e19">
+    <enunciado>&lt;p&gt;Dispones de la siguiente información, pero prefieres hacer algo de investigación por tu cuenta.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;El 1 de enero de 1900 fue un lunes.&lt;/li&gt;&lt;li&gt;Treinta días tienen septiembre,&lt;br&gt;abril, junio y noviembre.&lt;br&gt;El resto tienen treinta y uno,&lt;br&gt;menos febrero,&lt;br&gt;que tiene veintiocho.&lt;br&gt;Y en los años bisiestos, veintinueve.&lt;/li&gt;&lt;li&gt;Un año bisiesto ocurre en cualquier año que se pueda dividir exactamente entre 4, pero no en los centenarios a menos que éste sea divisible entre 400.&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;¿Cuántos domingos fueron primer día de mes durante el siglo XX (1 de enero de 1901 a 31 de diciembre de 2000)?&lt;/p&gt;</enunciado>
+    <nivel_en>1</nivel_en>
+    <orientadoALenguaje>true</orientadoALenguaje>
+    <solucion>
+      <lenguaje>Java</lenguaje>
+      <nivel_sol>1</nivel_sol>
+      <codigo>
+        <linea>public final class e19 {</linea>
+        <linea>	</linea>
+        <linea>	public static void main(String[] args) {</linea>
+        <linea>		System.out.println(new e19().run());</linea>
+        <linea>	}	</linea>
+        <linea>	</linea>
+        <linea>	public String run() {</linea>
+        <linea>		int count = 0;</linea>
+        <linea>		for (int y = 1901; y &lt;= 2000; y++) {</linea>
+        <linea>			for (int m = 1; m &lt;= 12; m++) {</linea>
+        <linea>				if (dayOfWeek(y, m, 1) == 0)  // Domingo</linea>
+        <linea>					count++;</linea>
+        <linea>			}</linea>
+        <linea>		}</linea>
+        <linea>		return Integer.toString(count);</linea>
+        <linea>	}</linea>
+        <linea>		</linea>
+        <linea>	private static int dayOfWeek(int year, int month, int day) {</linea>
+        <linea>		long m = mod((long)month - 3, 4800);</linea>
+        <linea>		long y = mod(year + m / 12, 400);</linea>
+        <linea>		m %= 12;</linea>
+        <linea>		return (int)((y + y/4 - y/100 + (13 * m + 2) / 5 + day + 2) % 7);</linea>
+        <linea>	}</linea>
+        <linea>		</linea>
+        <linea>	private static long mod(long x, long y) {</linea>
+        <linea>		x %= y;</linea>
+        <linea>		if (y &gt; 0 &amp;&amp; x &lt; 0 || y &lt; 0 &amp;&amp; x &gt; 0)</linea>
+        <linea>			x += y;</linea>
+        <linea>		return x;</linea>
+        <linea>	}	</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>C</lenguaje>
+      <nivel_sol>1</nivel_sol>
+      <codigo>
+        <linea>#include &lt;stdio.h&gt;</linea>
+        <linea/>
+        <linea>static int days(int y, int m);</linea>
+        <linea/>
+        <linea>int main(void)</linea>
+        <linea>{</linea>
+        <linea>  int year, wday = 0, sun = 0, mon;</linea>
+        <linea/>
+        <linea>  for (year = 1901; year &lt;= 2000; year++) {</linea>
+        <linea>    for (mon = 1; mon &lt;= 12; mon++) {</linea>
+        <linea>      if (wday == 5) {</linea>
+        <linea>        /* 1901-01-01 fue martes, así que wday == 5 quiere decir domingo */</linea>
+        <linea>        sun++;</linea>
+        <linea>      }</linea>
+        <linea>      wday = (wday + days(year, mon))%7;</linea>
+        <linea>    }</linea>
+        <linea>  }</linea>
+        <linea>  printf("%d\n", sun);</linea>
+        <linea/>
+        <linea>  return 0;</linea>
+        <linea>}</linea>
+        <linea/>
+        <linea>int days(int y, int m)</linea>
+        <linea>{</linea>
+        <linea>  switch (m) {</linea>
+        <linea>    case 2:</linea>
+        <linea>      if ((y%4 == 0 &amp;&amp; y%100 != 0) || y%400 == 0) {</linea>
+        <linea>        /* bisiesto */</linea>
+        <linea>        return 29;</linea>
+        <linea>      }</linea>
+        <linea>      else {</linea>
+        <linea>        return 28;</linea>
+        <linea>      }</linea>
+        <linea>      </linea>
+        <linea>    case 4:</linea>
+        <linea>    case 6:</linea>
+        <linea>    case 9:</linea>
+        <linea>    case 11:</linea>
+        <linea>      return 30;</linea>
+        <linea/>
+        <linea>    default:</linea>
+        <linea>      return 31;</linea>
+        <linea>  }</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>Python</lenguaje>
+      <nivel_sol>1</nivel_sol>
+      <codigo>
+        <linea>import datetime</linea>
+        <linea/>
+        <linea>sundays = 0</linea>
+        <linea>for year in xrange(1901, 2001):</linea>
+        <linea>    for month in xrange(1, 13):</linea>
+        <linea>        d = datetime.date(year, month, 1)</linea>
+        <linea>        if d.weekday() == 6:</linea>
+        <linea>            sundays = sundays + 1</linea>
+        <linea/>
+        <linea>print sundays</linea>
+      </codigo>
+    </solucion>
+  </ejercicio>
+  <ejercicio id="e20">
+    <enunciado>&lt;p&gt;&lt;i&gt;n&lt;/i&gt;! significa&lt;i&gt; n&lt;/i&gt; × (&lt;i&gt;n&lt;/i&gt; − 1) × ... × 3 × 2 × 1&lt;/p&gt;&lt;p&gt;Por ejemplo, 10! = 10 × 9 × ... × 3 × 2 × 1 = 3628800,&lt;br&gt;y la suma de los dígitos en el número 10! es 3 + 6 + 2 + 8 + 8 + 0 + 0 = 27.&lt;/p&gt;&lt;p&gt;Encuentra la suma de los dígitos en el número 100!&lt;/p&gt;</enunciado>
+    <nivel_en>1</nivel_en>
+    <orientadoALenguaje>true</orientadoALenguaje>
+    <solucion>
+      <lenguaje>Java</lenguaje>
+      <nivel_sol>1</nivel_sol>
+      <codigo>
+        <linea>public final class e20 {</linea>
+        <linea>	</linea>
+        <linea>	public static void main(String[] args) {</linea>
+        <linea>		System.out.println(new e20().run());</linea>
+        <linea>	}</linea>
+        <linea>		</linea>
+        <linea>	public String run() {</linea>
+        <linea>		String temp = Library.factorial(100).toString();</linea>
+        <linea>		int sum = 0;</linea>
+        <linea>		for (int i = 0; i &lt; temp.length(); i++)</linea>
+        <linea>			sum += temp.charAt(i) - '0';</linea>
+        <linea>		return Integer.toString(sum);</linea>
+        <linea>	}	</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>C</lenguaje>
+      <nivel_sol>1</nivel_sol>
+      <codigo>
+        <linea>#include &lt;stdio.h&gt;</linea>
+        <linea>#include &lt;stdlib.h&gt;</linea>
+        <linea>#include &lt;gmp.h&gt;</linea>
+        <linea></linea>
+        <linea>int main(void)</linea>
+        <linea>{</linea>
+        <linea>  mpz_t n;</linea>
+        <linea>  char *str;</linea>
+        <linea>  int i;</linea>
+        <linea>  int sum = 0;</linea>
+        <linea></linea>
+        <linea>  mpz_init(n);</linea>
+        <linea>  mpz_fac_ui(n, 100);</linea>
+        <linea>  str = mpz_get_str(NULL, 10, n);</linea>
+        <linea>  for (i = 0; str[i]; i++) {</linea>
+        <linea>    sum += str[i]-'0';</linea>
+        <linea>  }</linea>
+        <linea>  printf("%d\n", sum);</linea>
+        <linea></linea>
+        <linea>  free(str);</linea>
+        <linea>  mpz_clear(n);</linea>
+        <linea></linea>
+        <linea>  return 0;</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>Python</lenguaje>
+      <nivel_sol>1</nivel_sol>
+      <codigo>
+        <linea>def digits(n):</linea>
+        <linea>    s = 0</linea>
+        <linea>    while n &gt; 0:</linea>
+        <linea>        s = s + (n % 10)</linea>
+        <linea>        n = n / 10</linea>
+        <linea>    return s</linea>
+        <linea></linea>
+        <linea>n = 1</linea>
+        <linea>for i in xrange(1,100): n = n*i</linea>
+        <linea>print digits(n)</linea>
+      </codigo>
+    </solucion>
+  </ejercicio>
+</ejercicios>

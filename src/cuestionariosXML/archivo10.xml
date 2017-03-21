@@ -1,0 +1,589 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ejercicios xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../preguntas.xsd">
+  <ejercicio id="e46">
+    <enunciado>&lt;p&gt;Christian Goldbach propuso que todos los números impares compuestos pueden ser escritos como la suma de un número primo más dos veces un número elevado al cuadrado.&lt;/p&gt;&lt;p style="margin-left:10px;"&gt;9 = 7 + 2×1&lt;sup&gt;2&lt;/sup&gt;&lt;br&gt;15 = 7 + 2×2&lt;sup&gt;2&lt;/sup&gt;&lt;br&gt;21 = 3 + 2×3&lt;sup&gt;2&lt;/sup&gt;&lt;br&gt;25 = 7 + 2×3&lt;sup&gt;2&lt;/sup&gt;&lt;br&gt;27 = 19 + 2×2&lt;sup&gt;2&lt;/sup&gt;&lt;br&gt;33 = 31 + 2×1&lt;sup&gt;2&lt;/sup&gt;&lt;/p&gt;&lt;p&gt;Resulta que la conjetura es falsa.&lt;/p&gt;&lt;p&gt;¿Cuál es el menor número impar compuesto que no puede ser escrito como la suma de un número primo más dos veces el cuadrado de otro número?&lt;/p&gt;</enunciado>
+    <nivel_en>4</nivel_en>
+    <orientadoALenguaje>true</orientadoALenguaje>
+    <solucion>
+      <lenguaje>Java</lenguaje>
+      <nivel_sol>3</nivel_sol>
+      <codigo>
+        <linea>public final class e46 {</linea>
+        <linea>	</linea>
+        <linea>	public static void main(String[] args) {</linea>
+        <linea>		System.out.println(new e46().run());</linea>
+        <linea>	}	</linea>
+        <linea>	</linea>
+        <linea>	public String run() {</linea>
+        <linea>		for (int i = 2; ; i++) {</linea>
+        <linea>			if (!satisfiesConjecture(i))</linea>
+        <linea>				return Integer.toString(i);</linea>
+        <linea>		}</linea>
+        <linea>	}</linea>
+        <linea/>
+        <linea>	private boolean satisfiesConjecture(int n) {</linea>
+        <linea>		if (n % 2 == 0 || isPrime(n))</linea>
+        <linea>			return true;</linea>
+        <linea>		</linea>
+        <linea>		// Ahora n es un número compuesto impar</linea>
+        <linea>		for (int i = 1; i * i * 2 &lt;= n; i++) {</linea>
+        <linea>			if (isPrime(n - i * i * 2))</linea>
+        <linea>				return true;</linea>
+        <linea>		}</linea>
+        <linea>		return false;</linea>
+        <linea>	}</linea>
+        <linea>	</linea>
+        <linea>	private boolean[] isPrime = {};</linea>
+        <linea>	private boolean isPrime(int n) {</linea>
+        <linea>		if (n &gt;= isPrime.length)</linea>
+        <linea>			isPrime = Library.listPrimality(n * 2);</linea>
+        <linea>		return isPrime[n];</linea>
+        <linea>	}	</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>C</lenguaje>
+      <nivel_sol>4</nivel_sol>
+      <codigo>
+        <linea>#include &lt;stdio.h&gt;</linea>
+        <linea>#include &lt;stdlib.h&gt;</linea>
+        <linea>#include &lt;math.h&gt;</linea>
+        <linea/>
+        <linea>#define N 10000</linea>
+        <linea/>
+        <linea>static int is_square(unsigned n);</linea>
+        <linea>static char *prime_sieve(unsigned n);</linea>
+        <linea/>
+        <linea>int main(void)</linea>
+        <linea>{</linea>
+        <linea>  char *sieve = prime_sieve(N);</linea>
+        <linea>  unsigned *primes = malloc(sizeof(unsigned) * N);</linea>
+        <linea>  unsigned i, j = 0;</linea>
+        <linea/>
+        <linea>  for (i = 0; i &lt; N; i++) {</linea>
+        <linea>    if (!sieve[i]) {</linea>
+        <linea>      primes[j++] = i;</linea>
+        <linea>    }</linea>
+        <linea>  }</linea>
+        <linea>  primes[j] = 0;</linea>
+        <linea/>
+        <linea>  for (i = 3; i &lt; N; i += 2) {</linea>
+        <linea>    if (!sieve[i]) {</linea>
+        <linea>      /* ignorar si i es primo */</linea>
+        <linea>      continue;</linea>
+        <linea>    }</linea>
+        <linea>    for (j = 0; primes[j]; j++) {</linea>
+        <linea>      unsigned s;</linea>
+        <linea/>
+        <linea>      if (primes[j] &gt; i) {</linea>
+        <linea>        printf("%u\n", i);</linea>
+        <linea>        goto FINISH;</linea>
+        <linea>      }</linea>
+        <linea/>
+        <linea>      s = (i - primes[j])/2;</linea>
+        <linea>      if (is_square(s)) {</linea>
+        <linea>        break;</linea>
+        <linea>      }</linea>
+        <linea>    }</linea>
+        <linea>  }</linea>
+        <linea>FINISH:</linea>
+        <linea>  free(sieve);</linea>
+        <linea>  free(primes);</linea>
+        <linea/>
+        <linea>  return 0;</linea>
+        <linea>}</linea>
+        <linea/>
+        <linea>char *prime_sieve(unsigned n)</linea>
+        <linea>{</linea>
+        <linea>  char *sieve = calloc(n, sizeof *sieve);</linea>
+        <linea>  unsigned i;</linea>
+        <linea>  sieve[0] = sieve[1] = 1;</linea>
+        <linea>  for (i = 2; i &lt; n; i++) {</linea>
+        <linea>    if (!sieve[i]) {</linea>
+        <linea>      unsigned j;</linea>
+        <linea>      for (j = i*2; j &lt; n; j += i) {</linea>
+        <linea>        sieve[j] = 1;</linea>
+        <linea>      }</linea>
+        <linea>    }</linea>
+        <linea>  }</linea>
+        <linea>  return sieve;</linea>
+        <linea>}</linea>
+        <linea/>
+        <linea>int is_square(unsigned n)</linea>
+        <linea>{</linea>
+        <linea>  unsigned sq = sqrt(n);</linea>
+        <linea>  return sq*sq == n;</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>Python</lenguaje>
+      <nivel_sol>3</nivel_sol>
+      <codigo>
+        <linea>import prime</linea>
+        <linea>MAX = 10000</linea>
+        <linea>squares = dict.fromkeys((x*x for x in xrange(1, MAX)), 1)</linea>
+        <linea>prime._refresh(MAX)</linea>
+        <linea/>
+        <linea>for x in xrange(35, MAX, 2):</linea>
+        <linea>    if not prime.isprime(x):</linea>
+        <linea>        is_goldbach = 0</linea>
+        <linea>        for p in prime.prime_list[1:]:</linea>
+        <linea>            if p &gt;= x: break</linea>
+        <linea>            if squares.has_key((x - p)/2):</linea>
+        <linea>                is_goldbach = 1</linea>
+        <linea>                break</linea>
+        <linea>        if not is_goldbach:</linea>
+        <linea>            print x</linea>
+        <linea>            break</linea>
+      </codigo>
+    </solucion>
+  </ejercicio>
+  <ejercicio id="e47">
+    <enunciado>&lt;p&gt;Los dos primeros números consecutivos que tienen dos factores primos diferentes son:&lt;/p&gt;&lt;p style="margin-left:100px;"&gt;14 = 2 × 7&lt;br&gt;15 = 3 × 5&lt;/p&gt;&lt;p&gt;Los primeros tres números consecutivos que tienen tres factores primos diferentes son:&lt;/p&gt;&lt;p style="margin-left:100px;"&gt;644 = 2² × 7 × 23&lt;br&gt;645 = 3 × 5 × 43&lt;br&gt;646 = 2 × 17 × 19.&lt;/p&gt;&lt;p&gt;Encuentra los cuatro primeros números consecutivos que tengan cuatro factores. ¿Cuál es el primero de estos números?&lt;/p&gt;</enunciado>
+    <nivel_en>4</nivel_en>
+    <orientadoALenguaje>true</orientadoALenguaje>
+    <solucion>
+      <lenguaje>Java</lenguaje>
+      <nivel_sol>4</nivel_sol>
+      <codigo>
+        <linea>public final class e47 {</linea>
+        <linea>	</linea>
+        <linea>	public static void main(String[] args) {</linea>
+        <linea>		System.out.println(new e47().run());</linea>
+        <linea>	}</linea>
+        <linea>	</linea>
+        <linea>	public String run() {</linea>
+        <linea>		for (int i = 2; ; i++) {</linea>
+        <linea>			if (       has4PrimeFactors(i + 0)</linea>
+        <linea>			        &amp;&amp; has4PrimeFactors(i + 1)</linea>
+        <linea>			        &amp;&amp; has4PrimeFactors(i + 2)</linea>
+        <linea>			        &amp;&amp; has4PrimeFactors(i + 3))</linea>
+        <linea>				return Integer.toString(i);</linea>
+        <linea>		}</linea>
+        <linea>	}</linea>
+        <linea>	</linea>
+        <linea>	private static boolean has4PrimeFactors(int n) {</linea>
+        <linea>		return countDistinctPrimeFactors(n) == 4;</linea>
+        <linea>	}</linea>
+        <linea>	</linea>
+        <linea>	private static int countDistinctPrimeFactors(int n) {</linea>
+        <linea>		int count = 0;</linea>
+        <linea>		for (int i = 2, end = Library.sqrt(n); i &lt;= end; i++) {</linea>
+        <linea>			if (n % i == 0) {</linea>
+        <linea>				do n /= i;</linea>
+        <linea>				while (n % i == 0);</linea>
+        <linea>				count++;</linea>
+        <linea>				end = Library.sqrt(n);</linea>
+        <linea>			}</linea>
+        <linea>		}</linea>
+        <linea>		if (n &gt; 1)</linea>
+        <linea>			count++;</linea>
+        <linea>		return count;</linea>
+        <linea>	}	</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>C</lenguaje>
+      <nivel_sol>3</nivel_sol>
+      <codigo>
+        <linea>#include &lt;stdio.h&gt;</linea>
+        <linea/>
+        <linea>#define N 4</linea>
+        <linea>#define M 1000000</linea>
+        <linea/>
+        <linea>static int distinct_factor_count(unsigned n);</linea>
+        <linea/>
+        <linea>int main(void)</linea>
+        <linea>{</linea>
+        <linea>  unsigned i, j = 0;</linea>
+        <linea>  for (i = 2; i &lt; M &amp;&amp; j &lt; N; i++) {</linea>
+        <linea>    for (j = 0; j &lt; N &amp;&amp; distinct_factor_count(i+j) == 4; j++)</linea>
+        <linea>      ;</linea>
+        <linea>  }</linea>
+        <linea>  printf("%u\n", i-1);</linea>
+        <linea/>
+        <linea>  return 0;</linea>
+        <linea>}</linea>
+        <linea/>
+        <linea>int distinct_factor_count(unsigned n)</linea>
+        <linea>{</linea>
+        <linea>  unsigned count = 0;</linea>
+        <linea>  unsigned i;</linea>
+        <linea>  for (i = 2; i &lt;= n; i++) {</linea>
+        <linea>    if (n % i == 0) {</linea>
+        <linea>      count++;</linea>
+        <linea>      n /= i;</linea>
+        <linea>      while (n % i == 0) {</linea>
+        <linea>        n /= i;</linea>
+        <linea>      }</linea>
+        <linea>    }</linea>
+        <linea>  }</linea>
+        <linea>  return count;</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>Python</lenguaje>
+      <nivel_sol>2</nivel_sol>
+      <codigo>
+        <linea>import prime</linea>
+        <linea/>
+        <linea>def distinct_factors(n): return len(dict.fromkeys(prime.factors(n)).keys())</linea>
+        <linea/>
+        <linea>factors = [0, 1, distinct_factors(2), distinct_factors(3)]</linea>
+        <linea>while True:</linea>
+        <linea>    if factors[-4::] == [4,4,4,4]: break</linea>
+        <linea>    else: factors.append(distinct_factors(len(factors)))</linea>
+        <linea/>
+        <linea>print len(factors)-4</linea>
+      </codigo>
+    </solucion>
+  </ejercicio>
+  <ejercicio id="e48">
+    <enunciado>&lt;p&gt;La serie 1&lt;sup&gt;1&lt;/sup&gt; + 2&lt;sup&gt;2&lt;/sup&gt; + 3&lt;sup&gt;3&lt;/sup&gt; + ... + 10&lt;sup&gt;10&lt;/sup&gt; = 10405071317.&lt;/p&gt;&lt;p&gt;Encuentra los diez últimos dígitos de la serie 1&lt;sup&gt;1&lt;/sup&gt; + 2&lt;sup&gt;2&lt;/sup&gt; + 3&lt;sup&gt;3&lt;/sup&gt; + ... + 1000&lt;sup&gt;1000&lt;/sup&gt;.&lt;/p&gt;</enunciado>
+    <nivel_en>4</nivel_en>
+    <orientadoALenguaje>true</orientadoALenguaje>
+    <solucion>
+      <lenguaje>Java</lenguaje>
+      <nivel_sol>3</nivel_sol>
+      <codigo>
+        <linea>import java.math.BigInteger;</linea>
+        <linea/>
+        <linea/>
+        <linea>public final class e48 implements EulerSolution {</linea>
+        <linea>	</linea>
+        <linea>	public static void main(String[] args) {</linea>
+        <linea>		System.out.println(new e48().run());</linea>
+        <linea>	}</linea>
+        <linea>	</linea>
+        <linea>	public String run() {</linea>
+        <linea>		BigInteger modulus = BigInteger.TEN.pow(10);</linea>
+        <linea>		BigInteger sum = BigInteger.ZERO;</linea>
+        <linea>		for (int i = 1; i &lt;= 1000; i++)</linea>
+        <linea>			sum = sum.add(BigInteger.valueOf(i).modPow(BigInteger.valueOf(i), modulus));</linea>
+        <linea>		return sum.mod(modulus).toString();</linea>
+        <linea>	}	</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>C</lenguaje>
+      <nivel_sol>3</nivel_sol>
+      <codigo>
+        <linea>#include &lt;stdio.h&gt;</linea>
+        <linea/>
+        <linea>#define N 1000</linea>
+        <linea>#define Q 10000000000ULL</linea>
+        <linea/>
+        <linea>int main(void)</linea>
+        <linea>{</linea>
+        <linea>  unsigned long long rem = 0;</linea>
+        <linea>  unsigned i;</linea>
+        <linea>  for (i = 1; i &lt; N; i++) {</linea>
+        <linea>    unsigned long long r = 1;</linea>
+        <linea>    unsigned j;</linea>
+        <linea>    for (j = 0; j &lt; i; j++) {</linea>
+        <linea>      r = (r * i) % Q;</linea>
+        <linea>    }</linea>
+        <linea>    rem = (rem + r) % Q;</linea>
+        <linea>  }</linea>
+        <linea>  printf("%llu\n", rem);</linea>
+        <linea/>
+        <linea>  return 0;</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>Python</lenguaje>
+      <nivel_sol>1</nivel_sol>
+      <codigo>
+        <linea>s = 0</linea>
+        <linea>mod = pow(10, 10)</linea>
+        <linea>for x in xrange(1, 1001):</linea>
+        <linea>    s = s + pow(x, x)</linea>
+        <linea/>
+        <linea>print s % mod</linea>
+      </codigo>
+    </solucion>
+  </ejercicio>
+  <ejercicio id="e49">
+    <enunciado>&lt;p&gt;La secuencia aritmética 1487, 4817, 8147, en la cual cada uno de sus términos se incrementa en 3330, es rara de dos formas diferentes: (i) cada uno de los tres términos es un número primo, y&amp;nbsp; (ii) cada uno de los 4 dígitos de los diferentes números son permutaciones entre ellos.&lt;/p&gt;&lt;p&gt;No existen secuencias de este tipo para tres primos de 1, 2 o 3 dígitos, pero sí existe otra de 4 dígitos.&lt;/p&gt;&lt;p&gt;¿Qué número de 12 dígitos se formaría concatenando los tres términos de esta secuencia?&lt;/p&gt;</enunciado>
+    <nivel_en>4</nivel_en>
+    <orientadoALenguaje>true</orientadoALenguaje>
+    <solucion>
+      <lenguaje>Java</lenguaje>
+      <nivel_sol>4</nivel_sol>
+      <codigo>
+        <linea>import java.util.Arrays;</linea>
+        <linea/>
+        <linea>public final class e49 {</linea>
+        <linea>	</linea>
+        <linea>	public static void main(String[] args) {</linea>
+        <linea>		System.out.println(new e49().run());</linea>
+        <linea>	}</linea>
+        <linea>	</linea>
+        <linea>	private static final int LIMIT = 10000;	</linea>
+        <linea>	public String run() {</linea>
+        <linea>		boolean[] isPrime = Library.listPrimality(LIMIT - 1);</linea>
+        <linea>		for (int base = 1000; base &lt; LIMIT; base++) {</linea>
+        <linea>			if (isPrime[base]) {</linea>
+        <linea>				for (int step = 1; step &lt; LIMIT; step++) {</linea>
+        <linea>					int a = base + step;</linea>
+        <linea>					int b = a    + step;</linea>
+        <linea>					if (       a &lt; LIMIT &amp;&amp; isPrime[a] &amp;&amp; hasSameDigits(a, base)</linea>
+        <linea>					        &amp;&amp; b &lt; LIMIT &amp;&amp; isPrime[b] &amp;&amp; hasSameDigits(b, base)</linea>
+        <linea>					        &amp;&amp; (base != 1487 || a != 4817))</linea>
+        <linea>						return "" + base + a + b;</linea>
+        <linea>				}</linea>
+        <linea>			}</linea>
+        <linea>		}</linea>
+        <linea>		throw new RuntimeException("No encontrado");</linea>
+        <linea>	}</linea>
+        <linea>	</linea>
+        <linea>	private static boolean hasSameDigits(int x, int y) {</linea>
+        <linea>		char[] xdigits = Integer.toString(x).toCharArray();</linea>
+        <linea>		char[] ydigits = Integer.toString(y).toCharArray();</linea>
+        <linea>		Arrays.sort(xdigits);</linea>
+        <linea>		Arrays.sort(ydigits);</linea>
+        <linea>		return Arrays.equals(xdigits, ydigits);</linea>
+        <linea>	}	</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>C</lenguaje>
+      <nivel_sol>4</nivel_sol>
+      <codigo>
+        <linea>#include &lt;iostream&gt;</linea>
+        <linea>#include &lt;vector&gt;</linea>
+        <linea>#include &lt;algorithm&gt;</linea>
+        <linea>#include &lt;numeric&gt;</linea>
+        <linea/>
+        <linea>template &lt;typename T&gt;</linea>
+        <linea>struct func {</linea>
+        <linea>  T operator()(T a, T b) const</linea>
+        <linea>  {</linea>
+        <linea>    return 10*a + b;</linea>
+        <linea>  }</linea>
+        <linea>};</linea>
+        <linea/>
+        <linea>static bool is_prime(int n);</linea>
+        <linea/>
+        <linea>int main()</linea>
+        <linea>{</linea>
+        <linea>  using namespace std;</linea>
+        <linea/>
+        <linea>  bool seen[10000];</linea>
+        <linea>  fill(seen, seen+10000, false);</linea>
+        <linea/>
+        <linea>  for (int i = 1000; i &lt; 10000; i++) {</linea>
+        <linea>    /* int-&gt;vector p.ej. 1234 -&gt; [1,2,3,4] */</linea>
+        <linea>    vector&lt;int&gt; a(4);</linea>
+        <linea>    for (int j = 0, t = i; j &lt; 4; j++, t /= 10) {</linea>
+        <linea>      a[3-j] = t % 10;</linea>
+        <linea>    }</linea>
+        <linea/>
+        <linea>    vector&lt;int&gt; s;</linea>
+        <linea>    do {</linea>
+        <linea>      /* vector-&gt;int */</linea>
+        <linea>      int n = accumulate(a.begin(), a.end(), 0, func&lt;int&gt;());</linea>
+        <linea/>
+        <linea>      if (!seen[n] &amp;&amp; is_prime(n)) {</linea>
+        <linea>        s.push_back(n);</linea>
+        <linea>        seen[n] = true;</linea>
+        <linea>      }</linea>
+        <linea>    } while (next_permutation(a.begin(), a.end()));</linea>
+        <linea/>
+        <linea>    for (int j = 0; j &lt; s.size(); j++) {</linea>
+        <linea>      for (int k = j+1; k &lt; s.size(); k++) {</linea>
+        <linea>        for (int l = k+1; l &lt; s.size(); l++) {</linea>
+        <linea>          if (s[j] != 1487 &amp;&amp; s[l] - s[k] == s[k] - s[j]) {</linea>
+        <linea>            cout &lt;&lt; s[j] &lt;&lt; s[k] &lt;&lt; s[l] &lt;&lt; endl;</linea>
+        <linea>          }</linea>
+        <linea>        }</linea>
+        <linea>      }</linea>
+        <linea>    }</linea>
+        <linea>  }</linea>
+        <linea/>
+        <linea>  return 0;</linea>
+        <linea>}</linea>
+        <linea/>
+        <linea>bool is_prime(int n)</linea>
+        <linea>{</linea>
+        <linea>  if (n &lt; 2) {</linea>
+        <linea>    return false;</linea>
+        <linea>  }</linea>
+        <linea>  else if (n % 2 == 0) {</linea>
+        <linea>    return n == 2;</linea>
+        <linea>  }</linea>
+        <linea>  else {</linea>
+        <linea>    for (int d = 3; d*d &lt;= n; d += 2) {</linea>
+        <linea>      if (n % d == 0) {</linea>
+        <linea>        return false;</linea>
+        <linea>      }</linea>
+        <linea>    }</linea>
+        <linea>    return true;</linea>
+        <linea>  }</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>Python</lenguaje>
+      <nivel_sol>4</nivel_sol>
+      <codigo>
+        <linea>import prime</linea>
+        <linea>from combinatorics import permutations</linea>
+        <linea/>
+        <linea>prime._refresh(10000)</linea>
+        <linea>for num in xrange(1000, 10000):</linea>
+        <linea>    if str(num).find('0') &gt;= 0: continue</linea>
+        <linea/>
+        <linea>    if prime.isprime(num):</linea>
+        <linea>        prime_permutations = { num: 1 }</linea>
+        <linea>        for x in permutations(list(str(num))):</linea>
+        <linea>            next_num = int(''.join(x))</linea>
+        <linea>            if prime.isprime(next_num):</linea>
+        <linea>                prime_permutations[next_num] = 1</linea>
+        <linea/>
+        <linea>        primes = sorted(prime_permutations.keys())</linea>
+        <linea>        for a in xrange(0, len(primes)):</linea>
+        <linea>            if primes[a] == 1487: continue</linea>
+        <linea>            for b in xrange(a+1, len(primes)):</linea>
+        <linea>                c = (primes[a] + primes[b]) / 2</linea>
+        <linea>                if prime_permutations.has_key(c):</linea>
+        <linea>                    print str(primes[a]) + str(c) + str(primes[b])</linea>
+        <linea>                    exit()</linea>
+      </codigo>
+    </solucion>
+  </ejercicio>
+  <ejercicio id="e50">
+    <enunciado>&lt;p&gt;El número primo 41 puede ser escrito como la suma de seis primos consecutivos.&lt;/p&gt;&lt;div style="text-align:center;"&gt;41 = 2 + 3 + 5 + 7 + 11 + 13&lt;/div&gt;&lt;p&gt;Esta es la suma más larga de primos consecutivos cuyo resultado es un primo menor que cien.&lt;/p&gt;&lt;p&gt;La suma más larga de primos consecutivos por debajo de mil cuyo resultado es también un número primo, contiene 21 términos y es igual a 953.&lt;/p&gt;&lt;p&gt;¿Qué primo, por debajo de un millón, puede ser escrito como la suma más larga de primos consecutivos?&lt;/p&gt;</enunciado>
+    <nivel_en>4</nivel_en>
+    <orientadoALenguaje>true</orientadoALenguaje>
+    <solucion>
+      <lenguaje>Java</lenguaje>
+      <nivel_sol>4</nivel_sol>
+      <codigo>
+        <linea>public final class e50 {</linea>
+        <linea>	</linea>
+        <linea>	public static void main(String[] args) {</linea>
+        <linea>		System.out.println(new e50().run());</linea>
+        <linea>	}</linea>
+        <linea>	</linea>
+        <linea>	private static final int LIMIT = Library.pow(10, 6);	</linea>
+        <linea>	public String run() {</linea>
+        <linea>		boolean[] isPrime = Library.listPrimality(LIMIT);</linea>
+        <linea>		int[] primes = Library.listPrimes(LIMIT);</linea>
+        <linea>		</linea>
+        <linea>		long maxSum = 0;</linea>
+        <linea>		int maxRun = -1;</linea>
+        <linea>		for (int i = 0; i &lt; primes.length; i++) {  // Para cada índice de un número primo inicial</linea>
+        <linea>			int sum = 0;</linea>
+        <linea>			for (int j = i; j &lt; primes.length; j++) {  // Para cada índice final (inclusivo)</linea>
+        <linea>				sum += primes[j];</linea>
+        <linea>				if (sum &gt; LIMIT)</linea>
+        <linea>					break;</linea>
+        <linea>				else if (j - i &gt; maxRun &amp;&amp; sum &gt; maxSum &amp;&amp; isPrime[sum]) {</linea>
+        <linea>					maxSum = sum;</linea>
+        <linea>					maxRun = j - i;</linea>
+        <linea>				}</linea>
+        <linea>			}</linea>
+        <linea>		}</linea>
+        <linea>		return Long.toString(maxSum);</linea>
+        <linea>	}	</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>C</lenguaje>
+      <nivel_sol>4</nivel_sol>
+      <codigo>
+        <linea>#include &lt;stdio.h&gt;</linea>
+        <linea>#include &lt;stdlib.h&gt;</linea>
+        <linea></linea>
+        <linea>void sieve(short primes[], int length);</linea>
+        <linea></linea>
+        <linea>int main () {</linea>
+        <linea></linea>
+        <linea>	short * primes = (short *) malloc(sizeof(short) * 1000000);</linea>
+        <linea></linea>
+        <linea>	sieve(primes, 1000000);</linea>
+        <linea></linea>
+        <linea>	int i,j,counter,sum;</linea>
+        <linea></linea>
+        <linea>	sum = 0;</linea>
+        <linea>	for(i = 2; i&lt;1000000; i++){</linea>
+        <linea>		if(!primes[i]) continue;</linea>
+        <linea>		sum = i;</linea>
+        <linea>		counter = 1;</linea>
+        <linea>		for(j = i+1; j&lt; 1000000; j++) {</linea>
+        <linea>			if(!primes[j]) continue;</linea>
+        <linea>			sum = sum + j;</linea>
+        <linea>			counter++;</linea>
+        <linea>			if(sum &gt;= 1000000) break;</linea>
+        <linea>			if(primes[sum] &amp;&amp; primes[sum] &lt; counter) primes[sum] = counter;</linea>
+        <linea>		}</linea>
+        <linea>	}</linea>
+        <linea></linea>
+        <linea>	j = 1;</linea>
+        <linea>	for(i = 2; i&lt;1000000; i++) {</linea>
+        <linea>		if(primes[i] &gt; j) {</linea>
+        <linea>			j = primes[i];</linea>
+        <linea>			sum = i;</linea>
+        <linea>		}</linea>
+        <linea>	}</linea>
+        <linea></linea>
+        <linea>	printf("%d\n", sum);</linea>
+        <linea></linea>
+        <linea>	return 0;</linea>
+        <linea>}</linea>
+        <linea></linea>
+        <linea>// Poner todos los índices que sean primos a 1</linea>
+        <linea>void sieve(short * primes, int length) {</linea>
+        <linea>	int i,j;</linea>
+        <linea></linea>
+        <linea>	primes[0] = primes[1] = 0;</linea>
+        <linea></linea>
+        <linea>	for(i = 2; i &lt; length; i++) {</linea>
+        <linea>		primes[i] = 1;</linea>
+        <linea>	}</linea>
+        <linea></linea>
+        <linea>	for(i = 2; i*i &lt;= length; i++) {</linea>
+        <linea>		if(primes[i]) {</linea>
+        <linea>			for(j = i*i; j &lt;= length; j = j+i) {</linea>
+        <linea>				primes[j] = 0;</linea>
+        <linea>			}</linea>
+        <linea>		}</linea>
+        <linea>	}</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>Python</lenguaje>
+      <nivel_sol>4</nivel_sol>
+      <codigo>
+        <linea>import prime</linea>
+        <linea></linea>
+        <linea>MAX = 5000</linea>
+        <linea>prime.prime(MAX)</linea>
+        <linea></linea>
+        <linea>def check_length(n, below):</linea>
+        <linea>    maxprime = 0</linea>
+        <linea>    for x in xrange(0, below):</linea>
+        <linea>        total = sum(prime.prime_list[x:x+n])</linea>
+        <linea>        if total &gt; below: break</linea>
+        <linea>        if prime.isprime(total): maxprime = total</linea>
+        <linea>    return maxprime</linea>
+        <linea></linea>
+        <linea>for n in xrange(1000, 0, -1):</linea>
+        <linea>    maxprime = check_length(n, 1000000)</linea>
+        <linea>    if maxprime:</linea>
+        <linea>        print maxprime</linea>
+        <linea>        break</linea>
+      </codigo>
+    </solucion>
+  </ejercicio>
+</ejercicios>

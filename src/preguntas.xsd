@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           elementFormDefault="qualified">
+
+    <!-- Declaración de tipos -->
+    <xs:simpleType name="dificultad">
+        <xs:restriction base="xs:integer">
+            <xs:minInclusive value="1"/>
+            <xs:maxInclusive value="4"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="tipoLenguaje">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="C"/>
+            <xs:enumeration value="Java"/>
+            <xs:enumeration value="C++"/>
+            <xs:enumeration value="Objective-C"/>
+            <xs:enumeration value="C#"/>
+            <xs:enumeration value="JavaScript"/>
+            <xs:enumeration value="PHP"/>
+            <xs:enumeration value="Python"/>
+            <xs:enumeration value="Visual Basic .NET"/>
+            <xs:enumeration value="Visual Basic"/>
+            <xs:enumeration value="Delphi"/>
+            <xs:enumeration value="Perl"/>
+            <xs:enumeration value="PL/SQL"/>
+            <xs:enumeration value="F#"/>
+            <xs:enumeration value="Transact-SQL"/>
+            <xs:enumeration value="ABAP"/>
+            <xs:enumeration value="MATLAB"/>
+            <xs:enumeration value="R"/>
+            <xs:enumeration value="Pascal"/>
+            <xs:enumeration value="Ruby"/>
+            <xs:enumeration value="Pseudocodigo"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <!-- Fin declaración de tipos -->
+
+    <!-- Esquema -->
+    <xs:element name="ejercicios">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="ejercicio" minOccurs="1" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="ejercicio">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="enunciado">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:minLength value="1"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element name="nivel_en" type="dificultad"/>
+                <xs:element name="orientadoALenguaje" type="xs:boolean"/>
+                <xs:element ref="solucion" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:attribute name="id" type="xs:ID" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="solucion">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="lenguaje" type="tipoLenguaje"/>
+                <xs:element name="nivel_sol" type="dificultad"/>
+                <xs:element name="codigo">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="linea" minOccurs="1" maxOccurs="unbounded"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <!-- Fin esquema -->
+</xs:schema>

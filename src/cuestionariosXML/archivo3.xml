@@ -1,0 +1,880 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ejercicios xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../preguntas.xsd">
+  <ejercicio id="e11">
+    <enunciado>&lt;p&gt;En la siguiente matriz de 20×20, encontramos cuatro números de una diagonal marcados en rojo.&lt;/p&gt;&lt;p style="font-family:courier new;text-align:center;"&gt;08 02 22 97 38 15 00 40 00 75 04 05 07 78 52 12 50 77 91 08&lt;br&gt;49 49 99 40 17 81 18 57 60 87 17 40 98 43 69 48 04 56 62 00&lt;br&gt;81 49 31 73 55 79 14 29 93 71 40 67 53 88 30 03 49 13 36 65&lt;br&gt;52 70 95 23 04 60 11 42 69 24 68 56 01 32 56 71 37 02 36 91&lt;br&gt;22 31 16 71 51 67 63 89 41 92 36 54 22 40 40 28 66 33 13 80&lt;br&gt;24 47 32 60 99 03 45 02 44 75 33 53 78 36 84 20 35 17 12 50&lt;br&gt;32 98 81 28 64 23 67 10 &lt;span style="color:#ff0000;"&gt;&lt;b&gt;26&lt;/b&gt;&lt;/span&gt; 38 40 67 59 54 70 66 18 38 64 70&lt;br&gt;67 26 20 68 02 62 12 20 95 &lt;span style="color:#ff0000;"&gt;&lt;b&gt;63&lt;/b&gt;&lt;/span&gt; 94 39 63 08 40 91 66 49 94 21&lt;br&gt;24 55 58 05 66 73 99 26 97 17 &lt;span style="color:#ff0000;"&gt;&lt;b&gt;78&lt;/b&gt;&lt;/span&gt; 78 96 83 14 88 34 89 63 72&lt;br&gt;21 36 23 09 75 00 76 44 20 45 35 &lt;span style="color:#ff0000;"&gt;&lt;b&gt;14&lt;/b&gt;&lt;/span&gt; 00 61 33 97 34 31 33 95&lt;br&gt;78 17 53 28 22 75 31 67 15 94 03 80 04 62 16 14 09 53 56 92&lt;br&gt;16 39 05 42 96 35 31 47 55 58 88 24 00 17 54 24 36 29 85 57&lt;br&gt;86 56 00 48 35 71 89 07 05 44 44 37 44 60 21 58 51 54 17 58&lt;br&gt;19 80 81 68 05 94 47 69 28 73 92 13 86 52 17 77 04 89 55 40&lt;br&gt;04 52 08 83 97 35 99 16 07 97 57 32 16 26 26 79 33 27 98 66&lt;br&gt;88 36 68 87 57 62 20 72 03 46 33 67 46 55 12 32 63 93 53 69&lt;br&gt;04 42 16 73 38 25 39 11 24 94 72 18 08 46 29 32 40 62 76 36&lt;br&gt;20 69 36 41 72 30 23 88 34 62 99 69 82 67 59 85 74 04 36 16&lt;br&gt;20 73 35 29 78 31 90 01 74 31 49 71 48 86 81 16 23 57 05 54&lt;br&gt;01 70 54 71 83 51 54 69 16 92 33 48 61 43 52 01 89 19 67 48&lt;br&gt;&lt;/p&gt;&lt;p&gt;El producto de estos números es 26 × 63 × 78 × 14 = 1788696.&lt;/p&gt;&lt;p&gt;¿Cuál es el mayor producto que podemos encontrar de cuatro números adyacentes en la misma dirección (arriba, abajo, izquierda, derecha o diagonalmente)?&lt;/p&gt;</enunciado>
+    <nivel_en>1</nivel_en>
+    <orientadoALenguaje>true</orientadoALenguaje>
+    <solucion>
+      <lenguaje>Java</lenguaje>
+      <nivel_sol>2</nivel_sol>
+      <codigo>
+        <linea>public final class e11 {</linea>
+        <linea>	</linea>
+        <linea>	public static void main(String[] args) {</linea>
+        <linea>		System.out.println(new e11().run());</linea>
+        <linea>	}</linea>
+        <linea>		</linea>
+        <linea>	public String run() {</linea>
+        <linea>		int max = -1;</linea>
+        <linea>		max = Math.max(maxProduct(1, 0), max);</linea>
+        <linea>		max = Math.max(maxProduct(0, 1), max);</linea>
+        <linea>		max = Math.max(maxProduct(1, 1), max);</linea>
+        <linea>		max = Math.max(maxProduct(1, -1), max);</linea>
+        <linea>		return Integer.toString(max);</linea>
+        <linea>	}</linea>
+        <linea>		</linea>
+        <linea>	private static int maxProduct(int dx, int dy) {</linea>
+        <linea>		int max = -1;</linea>
+        <linea>		for (int y = 0; y &lt; SQUARE.length; y++) {</linea>
+        <linea>			for (int x = 0; x &lt; SQUARE[y].length; x++)</linea>
+        <linea>				max = Math.max(product(x, y, dx, dy, 4), max);</linea>
+        <linea>		}</linea>
+        <linea>		return max;</linea>
+        <linea>	}</linea>
+        <linea>		</linea>
+        <linea>	private static int product(int x, int y, int dx, int dy, int n) {</linea>
+        <linea>		if (!isInBounds(x + (n - 1) * dx, y + (n - 1) * dy))</linea>
+        <linea>			return -1;</linea>
+        <linea>		</linea>
+        <linea>		int prod = 1;</linea>
+        <linea>		for (int i = 0; i &lt; n; i++, x += dx, y += dy)</linea>
+        <linea>			prod *= SQUARE[y][x];</linea>
+        <linea>		return prod;</linea>
+        <linea>	}</linea>
+        <linea>		</linea>
+        <linea>	private static boolean isInBounds(int x, int y) {</linea>
+        <linea>		return 0 &lt;= y &amp;&amp; y &lt; SQUARE.length &amp;&amp; 0 &lt;= x &amp;&amp; x &lt; SQUARE[y].length;</linea>
+        <linea>	}</linea>
+        <linea>		</linea>
+        <linea>	private static int[][] SQUARE = {</linea>
+        <linea>		{ 8,02,22,97,38,15,00,40,00,75,04,05,07,78,52,12,50,77,91, 8},</linea>
+        <linea>		{49,49,99,40,17,81,18,57,60,87,17,40,98,43,69,48,04,56,62,00},</linea>
+        <linea>		{81,49,31,73,55,79,14,29,93,71,40,67,53,88,30,03,49,13,36,65},</linea>
+        <linea>		{52,70,95,23,04,60,11,42,69,24,68,56,01,32,56,71,37,02,36,91},</linea>
+        <linea>		{22,31,16,71,51,67,63,89,41,92,36,54,22,40,40,28,66,33,13,80},</linea>
+        <linea>		{24,47,32,60,99,03,45,02,44,75,33,53,78,36,84,20,35,17,12,50},</linea>
+        <linea>		{32,98,81,28,64,23,67,10,26,38,40,67,59,54,70,66,18,38,64,70},</linea>
+        <linea>		{67,26,20,68,02,62,12,20,95,63,94,39,63, 8,40,91,66,49,94,21},</linea>
+        <linea>		{24,55,58,05,66,73,99,26,97,17,78,78,96,83,14,88,34,89,63,72},</linea>
+        <linea>		{21,36,23, 9,75,00,76,44,20,45,35,14,00,61,33,97,34,31,33,95},</linea>
+        <linea>		{78,17,53,28,22,75,31,67,15,94,03,80,04,62,16,14, 9,53,56,92},</linea>
+        <linea>		{16,39,05,42,96,35,31,47,55,58,88,24,00,17,54,24,36,29,85,57},</linea>
+        <linea>		{86,56,00,48,35,71,89,07,05,44,44,37,44,60,21,58,51,54,17,58},</linea>
+        <linea>		{19,80,81,68,05,94,47,69,28,73,92,13,86,52,17,77,04,89,55,40},</linea>
+        <linea>		{04,52, 8,83,97,35,99,16,07,97,57,32,16,26,26,79,33,27,98,66},</linea>
+        <linea>		{88,36,68,87,57,62,20,72,03,46,33,67,46,55,12,32,63,93,53,69},</linea>
+        <linea>		{04,42,16,73,38,25,39,11,24,94,72,18, 8,46,29,32,40,62,76,36},</linea>
+        <linea>		{20,69,36,41,72,30,23,88,34,62,99,69,82,67,59,85,74,04,36,16},</linea>
+        <linea>		{20,73,35,29,78,31,90,01,74,31,49,71,48,86,81,16,23,57,05,54},</linea>
+        <linea>		{01,70,54,71,83,51,54,69,16,92,33,48,61,43,52,01,89,19,67,48}</linea>
+        <linea>	};</linea>
+        <linea>	</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>C</lenguaje>
+      <nivel_sol>1</nivel_sol>
+      <codigo>
+        <linea>#include &lt;stdio.h&gt;</linea>
+        <linea/>
+        <linea>#define N 20</linea>
+        <linea/>
+        <linea>static __inline unsigned max(unsigned a, unsigned b);</linea>
+        <linea/>
+        <linea>int main(void)</linea>
+        <linea>{</linea>
+        <linea>  unsigned grid[20][20] = {</linea>
+        <linea>    {8,2,22,97,38,15,0,40,0,75,4,5,7,78,52,12,50,77,91,8},</linea>
+        <linea>    {49,49,99,40,17,81,18,57,60,87,17,40,98,43,69,48,4,56,62,0},</linea>
+        <linea>    {81,49,31,73,55,79,14,29,93,71,40,67,53,88,30,3,49,13,36,65},</linea>
+        <linea>    {52,70,95,23,4,60,11,42,69,24,68,56,1,32,56,71,37,2,36,91},</linea>
+        <linea>    {22,31,16,71,51,67,63,89,41,92,36,54,22,40,40,28,66,33,13,80},</linea>
+        <linea>    {24,47,32,60,99,3,45,2,44,75,33,53,78,36,84,20,35,17,12,50},</linea>
+        <linea>    {32,98,81,28,64,23,67,10,26,38,40,67,59,54,70,66,18,38,64,70},</linea>
+        <linea>    {67,26,20,68,2,62,12,20,95,63,94,39,63,8,40,91,66,49,94,21},</linea>
+        <linea>    {24,55,58,5,66,73,99,26,97,17,78,78,96,83,14,88,34,89,63,72},</linea>
+        <linea>    {21,36,23,9,75,0,76,44,20,45,35,14,0,61,33,97,34,31,33,95},</linea>
+        <linea>    {78,17,53,28,22,75,31,67,15,94,3,80,4,62,16,14,9,53,56,92},</linea>
+        <linea>    {16,39,5,42,96,35,31,47,55,58,88,24,0,17,54,24,36,29,85,57},</linea>
+        <linea>    {86,56,0,48,35,71,89,7,5,44,44,37,44,60,21,58,51,54,17,58},</linea>
+        <linea>    {19,80,81,68,5,94,47,69,28,73,92,13,86,52,17,77,4,89,55,40},</linea>
+        <linea>    {4,52,8,83,97,35,99,16,7,97,57,32,16,26,26,79,33,27,98,66},</linea>
+        <linea>    {88,36,68,87,57,62,20,72,3,46,33,67,46,55,12,32,63,93,53,69},</linea>
+        <linea>    {4,42,16,73,38,25,39,11,24,94,72,18,8,46,29,32,40,62,76,36},</linea>
+        <linea>    {20,69,36,41,72,30,23,88,34,62,99,69,82,67,59,85,74,4,36,16},</linea>
+        <linea>    {20,73,35,29,78,31,90,1,74,31,49,71,48,86,81,16,23,57,5,54},</linea>
+        <linea>    {1,70,54,71,83,51,54,69,16,92,33,48,61,43,52,1,89,19,67,48},</linea>
+        <linea>  };</linea>
+        <linea>  unsigned m = 0;</linea>
+        <linea>  unsigned i, j;</linea>
+        <linea/>
+        <linea>  for (i = 0; i &lt; N-3; i++) {</linea>
+        <linea>    for (j = 0; j &lt; N-3; j++) {</linea>
+        <linea>      unsigned h = grid[i][j] * grid[i][j+1] * grid[i][j+2] * grid[i][j+3];</linea>
+        <linea>      unsigned v = grid[j][i] * grid[j+1][i] * grid[j+2][i] * grid[j+3][i];</linea>
+        <linea>      unsigned d1 = grid[i][j] * grid[i+1][j+1] * grid[i+2][j+2] * grid[i+3][j+3];</linea>
+        <linea>      unsigned d2 = grid[i][N-j-1] * grid[i+1][N-j-2] * grid[i+2][N-j-3] * grid[i+3][N-j-4];</linea>
+        <linea>      m = max(m, max(h, max(v, max(d1, d2))));</linea>
+        <linea>    }</linea>
+        <linea>  }</linea>
+        <linea>  printf("%u\n", m);</linea>
+        <linea/>
+        <linea>  return 0;</linea>
+        <linea>}</linea>
+        <linea/>
+        <linea>unsigned max(unsigned a, unsigned b)</linea>
+        <linea>{</linea>
+        <linea>  return a &gt; b ? a : b;</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>PHP</lenguaje>
+      <nivel_sol>1</nivel_sol>
+      <codigo>
+        <linea>&lt;?php</linea>
+        <linea>  $data[] = explode(' ', '08 02 22 97 38 15 00 40 00 75 04 05 07 78 52 12 50 77 91 08');</linea>
+        <linea>  $data[] = explode(' ', '49 49 99 40 17 81 18 57 60 87 17 40 98 43 69 48 04 56 62 00');</linea>
+        <linea>  $data[] = explode(' ', '81 49 31 73 55 79 14 29 93 71 40 67 53 88 30 03 49 13 36 65');</linea>
+        <linea>  $data[] = explode(' ', '52 70 95 23 04 60 11 42 69 24 68 56 01 32 56 71 37 02 36 91');</linea>
+        <linea>  $data[] = explode(' ', '22 31 16 71 51 67 63 89 41 92 36 54 22 40 40 28 66 33 13 80');</linea>
+        <linea>  $data[] = explode(' ', '24 47 32 60 99 03 45 02 44 75 33 53 78 36 84 20 35 17 12 50');</linea>
+        <linea>  $data[] = explode(' ', '32 98 81 28 64 23 67 10 26 38 40 67 59 54 70 66 18 38 64 70');</linea>
+        <linea>  $data[] = explode(' ', '67 26 20 68 02 62 12 20 95 63 94 39 63 08 40 91 66 49 94 21');</linea>
+        <linea>  $data[] = explode(' ', '24 55 58 05 66 73 99 26 97 17 78 78 96 83 14 88 34 89 63 72');</linea>
+        <linea>  $data[] = explode(' ', '21 36 23 09 75 00 76 44 20 45 35 14 00 61 33 97 34 31 33 95');</linea>
+        <linea>  $data[] = explode(' ', '78 17 53 28 22 75 31 67 15 94 03 80 04 62 16 14 09 53 56 92');</linea>
+        <linea>  $data[] = explode(' ', '16 39 05 42 96 35 31 47 55 58 88 24 00 17 54 24 36 29 85 57');</linea>
+        <linea>  $data[] = explode(' ', '86 56 00 48 35 71 89 07 05 44 44 37 44 60 21 58 51 54 17 58');</linea>
+        <linea>  $data[] = explode(' ', '19 80 81 68 05 94 47 69 28 73 92 13 86 52 17 77 04 89 55 40');</linea>
+        <linea>  $data[] = explode(' ', '04 52 08 83 97 35 99 16 07 97 57 32 16 26 26 79 33 27 98 66');</linea>
+        <linea>  $data[] = explode(' ', '88 36 68 87 57 62 20 72 03 46 33 67 46 55 12 32 63 93 53 69');</linea>
+        <linea>  $data[] = explode(' ', '04 42 16 73 38 25 39 11 24 94 72 18 08 46 29 32 40 62 76 36');</linea>
+        <linea>  $data[] = explode(' ', '20 69 36 41 72 30 23 88 34 62 99 69 82 67 59 85 74 04 36 16');</linea>
+        <linea>  $data[] = explode(' ', '20 73 35 29 78 31 90 01 74 31 49 71 48 86 81 16 23 57 05 54');</linea>
+        <linea>  $data[] = explode(' ', '01 70 54 71 83 51 54 69 16 92 33 48 61 43 52 01 89 19 67 48');</linea>
+        <linea>  $greatest = $_product = 0;</linea>
+        <linea>  for ($y = 0; $y &lt; count($data); $y++) {</linea>
+        <linea>    for ($x = 0; $x &lt; count($data[$y]); $x++) {</linea>
+        <linea>      // Store horizontal numbers based on X position (backwards and forward).</linea>
+        <linea>      $_num[0] = array($data[$y][$x]);</linea>
+        <linea>      if (!isset($data[$y][$x + 1])) { $_num[0][] = 0; } else { $_num[0][] = $data[$y][$x + 1]; }</linea>
+        <linea>      if (!isset($data[$y][$x + 2])) { $_num[0][] = 0; } else { $_num[0][] = $data[$y][$x + 2]; }</linea>
+        <linea>      if (!isset($data[$y][$x + 3])) { $_num[0][] = 0; } else { $_num[0][] = $data[$y][$x + 3]; }</linea>
+        <linea>      $_num[1] = array($data[$y][$x]);</linea>
+        <linea>      if (!isset($data[$y][$x - 1])) { $_num[1][] = 0; } else { $_num[1][] = $data[$y][$x - 1]; }</linea>
+        <linea>      if (!isset($data[$y][$x - 2])) { $_num[1][] = 0; } else { $_num[1][] = $data[$y][$x - 2]; }</linea>
+        <linea>      if (!isset($data[$y][$x - 3])) { $_num[1][] = 0; } else { $_num[1][] = $data[$y][$x - 3]; }</linea>
+        <linea>      // Vertical numbers from X point.</linea>
+        <linea>      $_num[2] = array($data[$y][$x]);</linea>
+        <linea>      if (!isset($data[$y + 1][$x])) { $_num[2][] = 0; } else { $_num[2][] = $data[$y + 1][$x]; }</linea>
+        <linea>      if (!isset($data[$y + 2][$x])) { $_num[2][] = 0; } else { $_num[2][] = $data[$y + 2][$x]; }</linea>
+        <linea>      if (!isset($data[$y + 3][$x])) { $_num[2][] = 0; } else { $_num[2][] = $data[$y + 3][$x]; }</linea>
+        <linea>      $_num[3] = array($data[$y][$x]);</linea>
+        <linea>      if (!isset($data[$y - 1][$x])) { $_num[3][] = 0; } else { $_num[3][] = $data[$y - 1][$x]; }</linea>
+        <linea>      if (!isset($data[$y - 2][$x])) { $_num[3][] = 0; } else { $_num[3][] = $data[$y - 2][$x]; }</linea>
+        <linea>      if (!isset($data[$y - 3][$x])) { $_num[3][] = 0; } else { $_num[3][] = $data[$y - 3][$x]; }</linea>
+        <linea>      // Diagonal position (top left to down right).</linea>
+        <linea>      $_num[4] = array($data[$y][$x]);</linea>
+        <linea>      if (!isset($data[$y + 1][$x + 1])) { $_num[4][] = 0; } else { $_num[4][] = $data[$y + 1][$x + 1]; }</linea>
+        <linea>      if (!isset($data[$y + 2][$x + 2])) { $_num[4][] = 0; } else { $_num[4][] = $data[$y + 2][$x + 2]; }</linea>
+        <linea>      if (!isset($data[$y + 3][$x + 3])) { $_num[4][] = 0; } else { $_num[4][] = $data[$y + 3][$x + 3]; }</linea>
+        <linea>      $_num[5] = array($data[$y][$x]);</linea>
+        <linea>      if (!isset($data[$y - 1][$x - 1])) { $_num[5][] = 0; } else { $_num[5][] = $data[$y - 1][$x - 1]; }</linea>
+        <linea>      if (!isset($data[$y - 2][$x - 2])) { $_num[5][] = 0; } else { $_num[5][] = $data[$y - 2][$x - 2]; }</linea>
+        <linea>      if (!isset($data[$y - 3][$x - 3])) { $_num[5][] = 0; } else { $_num[5][] = $data[$y - 3][$x - 3]; }</linea>
+        <linea>      // Diagonal position (top right to down left).</linea>
+        <linea>      $_num[6] = array($data[$y][$x]);</linea>
+        <linea>      if (!isset($data[$y + 1][$x - 1])) { $_num[6][] = 0; } else { $_num[6][] = $data[$y + 1][$x - 1]; }</linea>
+        <linea>      if (!isset($data[$y + 2][$x - 2])) { $_num[6][] = 0; } else { $_num[6][] = $data[$y + 2][$x - 2]; }</linea>
+        <linea>      if (!isset($data[$y + 3][$x - 3])) { $_num[6][] = 0; } else { $_num[6][] = $data[$y + 3][$x - 3]; }</linea>
+        <linea>      $_num[7] = array($data[$y][$x]);</linea>
+        <linea>      if (!isset($data[$y - 1][$x + 1])) { $_num[7][] = 0; } else { $_num[7][] = $data[$y - 1][$x + 1]; }</linea>
+        <linea>      if (!isset($data[$y - 2][$x + 2])) { $_num[7][] = 0; } else { $_num[7][] = $data[$y - 2][$x + 2]; }</linea>
+        <linea>      if (!isset($data[$y - 3][$x + 3])) { $_num[7][] = 0; } else { $_num[7][] = $data[$y - 3][$x + 3]; }</linea>
+        <linea/>
+        <linea>      foreach ($_num as $__num) {</linea>
+        <linea>        $_product = $__num[0] * $__num[1] * $__num[2] * $__num[3];</linea>
+        <linea>        if ($_product &gt; $greatest) {</linea>
+        <linea>          $greatest = $_product;</linea>
+        <linea>        }</linea>
+        <linea>      }</linea>
+        <linea>    }</linea>
+        <linea>  }</linea>
+        <linea>echo $greatest;</linea>
+        <linea>?&gt;</linea>
+      </codigo>
+    </solucion>
+  </ejercicio>
+  <ejercicio id="e12">
+    <enunciado>&lt;p&gt;La sucesión de &lt;span style="font-weight: bold;"&gt;números triangulares&lt;/span&gt; se genera sumando los números naturales. Por ejemplo el 7º número triangular sería 1 + 2 + 3 + 4 + 5 + 6 + 7 = 28. Los primeros 10 términos de esta secuencia son:&lt;/p&gt;&lt;p style="text-align:center;"&gt;1, 3, 6, 10, 15, 21, 28, 36, 45, 55, ...&lt;/p&gt;&lt;p&gt;La descomposición en factores de los primeros siete números triangulares es:&lt;/p&gt;&lt;blockquote style="font-family:courier new;"&gt;&lt;b&gt;&amp;nbsp;1&lt;/b&gt;: 1&lt;br&gt;&lt;b&gt;&amp;nbsp;3&lt;/b&gt;: 1,3&lt;br&gt;&lt;b&gt;&amp;nbsp;6&lt;/b&gt;: 1,2,3,6&lt;br&gt;&lt;b&gt;10&lt;/b&gt;: 1,2,5,10&lt;br&gt;&lt;b&gt;15&lt;/b&gt;: 1,3,5,15&lt;br&gt;&lt;b&gt;21&lt;/b&gt;: 1,3,7,21&lt;br&gt;&lt;b&gt;28&lt;/b&gt;: 1,2,4,7,14,28&lt;/blockquote&gt;&lt;p&gt;Podemos observar que el 28 es el primer número triangular con más de cinco divisores.&lt;/p&gt;&lt;p&gt;¿Cuál es el valor del primer número triangular en tener más de quinientos divisores?&lt;/p&gt;</enunciado>
+    <nivel_en>1</nivel_en>
+    <orientadoALenguaje>true</orientadoALenguaje>
+    <solucion>
+      <lenguaje>C</lenguaje>
+      <nivel_sol>1</nivel_sol>
+      <codigo>
+        <linea>#include &lt;stdio.h&gt;</linea>
+        <linea/>
+        <linea>static unsigned divisor_count(unsigned long n);</linea>
+        <linea/>
+        <linea>int main(void)</linea>
+        <linea>{</linea>
+        <linea>  unsigned long i = 1, n = 1;</linea>
+        <linea/>
+        <linea>  while (divisor_count(n) &lt; 500) {</linea>
+        <linea>    n += ++i;</linea>
+        <linea>  }</linea>
+        <linea>  printf("%lu\n", n);</linea>
+        <linea>  return 0;</linea>
+        <linea>}</linea>
+        <linea/>
+        <linea>unsigned divisor_count(unsigned long n)</linea>
+        <linea>{</linea>
+        <linea>  unsigned ret = 1;</linea>
+        <linea>  unsigned long i;</linea>
+        <linea/>
+        <linea>  for (i = 2; i &lt;= n; i++) {</linea>
+        <linea>    unsigned c = 0;</linea>
+        <linea>    while (n % i == 0) {</linea>
+        <linea>      c++;</linea>
+        <linea>      n /= i;</linea>
+        <linea>    }</linea>
+        <linea>    ret *= c+1;</linea>
+        <linea>  }</linea>
+        <linea>  return ret;</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>Java</lenguaje>
+      <nivel_sol>1</nivel_sol>
+      <codigo>
+        <linea>public final class e12 {</linea>
+        <linea>	</linea>
+        <linea>	public static void main(String[] args) {</linea>
+        <linea>		System.out.println(new e12().run());</linea>
+        <linea>	}</linea>
+        <linea>  </linea>
+        <linea>	public String run() {</linea>
+        <linea>		int num = 0;</linea>
+        <linea>		for (int i = 1; ; i++) {</linea>
+        <linea>			num += i;  // num es el número triangular i</linea>
+        <linea>			if (countDivisors(num) &gt; 500)</linea>
+        <linea>				return Integer.toString(num);</linea>
+        <linea>		}</linea>
+        <linea>	}</linea>
+        <linea>	</linea>
+        <linea>	private static int countDivisors(int n) {</linea>
+        <linea>		int count = 0;</linea>
+        <linea>		int end = Library.sqrt(n);</linea>
+        <linea>		for (int i = 1; i &lt; end; i++) {</linea>
+        <linea>			if (n % i == 0)</linea>
+        <linea>				count += 2;</linea>
+        <linea>		}</linea>
+        <linea>		if (end * end == n)  // Perfect square</linea>
+        <linea>			count++;</linea>
+        <linea>		return count;</linea>
+        <linea>	}	</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>Python</lenguaje>
+      <nivel_sol>1</nivel_sol>
+      <codigo>
+        <linea>import prime</linea>
+        <linea/>
+        <linea>for i in xrange(1, 1000000000):</linea>
+        <linea>    n = i * (i+1) / 2</linea>
+        <linea>    if prime.num_factors(n) &gt; 500:</linea>
+        <linea>        print n</linea>
+        <linea>        break</linea>
+      </codigo>
+    </solucion>
+  </ejercicio>
+  <ejercicio id="e13">
+    <enunciado>&lt;p&gt;Imprime los primeros diez dígitos de la suma de los siguientes cien números de 50 dígitos cada uno.&lt;/p&gt;&lt;div style="text-align: center;"&gt;&lt;span style="font-family: Courier New;"&gt;37107287533902102798797998220837590246510135740250&lt;br&gt;46376937677490009712648124896970078050417018260538&lt;br&gt;74324986199524741059474233309513058123726617309629&lt;br&gt;91942213363574161572522430563301811072406154908250&lt;br&gt;23067588207539346171171980310421047513778063246676&lt;br&gt;89261670696623633820136378418383684178734361726757&lt;br&gt;28112879812849979408065481931592621691275889832738&lt;br&gt;44274228917432520321923589422876796487670272189318&lt;br&gt;47451445736001306439091167216856844588711603153276&lt;br&gt;70386486105843025439939619828917593665686757934951&lt;br&gt;62176457141856560629502157223196586755079324193331&lt;br&gt;64906352462741904929101432445813822663347944758178&lt;br&gt;92575867718337217661963751590579239728245598838407&lt;br&gt;58203565325359399008402633568948830189458628227828&lt;br&gt;80181199384826282014278194139940567587151170094390&lt;br&gt;35398664372827112653829987240784473053190104293586&lt;br&gt;86515506006295864861532075273371959191420517255829&lt;br&gt;71693888707715466499115593487603532921714970056938&lt;br&gt;54370070576826684624621495650076471787294438377604&lt;br&gt;53282654108756828443191190634694037855217779295145&lt;br&gt;36123272525000296071075082563815656710885258350721&lt;br&gt;45876576172410976447339110607218265236877223636045&lt;br&gt;17423706905851860660448207621209813287860733969412&lt;br&gt;81142660418086830619328460811191061556940512689692&lt;br&gt;51934325451728388641918047049293215058642563049483&lt;br&gt;62467221648435076201727918039944693004732956340691&lt;br&gt;15732444386908125794514089057706229429197107928209&lt;br&gt;55037687525678773091862540744969844508330393682126&lt;br&gt;18336384825330154686196124348767681297534375946515&lt;br&gt;80386287592878490201521685554828717201219257766954&lt;br&gt;78182833757993103614740356856449095527097864797581&lt;br&gt;16726320100436897842553539920931837441497806860984&lt;br&gt;48403098129077791799088218795327364475675590848030&lt;br&gt;87086987551392711854517078544161852424320693150332&lt;br&gt;59959406895756536782107074926966537676326235447210&lt;br&gt;69793950679652694742597709739166693763042633987085&lt;br&gt;41052684708299085211399427365734116182760315001271&lt;br&gt;65378607361501080857009149939512557028198746004375&lt;br&gt;35829035317434717326932123578154982629742552737307&lt;br&gt;94953759765105305946966067683156574377167401875275&lt;br&gt;88902802571733229619176668713819931811048770190271&lt;br&gt;25267680276078003013678680992525463401061632866526&lt;br&gt;36270218540497705585629946580636237993140746255962&lt;br&gt;24074486908231174977792365466257246923322810917141&lt;br&gt;91430288197103288597806669760892938638285025333403&lt;br&gt;34413065578016127815921815005561868836468420090470&lt;br&gt;23053081172816430487623791969842487255036638784583&lt;br&gt;11487696932154902810424020138335124462181441773470&lt;br&gt;63783299490636259666498587618221225225512486764533&lt;br&gt;67720186971698544312419572409913959008952310058822&lt;br&gt;95548255300263520781532296796249481641953868218774&lt;br&gt;76085327132285723110424803456124867697064507995236&lt;br&gt;37774242535411291684276865538926205024910326572967&lt;br&gt;23701913275725675285653248258265463092207058596522&lt;br&gt;29798860272258331913126375147341994889534765745501&lt;br&gt;18495701454879288984856827726077713721403798879715&lt;br&gt;38298203783031473527721580348144513491373226651381&lt;br&gt;34829543829199918180278916522431027392251122869539&lt;br&gt;40957953066405232632538044100059654939159879593635&lt;br&gt;29746152185502371307642255121183693803580388584903&lt;br&gt;41698116222072977186158236678424689157993532961922&lt;br&gt;62467957194401269043877107275048102390895523597457&lt;br&gt;23189706772547915061505504953922979530901129967519&lt;br&gt;86188088225875314529584099251203829009407770775672&lt;br&gt;11306739708304724483816533873502340845647058077308&lt;br&gt;82959174767140363198008187129011875491310547126581&lt;br&gt;97623331044818386269515456334926366572897563400500&lt;br&gt;42846280183517070527831839425882145521227251250327&lt;br&gt;55121603546981200581762165212827652751691296897789&lt;br&gt;32238195734329339946437501907836945765883352399886&lt;br&gt;75506164965184775180738168837861091527357929701337&lt;br&gt;62177842752192623401942399639168044983993173312731&lt;br&gt;32924185707147349566916674687634660915035914677504&lt;br&gt;99518671430235219628894890102423325116913619626622&lt;br&gt;73267460800591547471830798392868535206946944540724&lt;br&gt;76841822524674417161514036427982273348055556214818&lt;br&gt;97142617910342598647204516893989422179826088076852&lt;br&gt;87783646182799346313767754307809363333018982642090&lt;br&gt;10848802521674670883215120185883543223812876952786&lt;br&gt;71329612474782464538636993009049310363619763878039&lt;br&gt;62184073572399794223406235393808339651327408011116&lt;br&gt;66627891981488087797941876876144230030984490851411&lt;br&gt;60661826293682836764744779239180335110989069790714&lt;br&gt;85786944089552990653640447425576083659976645795096&lt;br&gt;66024396409905389607120198219976047599490197230297&lt;br&gt;64913982680032973156037120041377903785566085089252&lt;br&gt;16730939319872750275468906903707539413042652315011&lt;br&gt;94809377245048795150954100921645863754710598436791&lt;br&gt;78639167021187492431995700641917969777599028300699&lt;br&gt;15368713711936614952811305876380278410754449733078&lt;br&gt;40789923115535562561142322423255033685442488917353&lt;br&gt;44889911501440648020369068063960672322193204149535&lt;br&gt;41503128880339536053299340368006977710650566631954&lt;br&gt;81234880673210146739058568557934581403627822703280&lt;br&gt;82616570773948327592232845941706525094512325230608&lt;br&gt;22918802058777319719839450180888072429661980811197&lt;br&gt;77158542502016545090413245809786882778948721859617&lt;br&gt;72107838435069186155435662884062257473692284509516&lt;br&gt;20849603980134001723930671666823555245252804609722&lt;br&gt;53503534226472524250874054075591789781264330331690&lt;/span&gt;&lt;/div&gt;</enunciado>
+    <nivel_en>1</nivel_en>
+    <orientadoALenguaje>true</orientadoALenguaje>
+    <solucion>
+      <lenguaje>Java</lenguaje>
+      <nivel_sol>1</nivel_sol>
+      <codigo>
+        <linea>import java.math.BigInteger;</linea>
+        <linea/>
+        <linea>public final class e13 {</linea>
+        <linea>	</linea>
+        <linea>	public static void main(String[] args) {</linea>
+        <linea>		System.out.println(new e13().run());</linea>
+        <linea>	}</linea>
+        <linea>	</linea>
+        <linea>	public String run() {</linea>
+        <linea>		BigInteger sum = BigInteger.ZERO;</linea>
+        <linea>		for (String num : NUMBERS)</linea>
+        <linea>			sum = sum.add(new BigInteger(num));</linea>
+        <linea>		return sum.toString().substring(0, 10);</linea>
+        <linea>	}</linea>
+        <linea>		</linea>
+        <linea>	private static String[] NUMBERS = {</linea>
+        <linea>		"37107287533902102798797998220837590246510135740250",</linea>
+        <linea>		"46376937677490009712648124896970078050417018260538",</linea>
+        <linea>		"74324986199524741059474233309513058123726617309629",</linea>
+        <linea>		"91942213363574161572522430563301811072406154908250",</linea>
+        <linea>		"23067588207539346171171980310421047513778063246676",</linea>
+        <linea>		"89261670696623633820136378418383684178734361726757",</linea>
+        <linea>		"28112879812849979408065481931592621691275889832738",</linea>
+        <linea>		"44274228917432520321923589422876796487670272189318",</linea>
+        <linea>		"47451445736001306439091167216856844588711603153276",</linea>
+        <linea>		"70386486105843025439939619828917593665686757934951",</linea>
+        <linea>		"62176457141856560629502157223196586755079324193331",</linea>
+        <linea>		"64906352462741904929101432445813822663347944758178",</linea>
+        <linea>		"92575867718337217661963751590579239728245598838407",</linea>
+        <linea>		"58203565325359399008402633568948830189458628227828",</linea>
+        <linea>		"80181199384826282014278194139940567587151170094390",</linea>
+        <linea>		"35398664372827112653829987240784473053190104293586",</linea>
+        <linea>		"86515506006295864861532075273371959191420517255829",</linea>
+        <linea>		"71693888707715466499115593487603532921714970056938",</linea>
+        <linea>		"54370070576826684624621495650076471787294438377604",</linea>
+        <linea>		"53282654108756828443191190634694037855217779295145",</linea>
+        <linea>		"36123272525000296071075082563815656710885258350721",</linea>
+        <linea>		"45876576172410976447339110607218265236877223636045",</linea>
+        <linea>		"17423706905851860660448207621209813287860733969412",</linea>
+        <linea>		"81142660418086830619328460811191061556940512689692",</linea>
+        <linea>		"51934325451728388641918047049293215058642563049483",</linea>
+        <linea>		"62467221648435076201727918039944693004732956340691",</linea>
+        <linea>		"15732444386908125794514089057706229429197107928209",</linea>
+        <linea>		"55037687525678773091862540744969844508330393682126",</linea>
+        <linea>		"18336384825330154686196124348767681297534375946515",</linea>
+        <linea>		"80386287592878490201521685554828717201219257766954",</linea>
+        <linea>		"78182833757993103614740356856449095527097864797581",</linea>
+        <linea>		"16726320100436897842553539920931837441497806860984",</linea>
+        <linea>		"48403098129077791799088218795327364475675590848030",</linea>
+        <linea>		"87086987551392711854517078544161852424320693150332",</linea>
+        <linea>		"59959406895756536782107074926966537676326235447210",</linea>
+        <linea>		"69793950679652694742597709739166693763042633987085",</linea>
+        <linea>		"41052684708299085211399427365734116182760315001271",</linea>
+        <linea>		"65378607361501080857009149939512557028198746004375",</linea>
+        <linea>		"35829035317434717326932123578154982629742552737307",</linea>
+        <linea>		"94953759765105305946966067683156574377167401875275",</linea>
+        <linea>		"88902802571733229619176668713819931811048770190271",</linea>
+        <linea>		"25267680276078003013678680992525463401061632866526",</linea>
+        <linea>		"36270218540497705585629946580636237993140746255962",</linea>
+        <linea>		"24074486908231174977792365466257246923322810917141",</linea>
+        <linea>		"91430288197103288597806669760892938638285025333403",</linea>
+        <linea>		"34413065578016127815921815005561868836468420090470",</linea>
+        <linea>		"23053081172816430487623791969842487255036638784583",</linea>
+        <linea>		"11487696932154902810424020138335124462181441773470",</linea>
+        <linea>		"63783299490636259666498587618221225225512486764533",</linea>
+        <linea>		"67720186971698544312419572409913959008952310058822",</linea>
+        <linea>		"95548255300263520781532296796249481641953868218774",</linea>
+        <linea>		"76085327132285723110424803456124867697064507995236",</linea>
+        <linea>		"37774242535411291684276865538926205024910326572967",</linea>
+        <linea>		"23701913275725675285653248258265463092207058596522",</linea>
+        <linea>		"29798860272258331913126375147341994889534765745501",</linea>
+        <linea>		"18495701454879288984856827726077713721403798879715",</linea>
+        <linea>		"38298203783031473527721580348144513491373226651381",</linea>
+        <linea>		"34829543829199918180278916522431027392251122869539",</linea>
+        <linea>		"40957953066405232632538044100059654939159879593635",</linea>
+        <linea>		"29746152185502371307642255121183693803580388584903",</linea>
+        <linea>		"41698116222072977186158236678424689157993532961922",</linea>
+        <linea>		"62467957194401269043877107275048102390895523597457",</linea>
+        <linea>		"23189706772547915061505504953922979530901129967519",</linea>
+        <linea>		"86188088225875314529584099251203829009407770775672",</linea>
+        <linea>		"11306739708304724483816533873502340845647058077308",</linea>
+        <linea>		"82959174767140363198008187129011875491310547126581",</linea>
+        <linea>		"97623331044818386269515456334926366572897563400500",</linea>
+        <linea>		"42846280183517070527831839425882145521227251250327",</linea>
+        <linea>		"55121603546981200581762165212827652751691296897789",</linea>
+        <linea>		"32238195734329339946437501907836945765883352399886",</linea>
+        <linea>		"75506164965184775180738168837861091527357929701337",</linea>
+        <linea>		"62177842752192623401942399639168044983993173312731",</linea>
+        <linea>		"32924185707147349566916674687634660915035914677504",</linea>
+        <linea>		"99518671430235219628894890102423325116913619626622",</linea>
+        <linea>		"73267460800591547471830798392868535206946944540724",</linea>
+        <linea>		"76841822524674417161514036427982273348055556214818",</linea>
+        <linea>		"97142617910342598647204516893989422179826088076852",</linea>
+        <linea>		"87783646182799346313767754307809363333018982642090",</linea>
+        <linea>		"10848802521674670883215120185883543223812876952786",</linea>
+        <linea>		"71329612474782464538636993009049310363619763878039",</linea>
+        <linea>		"62184073572399794223406235393808339651327408011116",</linea>
+        <linea>		"66627891981488087797941876876144230030984490851411",</linea>
+        <linea>		"60661826293682836764744779239180335110989069790714",</linea>
+        <linea>		"85786944089552990653640447425576083659976645795096",</linea>
+        <linea>		"66024396409905389607120198219976047599490197230297",</linea>
+        <linea>		"64913982680032973156037120041377903785566085089252",</linea>
+        <linea>		"16730939319872750275468906903707539413042652315011",</linea>
+        <linea>		"94809377245048795150954100921645863754710598436791",</linea>
+        <linea>		"78639167021187492431995700641917969777599028300699",</linea>
+        <linea>		"15368713711936614952811305876380278410754449733078",</linea>
+        <linea>		"40789923115535562561142322423255033685442488917353",</linea>
+        <linea>		"44889911501440648020369068063960672322193204149535",</linea>
+        <linea>		"41503128880339536053299340368006977710650566631954",</linea>
+        <linea>		"81234880673210146739058568557934581403627822703280",</linea>
+        <linea>		"82616570773948327592232845941706525094512325230608",</linea>
+        <linea>		"22918802058777319719839450180888072429661980811197",</linea>
+        <linea>		"77158542502016545090413245809786882778948721859617",</linea>
+        <linea>		"72107838435069186155435662884062257473692284509516",</linea>
+        <linea>		"20849603980134001723930671666823555245252804609722",</linea>
+        <linea>		"53503534226472524250874054075591789781264330331690",</linea>
+        <linea>	};</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>C</lenguaje>
+      <nivel_sol>1</nivel_sol>
+      <codigo>
+        <linea>#include &lt;stdio.h&gt;</linea>
+        <linea>#include &lt;stdlib.h&gt;</linea>
+        <linea>#include &lt;gmp.h&gt;</linea>
+        <linea/>
+        <linea>#define N 100</linea>
+        <linea/>
+        <linea>int main(void)</linea>
+        <linea>{</linea>
+        <linea>  char digits[][N] = {</linea>
+        <linea>    "37107287533902102798797998220837590246510135740250",</linea>
+        <linea>    "46376937677490009712648124896970078050417018260538",</linea>
+        <linea>    "74324986199524741059474233309513058123726617309629",</linea>
+        <linea>    "91942213363574161572522430563301811072406154908250",</linea>
+        <linea>    "23067588207539346171171980310421047513778063246676",</linea>
+        <linea>    "89261670696623633820136378418383684178734361726757",</linea>
+        <linea>    "28112879812849979408065481931592621691275889832738",</linea>
+        <linea>    "44274228917432520321923589422876796487670272189318",</linea>
+        <linea>    "47451445736001306439091167216856844588711603153276",</linea>
+        <linea>    "70386486105843025439939619828917593665686757934951",</linea>
+        <linea>    "62176457141856560629502157223196586755079324193331",</linea>
+        <linea>    "64906352462741904929101432445813822663347944758178",</linea>
+        <linea>    "92575867718337217661963751590579239728245598838407",</linea>
+        <linea>    "58203565325359399008402633568948830189458628227828",</linea>
+        <linea>    "80181199384826282014278194139940567587151170094390",</linea>
+        <linea>    "35398664372827112653829987240784473053190104293586",</linea>
+        <linea>    "86515506006295864861532075273371959191420517255829",</linea>
+        <linea>    "71693888707715466499115593487603532921714970056938",</linea>
+        <linea>    "54370070576826684624621495650076471787294438377604",</linea>
+        <linea>    "53282654108756828443191190634694037855217779295145",</linea>
+        <linea>    "36123272525000296071075082563815656710885258350721",</linea>
+        <linea>    "45876576172410976447339110607218265236877223636045",</linea>
+        <linea>    "17423706905851860660448207621209813287860733969412",</linea>
+        <linea>    "81142660418086830619328460811191061556940512689692",</linea>
+        <linea>    "51934325451728388641918047049293215058642563049483",</linea>
+        <linea>    "62467221648435076201727918039944693004732956340691",</linea>
+        <linea>    "15732444386908125794514089057706229429197107928209",</linea>
+        <linea>    "55037687525678773091862540744969844508330393682126",</linea>
+        <linea>    "18336384825330154686196124348767681297534375946515",</linea>
+        <linea>    "80386287592878490201521685554828717201219257766954",</linea>
+        <linea>    "78182833757993103614740356856449095527097864797581",</linea>
+        <linea>    "16726320100436897842553539920931837441497806860984",</linea>
+        <linea>    "48403098129077791799088218795327364475675590848030",</linea>
+        <linea>    "87086987551392711854517078544161852424320693150332",</linea>
+        <linea>    "59959406895756536782107074926966537676326235447210",</linea>
+        <linea>    "69793950679652694742597709739166693763042633987085",</linea>
+        <linea>    "41052684708299085211399427365734116182760315001271",</linea>
+        <linea>    "65378607361501080857009149939512557028198746004375",</linea>
+        <linea>    "35829035317434717326932123578154982629742552737307",</linea>
+        <linea>    "94953759765105305946966067683156574377167401875275",</linea>
+        <linea>    "88902802571733229619176668713819931811048770190271",</linea>
+        <linea>    "25267680276078003013678680992525463401061632866526",</linea>
+        <linea>    "36270218540497705585629946580636237993140746255962",</linea>
+        <linea>    "24074486908231174977792365466257246923322810917141",</linea>
+        <linea>    "91430288197103288597806669760892938638285025333403",</linea>
+        <linea>    "34413065578016127815921815005561868836468420090470",</linea>
+        <linea>    "23053081172816430487623791969842487255036638784583",</linea>
+        <linea>    "11487696932154902810424020138335124462181441773470",</linea>
+        <linea>    "63783299490636259666498587618221225225512486764533",</linea>
+        <linea>    "67720186971698544312419572409913959008952310058822",</linea>
+        <linea>    "95548255300263520781532296796249481641953868218774",</linea>
+        <linea>    "76085327132285723110424803456124867697064507995236",</linea>
+        <linea>    "37774242535411291684276865538926205024910326572967",</linea>
+        <linea>    "23701913275725675285653248258265463092207058596522",</linea>
+        <linea>    "29798860272258331913126375147341994889534765745501",</linea>
+        <linea>    "18495701454879288984856827726077713721403798879715",</linea>
+        <linea>    "38298203783031473527721580348144513491373226651381",</linea>
+        <linea>    "34829543829199918180278916522431027392251122869539",</linea>
+        <linea>    "40957953066405232632538044100059654939159879593635",</linea>
+        <linea>    "29746152185502371307642255121183693803580388584903",</linea>
+        <linea>    "41698116222072977186158236678424689157993532961922",</linea>
+        <linea>    "62467957194401269043877107275048102390895523597457",</linea>
+        <linea>    "23189706772547915061505504953922979530901129967519",</linea>
+        <linea>    "86188088225875314529584099251203829009407770775672",</linea>
+        <linea>    "11306739708304724483816533873502340845647058077308",</linea>
+        <linea>    "82959174767140363198008187129011875491310547126581",</linea>
+        <linea>    "97623331044818386269515456334926366572897563400500",</linea>
+        <linea>    "42846280183517070527831839425882145521227251250327",</linea>
+        <linea>    "55121603546981200581762165212827652751691296897789",</linea>
+        <linea>    "32238195734329339946437501907836945765883352399886",</linea>
+        <linea>    "75506164965184775180738168837861091527357929701337",</linea>
+        <linea>    "62177842752192623401942399639168044983993173312731",</linea>
+        <linea>    "32924185707147349566916674687634660915035914677504",</linea>
+        <linea>    "99518671430235219628894890102423325116913619626622",</linea>
+        <linea>    "73267460800591547471830798392868535206946944540724",</linea>
+        <linea>    "76841822524674417161514036427982273348055556214818",</linea>
+        <linea>    "97142617910342598647204516893989422179826088076852",</linea>
+        <linea>    "87783646182799346313767754307809363333018982642090",</linea>
+        <linea>    "10848802521674670883215120185883543223812876952786",</linea>
+        <linea>    "71329612474782464538636993009049310363619763878039",</linea>
+        <linea>    "62184073572399794223406235393808339651327408011116",</linea>
+        <linea>    "66627891981488087797941876876144230030984490851411",</linea>
+        <linea>    "60661826293682836764744779239180335110989069790714",</linea>
+        <linea>    "85786944089552990653640447425576083659976645795096",</linea>
+        <linea>    "66024396409905389607120198219976047599490197230297",</linea>
+        <linea>    "64913982680032973156037120041377903785566085089252",</linea>
+        <linea>    "16730939319872750275468906903707539413042652315011",</linea>
+        <linea>    "94809377245048795150954100921645863754710598436791",</linea>
+        <linea>    "78639167021187492431995700641917969777599028300699",</linea>
+        <linea>    "15368713711936614952811305876380278410754449733078",</linea>
+        <linea>    "40789923115535562561142322423255033685442488917353",</linea>
+        <linea>    "44889911501440648020369068063960672322193204149535",</linea>
+        <linea>    "41503128880339536053299340368006977710650566631954",</linea>
+        <linea>    "81234880673210146739058568557934581403627822703280",</linea>
+        <linea>    "82616570773948327592232845941706525094512325230608",</linea>
+        <linea>    "22918802058777319719839450180888072429661980811197",</linea>
+        <linea>    "77158542502016545090413245809786882778948721859617",</linea>
+        <linea>    "72107838435069186155435662884062257473692284509516",</linea>
+        <linea>    "20849603980134001723930671666823555245252804609722",</linea>
+        <linea>    "53503534226472524250874054075591789781264330331690",</linea>
+        <linea>  };</linea>
+        <linea>  </linea>
+        <linea>  int i;</linea>
+        <linea>  char *str;</linea>
+        <linea>  mpz_t sum, t;</linea>
+        <linea/>
+        <linea>  mpz_init_set_ui(sum, 0);</linea>
+        <linea>  mpz_init(t);</linea>
+        <linea>  for (i = 0; i &lt; N; i++) {</linea>
+        <linea>    mpz_set_str(t, digits[i], 10);</linea>
+        <linea>    mpz_add(sum, sum, t);</linea>
+        <linea>  }</linea>
+        <linea/>
+        <linea>  str = mpz_get_str(NULL, 10, sum);</linea>
+        <linea>  str[10] = 0;</linea>
+        <linea>  puts(str);</linea>
+        <linea/>
+        <linea>  free(str);</linea>
+        <linea>  mpz_clear(sum);</linea>
+        <linea>  mpz_clear(t);</linea>
+        <linea/>
+        <linea>  return 0;</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>Python</lenguaje>
+      <nivel_sol>1</nivel_sol>
+      <codigo>
+        <linea>print str(sum((</linea>
+        <linea>    37107287533902102798797998220837590246510135740250,</linea>
+        <linea>    46376937677490009712648124896970078050417018260538,</linea>
+        <linea>    74324986199524741059474233309513058123726617309629,</linea>
+        <linea>    91942213363574161572522430563301811072406154908250,</linea>
+        <linea>    23067588207539346171171980310421047513778063246676,</linea>
+        <linea>    89261670696623633820136378418383684178734361726757,</linea>
+        <linea>    28112879812849979408065481931592621691275889832738,</linea>
+        <linea>    44274228917432520321923589422876796487670272189318,</linea>
+        <linea>    47451445736001306439091167216856844588711603153276,</linea>
+        <linea>    70386486105843025439939619828917593665686757934951,</linea>
+        <linea>    62176457141856560629502157223196586755079324193331,</linea>
+        <linea>    64906352462741904929101432445813822663347944758178,</linea>
+        <linea>    92575867718337217661963751590579239728245598838407,</linea>
+        <linea>    58203565325359399008402633568948830189458628227828,</linea>
+        <linea>    80181199384826282014278194139940567587151170094390,</linea>
+        <linea>    35398664372827112653829987240784473053190104293586,</linea>
+        <linea>    86515506006295864861532075273371959191420517255829,</linea>
+        <linea>    71693888707715466499115593487603532921714970056938,</linea>
+        <linea>    54370070576826684624621495650076471787294438377604,</linea>
+        <linea>    53282654108756828443191190634694037855217779295145,</linea>
+        <linea>    36123272525000296071075082563815656710885258350721,</linea>
+        <linea>    45876576172410976447339110607218265236877223636045,</linea>
+        <linea>    17423706905851860660448207621209813287860733969412,</linea>
+        <linea>    81142660418086830619328460811191061556940512689692,</linea>
+        <linea>    51934325451728388641918047049293215058642563049483,</linea>
+        <linea>    62467221648435076201727918039944693004732956340691,</linea>
+        <linea>    15732444386908125794514089057706229429197107928209,</linea>
+        <linea>    55037687525678773091862540744969844508330393682126,</linea>
+        <linea>    18336384825330154686196124348767681297534375946515,</linea>
+        <linea>    80386287592878490201521685554828717201219257766954,</linea>
+        <linea>    78182833757993103614740356856449095527097864797581,</linea>
+        <linea>    16726320100436897842553539920931837441497806860984,</linea>
+        <linea>    48403098129077791799088218795327364475675590848030,</linea>
+        <linea>    87086987551392711854517078544161852424320693150332,</linea>
+        <linea>    59959406895756536782107074926966537676326235447210,</linea>
+        <linea>    69793950679652694742597709739166693763042633987085,</linea>
+        <linea>    41052684708299085211399427365734116182760315001271,</linea>
+        <linea>    65378607361501080857009149939512557028198746004375,</linea>
+        <linea>    35829035317434717326932123578154982629742552737307,</linea>
+        <linea>    94953759765105305946966067683156574377167401875275,</linea>
+        <linea>    88902802571733229619176668713819931811048770190271,</linea>
+        <linea>    25267680276078003013678680992525463401061632866526,</linea>
+        <linea>    36270218540497705585629946580636237993140746255962,</linea>
+        <linea>    24074486908231174977792365466257246923322810917141,</linea>
+        <linea>    91430288197103288597806669760892938638285025333403,</linea>
+        <linea>    34413065578016127815921815005561868836468420090470,</linea>
+        <linea>    23053081172816430487623791969842487255036638784583,</linea>
+        <linea>    11487696932154902810424020138335124462181441773470,</linea>
+        <linea>    63783299490636259666498587618221225225512486764533,</linea>
+        <linea>    67720186971698544312419572409913959008952310058822,</linea>
+        <linea>    95548255300263520781532296796249481641953868218774,</linea>
+        <linea>    76085327132285723110424803456124867697064507995236,</linea>
+        <linea>    37774242535411291684276865538926205024910326572967,</linea>
+        <linea>    23701913275725675285653248258265463092207058596522,</linea>
+        <linea>    29798860272258331913126375147341994889534765745501,</linea>
+        <linea>    18495701454879288984856827726077713721403798879715,</linea>
+        <linea>    38298203783031473527721580348144513491373226651381,</linea>
+        <linea>    34829543829199918180278916522431027392251122869539,</linea>
+        <linea>    40957953066405232632538044100059654939159879593635,</linea>
+        <linea>    29746152185502371307642255121183693803580388584903,</linea>
+        <linea>    41698116222072977186158236678424689157993532961922,</linea>
+        <linea>    62467957194401269043877107275048102390895523597457,</linea>
+        <linea>    23189706772547915061505504953922979530901129967519,</linea>
+        <linea>    86188088225875314529584099251203829009407770775672,</linea>
+        <linea>    11306739708304724483816533873502340845647058077308,</linea>
+        <linea>    82959174767140363198008187129011875491310547126581,</linea>
+        <linea>    97623331044818386269515456334926366572897563400500,</linea>
+        <linea>    42846280183517070527831839425882145521227251250327,</linea>
+        <linea>    55121603546981200581762165212827652751691296897789,</linea>
+        <linea>    32238195734329339946437501907836945765883352399886,</linea>
+        <linea>    75506164965184775180738168837861091527357929701337,</linea>
+        <linea>    62177842752192623401942399639168044983993173312731,</linea>
+        <linea>    32924185707147349566916674687634660915035914677504,</linea>
+        <linea>    99518671430235219628894890102423325116913619626622,</linea>
+        <linea>    73267460800591547471830798392868535206946944540724,</linea>
+        <linea>    76841822524674417161514036427982273348055556214818,</linea>
+        <linea>    97142617910342598647204516893989422179826088076852,</linea>
+        <linea>    87783646182799346313767754307809363333018982642090,</linea>
+        <linea>    10848802521674670883215120185883543223812876952786,</linea>
+        <linea>    71329612474782464538636993009049310363619763878039,</linea>
+        <linea>    62184073572399794223406235393808339651327408011116,</linea>
+        <linea>    66627891981488087797941876876144230030984490851411,</linea>
+        <linea>    60661826293682836764744779239180335110989069790714,</linea>
+        <linea>    85786944089552990653640447425576083659976645795096,</linea>
+        <linea>    66024396409905389607120198219976047599490197230297,</linea>
+        <linea>    64913982680032973156037120041377903785566085089252,</linea>
+        <linea>    16730939319872750275468906903707539413042652315011,</linea>
+        <linea>    94809377245048795150954100921645863754710598436791,</linea>
+        <linea>    78639167021187492431995700641917969777599028300699,</linea>
+        <linea>    15368713711936614952811305876380278410754449733078,</linea>
+        <linea>    40789923115535562561142322423255033685442488917353,</linea>
+        <linea>    44889911501440648020369068063960672322193204149535,</linea>
+        <linea>    41503128880339536053299340368006977710650566631954,</linea>
+        <linea>    81234880673210146739058568557934581403627822703280,</linea>
+        <linea>    82616570773948327592232845941706525094512325230608,</linea>
+        <linea>    22918802058777319719839450180888072429661980811197,</linea>
+        <linea>    77158542502016545090413245809786882778948721859617,</linea>
+        <linea>    72107838435069186155435662884062257473692284509516,</linea>
+        <linea>    20849603980134001723930671666823555245252804609722,</linea>
+        <linea>    53503534226472524250874054075591789781264330331690,</linea>
+        <linea>)))[0:10]</linea>
+      </codigo>
+    </solucion>
+  </ejercicio>
+  <ejercicio id="e14">
+    <enunciado>&lt;p&gt;La sucesión iterativa mostrada está definida para el conjunto de los números enteros positivos:&lt;/p&gt;&lt;p style="margin-left:50px;"&gt;&lt;var&gt;n&lt;/var&gt; → &lt;var&gt;n&lt;/var&gt;/2 (&lt;var&gt;n&lt;/var&gt; par)&lt;br&gt;&lt;var&gt;n&lt;/var&gt; → 3&lt;var&gt;n&lt;/var&gt; + 1 (&lt;var&gt;n&lt;/var&gt; impar)&lt;/p&gt;&lt;p&gt;Utilizando la regla anterior y empezando con el número 13, se genera la siguiente secuencia:&lt;/p&gt;&lt;div style="text-align:center;"&gt;13 → 40 → 20 → 10 → 5 → 16 → 8 → 4 → 2 → 1&lt;/div&gt;&lt;p&gt;Se puede ver que esta secuencia contiene 10 términos. Aunque no ha sido demostrado todavía, se cree que para cualquier número inicial la secuencia siempre acabará en el 1.&lt;br&gt;&lt;/p&gt;&lt;p&gt;¿Qué numero inicial, menor que un millón, produce la secuencia más larga (la secuencia con más términos)?&lt;/p&gt;&lt;p&gt;&lt;b&gt;NOTA:&lt;/b&gt; Una vez comenzada la secuencia se permite que sus términos sean mayor que un millón.&lt;/p&gt;</enunciado>
+    <nivel_en>1</nivel_en>
+    <orientadoALenguaje>true</orientadoALenguaje>
+    <solucion>
+      <lenguaje>Java</lenguaje>
+      <nivel_sol>2</nivel_sol>
+      <codigo>
+        <linea>import java.math.BigInteger;</linea>
+        <linea/>
+        <linea>public final class e14 {</linea>
+        <linea>	</linea>
+        <linea>	public static void main(String[] args) {</linea>
+        <linea>		System.out.println(new e14().run());</linea>
+        <linea>	}	</linea>
+        <linea>	</linea>
+        <linea>	private static final int LIMIT = Library.pow(10, 6);</linea>
+        <linea>	private static final BigInteger CACHE_SIZE = BigInteger.valueOf(LIMIT);  // Cualquier entero no negativo</linea>
+        <linea>		</linea>
+        <linea>	public String run() {</linea>
+        <linea>		int maxArg = -1;</linea>
+        <linea>		int maxChain = 0;</linea>
+        <linea>		for (int i = 1; i &lt; LIMIT; i++) {</linea>
+        <linea>			int chainLen = collatzChainLength(BigInteger.valueOf(i));</linea>
+        <linea>			if (chainLen &gt; maxChain) {</linea>
+        <linea>				maxArg = i;</linea>
+        <linea>				maxChain = chainLen;</linea>
+        <linea>			}</linea>
+        <linea>		}</linea>
+        <linea>		return Integer.toString(maxArg);</linea>
+        <linea>	}</linea>
+        <linea>	</linea>
+        <linea>	// Memoization</linea>
+        <linea>	private int[] collatzChainLength = new int[CACHE_SIZE.intValue()];</linea>
+        <linea>	</linea>
+        <linea>	private int collatzChainLength(BigInteger n) {</linea>
+        <linea>		if (n.signum() &lt; 0)</linea>
+        <linea>			throw new IllegalArgumentException();</linea>
+        <linea>		</linea>
+        <linea>		if (n.compareTo(CACHE_SIZE) &gt;= 0)  // Caché no disponible</linea>
+        <linea>			return collatzChainLengthDirect(n);</linea>
+        <linea>		</linea>
+        <linea>		int index = n.intValue();  // index está en caché</linea>
+        <linea>		if (collatzChainLength[index] == 0)</linea>
+        <linea>			collatzChainLength[index] = collatzChainLengthDirect(n);</linea>
+        <linea>		return collatzChainLength[index];</linea>
+        <linea>	}</linea>
+        <linea>		</linea>
+        <linea>	private int collatzChainLengthDirect(BigInteger n) {</linea>
+        <linea>		if (n.equals(BigInteger.ONE))  // Caso base</linea>
+        <linea>			return 1;</linea>
+        <linea>		else if (!n.testBit(0))  // Si n es par</linea>
+        <linea>			return collatzChainLength(n.shiftRight(1)) + 1;</linea>
+        <linea>		else  // Si n es impar</linea>
+        <linea>			return collatzChainLength(n.multiply(BigInteger.valueOf(3)).add(BigInteger.ONE)) + 1;</linea>
+        <linea>	}	</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>C</lenguaje>
+      <nivel_sol>1</nivel_sol>
+      <codigo>
+        <linea>#include &lt;stdio.h&gt;</linea>
+        <linea/>
+        <linea>static unsigned collatz_count(unsigned n);</linea>
+        <linea/>
+        <linea>int main(void)</linea>
+        <linea>{</linea>
+        <linea>  unsigned i, max_c = 0, max_i = 0;</linea>
+        <linea/>
+        <linea>  for (i = 1; i &lt; 1000000; i++) {</linea>
+        <linea>    unsigned c = collatz_count(i);</linea>
+        <linea>    if (c &gt; max_c) {</linea>
+        <linea>      max_c = c;</linea>
+        <linea>      max_i = i;</linea>
+        <linea>    }</linea>
+        <linea>  }</linea>
+        <linea>  printf("%u\n", max_i);</linea>
+        <linea>  return 0;</linea>
+        <linea>}</linea>
+        <linea/>
+        <linea>unsigned collatz_count(unsigned n)</linea>
+        <linea>{</linea>
+        <linea>  unsigned c = 0;</linea>
+        <linea>  while (n &gt; 1) {</linea>
+        <linea>    n = n%2==0 ? n/2 : 3*n+1;</linea>
+        <linea>    c++;</linea>
+        <linea>  }</linea>
+        <linea>  return c+1;</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>C#</lenguaje>
+      <nivel_sol>1</nivel_sol>
+      <codigo>
+        <linea>#include&lt;iostream&gt;</linea>
+        <linea>using namespace std;</linea>
+        <linea/>
+        <linea>void sequence(unsigned long long int &amp; n) { if(n % 2 == 0) { n = n/2; } else { n = 3*n+1; } }</linea>
+        <linea/>
+        <linea>int main() {</linea>
+        <linea/>
+        <linea>	int max = 0;</linea>
+        <linea>	int top = 0;</linea>
+        <linea/>
+        <linea>	for( int n = 1; n &lt; 1000001; ++n) {</linea>
+        <linea>		int len = 0;</linea>
+        <linea>		unsigned long long int k  = n;</linea>
+        <linea/>
+        <linea>		while(k &gt; 1) {</linea>
+        <linea>			sequence(k);</linea>
+        <linea>			++len;</linea>
+        <linea>		}</linea>
+        <linea/>
+        <linea>		if(max &lt;= len) {</linea>
+        <linea>			max = len;</linea>
+        <linea>			top = n;</linea>
+        <linea>		}</linea>
+        <linea>	}</linea>
+        <linea>	cout &lt;&lt; top &lt;&lt; endl;</linea>
+        <linea>	return 0;</linea>
+        <linea>}</linea>
+        <linea/>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>Python</lenguaje>
+      <nivel_sol>2</nivel_sol>
+      <codigo>
+        <linea>cache = { 1: 1 }</linea>
+        <linea>def chain(cache, n):</linea>
+        <linea>    if not cache.get(n,0):</linea>
+        <linea>        if n % 2: cache[n] = 1 + chain(cache, 3*n + 1)</linea>
+        <linea>        else: cache[n] = 1 + chain(cache, n/2)</linea>
+        <linea>    return cache[n]</linea>
+        <linea/>
+        <linea>m,n = 0,0</linea>
+        <linea>for i in xrange(1, 1000000):</linea>
+        <linea>    c = chain(cache, i)</linea>
+        <linea>    if c &gt; m: m,n = c,i</linea>
+        <linea/>
+        <linea>print n</linea>
+      </codigo>
+    </solucion>
+  </ejercicio>
+  <ejercicio id="e15">
+    <enunciado>&lt;p&gt;Comenzando en la esquina superior izquierda de una matriz de tamaño 2×2, y pudiendo moverse únicamente hacia la derecha o hacia abajo, hay exactamente 6 rutas posibles para alcanzar la esquina inferior derecha.&lt;/p&gt;&lt;p style="text-align:center"&gt;&lt;img data-filename="p015.gif" src="data:image/gif;base64,R0lGODlh0ACXAMQAAAAAALXf/7fg/7zi/8Tl/8jn/8fo/8zp/9Ts/9nv/93x/+Pz/+v2/+34//P6/////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP///yH5BAEAAB8AIf4cVWxlYWQgR0lGIFNtYXJ0U2F2ZXIgVmVyIDIuMAAsAAAAANAAlwAABf/gJ45kaZ5oqq7sB7xwLM9ya98ore8v3vLAoHDmyw2DxSTriFSemNAowEmSWoHU6nVL03K/sawLPHWWxeSzUp0mo91msSidZaPrsLs5H5eri2FUdnV4PYR7hmtyLoJ8fXN6iH9JkziBin6NiZiQh5KRlI6Ui5U3l5yMnmuiqICsPqWAmrE2g4KFtLWzt5mfvJ2/q5utsK+WpLvBuT+4oK7DsMi+j6nBodCy06O9wssrttTX3t/JxOamxscj4yrsRtjR2tnOxfCmVfT17jnl2/no9nSt+wdw35N+81Q9M1gC3LmCBH+kExhxyUSK1cItrPjt4hJp3VQxbNhMoT5rGi3/efw40ORJlxBT+hMnkmPHgBg3ykyok9pIfAhn9hS6UyJOlsCKGv3ZMqTSe/ISMk1KE2atle1AVvVpsx1WclHVdX031SHRlyhVgtE6dObUjFufel3LLa5bumH1tYlCCg7XN3jlptg79gmdpmljJr56ePHSmoVNnHoI1alji0fBUqWM+a3noDzRonoLVzRnZnnF2pVat+3ZeJYFk4Vs9XHtnKZfMy4L9LYXJqpPr+NbeTXs0roNAy8ufPhy3Gp5I5Y95sjx5nOeQ1c8unXnJsyTKxdyPfdx0vuslw99E3z46LQvj+fBfn17+vZ3x6eeHUv94EvtIF57+2H3mw4DIhUd/4L/2faXb/MRkaBmC0rYYGcFTiiZgBoO1o2F+TnYXWTOgRjidt9NBiB8yni3Ww0G8iMOjB1uOExmiKEnyVcyyjeYiScS+BtGOn6IY4/8HXjkQfIAKVlvPv7II5IxNqRikHP9wSCSRX4IIYULSRdbdV0wuVmNNpL4pCZqlmglflB2KUybUF5DJ5lv+peUnKG4iKVXfr5oxZ57beFHoYMChigUizTq6KOQRnrfFZJWaumlmKYoRaacduopptp9KuqopIbJYamopqqqjaeu6uqro8IJ66y0glpmrbjmCqmTuvbqq2u/BiusRcMWa+yxyCar7LLMNuvss9BGK+201FZr7f+12Gar7bbcduvtt+CGK+645JZr7rnopqvuuuy2y+qijOICr3qzzKvelSv+mWWUWZVUJZP4vqevlEx95i+aAE9pZpKs8uvhwRcKFDCKArP4L0kQD/zwxKg5PBvDGINWsTocK3jxkCDXadzIUJUMJsJ5erzwmBrL6HK/Mjec8nQrU9yywmvmHPPOZ5rHssRAh0w0nkt7ljTP29z8sNAonwy10T4jveTMMFfd9dUWf92S1FSKzbTVRYcdMWpkc722kGgjh3XHvLQddNNPp300hkunYrfScf8N9t5wm+133npnzXfgilINlOCDK1742zinRncfkCd+ec+bU06w42MjLnf/vmrXfDfNpJMsusEiS1456oSDlfnosX/edON9lzE765abbHbmRe5+Z38FD3+24brbG2+9X4B+vOcbKx/qjM3jHRjm0i9PffZb9q7ppmRy756pXDgvfIbQD+048LjfHrnr493JfsamK83n3PDrHPjqoNxfevpeA6D6GPe+znHHavNrXf4W5j+y0MuA+rGemB7kMOIsMID1w2AGcxSoCOnpgm6S4Jcq10CCjc93/6vdx9ynOQg6UFYgJJ75+Ie+mg1BgDIUoflUhiby4PB5G8whC2mnQuJ1r4gaROIAf8dDAH4wdYv7HQ1b1CYYKlGIUtza6dzSwSzR6IcJ9N7LWFPFvyNCsXBLcpoWATcG1ZRQU+sTxc3UOEEskrCLXlxjAW1nxGXQ0SS8ihMevTjC+JVoYn9EiRkFKb/zxcaKLZxcaCCZkTcapZGbOGEiNaLJJgZRdEREow8juS9FjrKSgwQUJikVyu+JzxBseCUl9SJLUNZyluW63vZuqUdtVU9evOylL1nZqGAKM1w3DFYy3WXCRebqlMz04Oxihcto9hGUpGqVNZtJmlLdapuTWlYgwblEZE1zXceEVTrJyc52MisEADs=" style="width: 208px; float: none;"&gt;&lt;/p&gt;&lt;p&gt;¿Cuántas rutas hay para una matriz de tamaño 20×20?&lt;/p&gt;</enunciado>
+    <nivel_en>1</nivel_en>
+    <orientadoALenguaje>true</orientadoALenguaje>
+    <solucion>
+      <lenguaje>C#</lenguaje>
+      <nivel_sol>1</nivel_sol>
+      <codigo>
+        <linea>#include&lt;iostream&gt;</linea>
+        <linea>#include&lt;cstdio&gt;</linea>
+        <linea>using namespace std;</linea>
+        <linea></linea>
+        <linea>int main() {</linea>
+        <linea>	double prod = 1;</linea>
+        <linea>	for(double i = 40; i != 20; --i)</linea>
+        <linea>		prod *= i/(i-20);</linea>
+        <linea>	cout &lt;&lt; printf("%20f", prod) &lt;&lt; '\n';</linea>
+        <linea>	return 0;</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>C</lenguaje>
+      <nivel_sol>2</nivel_sol>
+      <codigo>
+        <linea>#include &lt;stdio.h&gt;</linea>
+        <linea>#include &lt;gmp.h&gt;</linea>
+        <linea></linea>
+        <linea>int main(void)</linea>
+        <linea>{</linea>
+        <linea>  mpz_t n, m;</linea>
+        <linea></linea>
+        <linea>  /* calcular 40C20 como 40! / (20! * 20!) */</linea>
+        <linea>  mpz_init(n); mpz_init(m);</linea>
+        <linea>  mpz_fac_ui(n, 40); mpz_fac_ui(m, 20);</linea>
+        <linea>  mpz_mul(m, m, m);</linea>
+        <linea>  mpz_divexact(n, n, m);</linea>
+        <linea></linea>
+        <linea>  mpz_out_str(stdout, 10, n);</linea>
+        <linea>  putchar('\n');</linea>
+        <linea></linea>
+        <linea>  mpz_clear(n);</linea>
+        <linea>  mpz_clear(m);</linea>
+        <linea></linea>
+        <linea>  return 0;</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>Python</lenguaje>
+      <nivel_sol>1</nivel_sol>
+      <codigo>
+        <linea>def fact(n):</linea>
+        <linea>    f = 1</linea>
+        <linea>    for x in xrange(1, n+1): f = f * x</linea>
+        <linea>    return f</linea>
+        <linea></linea>
+        <linea>print fact(40) / fact(20) / fact(20)</linea>
+      </codigo>
+    </solucion>
+  </ejercicio>
+</ejercicios>

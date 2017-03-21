@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ejercicios xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../preguntas.xsd">
+  <ejercicio id="e06">
+    <enunciado>&lt;p&gt;La suma de los cuadrados de los diez primeros números naturales es:&lt;/p&gt;&lt;p style="text-align: center;"&gt;1&lt;sup&gt;2&lt;/sup&gt; + 2&lt;sup&gt;2&lt;/sup&gt; + ... + 10&lt;sup&gt;2&lt;/sup&gt; = 385&lt;/p&gt;&lt;p&gt;El cuadrado de la suma de los diez primeros números naturales es:&lt;/p&gt;&lt;p style="text-align: center;"&gt;(1 + 2 + ... + 10)&lt;sup&gt;2&lt;/sup&gt; = 55&lt;sup&gt;2&lt;/sup&gt; = 3025&lt;/p&gt;La diferencia entre la suma de los cuadrados de los diez primeros números naturales y el cuadrado de la suma es 3025 − 385 = 2640.&lt;/p&gt;&lt;p&gt;Encuentra la diferencia entre la suma de los cuadrados de los &lt;span style="font-weight: bold;"&gt;cien&lt;/span&gt; primeros números naturales y el cuadrado de su suma.&lt;/p&gt;</enunciado>
+    <nivel_en>2</nivel_en>
+    <orientadoALenguaje>true</orientadoALenguaje>
+    <solucion>
+      <lenguaje>Java</lenguaje>
+      <nivel_sol>2</nivel_sol>
+      <codigo>
+        <linea>public final class e06 {</linea>
+        <linea>	</linea>
+        <linea>	public static void main(String[] args) {</linea>
+        <linea>		System.out.println(new e06().run());</linea>
+        <linea>	}</linea>
+        <linea>		</linea>
+        <linea>	private static final int N = 100;</linea>
+        <linea>		</linea>
+        <linea>	public String run() {</linea>
+        <linea>		int sum = 0;</linea>
+        <linea>		int sum2 = 0;</linea>
+        <linea>		for (int i = 1; i &lt;= N; i++) {</linea>
+        <linea>			sum += i;</linea>
+        <linea>			sum2 += i * i;</linea>
+        <linea>		}</linea>
+        <linea>		/* </linea>
+        <linea>		 * Para los que gustan de las matemáticas:</linea>
+        <linea>		 *   sum  = N(N + 1) / 2.</linea>
+        <linea>		 *   sum2 = N(N + 1)(2N + 1) / 6.</linea>
+        <linea>		 */</linea>
+        <linea>		return Integer.toString(sum * sum - sum2);</linea>
+        <linea>	}</linea>
+        <linea>	</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>Python</lenguaje>
+      <nivel_sol>1</nivel_sol>
+      <codigo>
+        <linea>r = xrange(1, 101)</linea>
+        <linea>a = sum(r)</linea>
+        <linea>print a * a - sum(i*i for i in r)</linea>
+      </codigo>
+    </solucion>
+  </ejercicio>
+  <ejercicio id="e07">
+    <enunciado>&lt;p&gt;Enumerando los seis primeros números primos: 2, 3, 5, 7, 11 y 13, observamos que el sexto primo es el 13.&lt;/p&gt;&lt;p&gt;¿Cuál es el primo diezmilésimo primero (10001º)?&lt;/p&gt;</enunciado>
+    <nivel_en>2</nivel_en>
+    <orientadoALenguaje>true</orientadoALenguaje>
+    <solucion>
+      <lenguaje>C</lenguaje>
+      <nivel_sol>2</nivel_sol>
+      <codigo>
+        <linea>#include &lt;stdio.h&gt;</linea>
+        <linea>#include &lt;stdlib.h&gt;</linea>
+        <linea/>
+        <linea>int main(void)</linea>
+        <linea>{</linea>
+        <linea>  char *sieve;</linea>
+        <linea>  size_t i;</linea>
+        <linea>  unsigned count = 0;</linea>
+        <linea>  size_t n = 1000000;</linea>
+        <linea>  const unsigned target = 10001;</linea>
+        <linea/>
+        <linea>  sieve = calloc(n, sizeof *sieve);</linea>
+        <linea>  for (i = 2; i &lt; n; i++) {</linea>
+        <linea>    if (!sieve[i]) {</linea>
+        <linea>      size_t j;</linea>
+        <linea/>
+        <linea>      count++;</linea>
+        <linea>      if (count == target) {</linea>
+        <linea>        printf("%lu\n", i);</linea>
+        <linea>        break;</linea>
+        <linea>      }</linea>
+        <linea>      for (j = i*2; j &lt; n; j += i) {</linea>
+        <linea>        sieve[j] = 1;</linea>
+        <linea>      }</linea>
+        <linea>    }</linea>
+        <linea>  }</linea>
+        <linea>  free(sieve);</linea>
+        <linea/>
+        <linea>  return 0;</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>Java</lenguaje>
+      <nivel_sol>1</nivel_sol>
+      <codigo>
+        <linea>public final class e07 {</linea>
+        <linea>	</linea>
+        <linea>	public static void main(String[] args) {</linea>
+        <linea>		System.out.println(new e07().run());</linea>
+        <linea>	}</linea>
+        <linea>		</linea>
+        <linea>	public String run() {</linea>
+        <linea>		for (int i = 2, count = 0; ; i++) {</linea>
+        <linea>			if (Library.isPrime(i)) {</linea>
+        <linea>				count++;</linea>
+        <linea>				if (count == 10001)</linea>
+        <linea>					return Integer.toString(i);</linea>
+        <linea>			}</linea>
+        <linea>		}</linea>
+        <linea>	}	</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+  </ejercicio>
+  <ejercicio id="e08">
+    <enunciado>&lt;p&gt;En el siguiente número de 1000 dígitos, los cuatro dígitos adyacentes cuyo producto es el mayor son 9 × 9 × 8 × 9 = 5832.&lt;/p&gt;&lt;p style="font-family:courier new;text-align:center;"&gt;73167176531330624919225119674426574742355349194934&lt;br&gt;96983520312774506326239578318016984801869478851843&lt;br&gt;85861560789112949495459501737958331952853208805511&lt;br&gt;12540698747158523863050715693290963295227443043557&lt;br&gt;66896648950445244523161731856403098711121722383113&lt;br&gt;62229893423380308135336276614282806444486645238749&lt;br&gt;30358907296290491560440772390713810515859307960866&lt;br&gt;70172427121883998797908792274921901699720888093776&lt;br&gt;65727333001053367881220235421809751254540594752243&lt;br&gt;52584907711670556013604839586446706324415722155397&lt;br&gt;53697817977846174064955149290862569321978468622482&lt;br&gt;83972241375657056057490261407972968652414535100474&lt;br&gt;82166370484403199890008895243450658541227588666881&lt;br&gt;16427171479924442928230863465674813919123162824586&lt;br&gt;17866458359124566529476545682848912883142607690042&lt;br&gt;24219022671055626321111109370544217506941658960408&lt;br&gt;07198403850962455444362981230987879927244284909188&lt;br&gt;84580156166097919133875499200524063689912560717606&lt;br&gt;05886116467109405077541002256983155200055935729725&lt;br&gt;71636269561882670428252483600823257530420752963450&lt;br&gt;&lt;/p&gt;&lt;p&gt;Encuentra los trece dígitos adyacentes en el número de 1000 dígitos cuyo producto sea el mayor posible. ¿Cuál es el valor de esta multiplicación?&lt;/p&gt;</enunciado>
+    <nivel_en>2</nivel_en>
+    <orientadoALenguaje>true</orientadoALenguaje>
+    <solucion>
+      <lenguaje>C</lenguaje>
+      <nivel_sol>2</nivel_sol>
+      <codigo>
+        <linea>#include &lt;stdio.h&gt;</linea>
+        <linea/>
+        <linea>int main(void)</linea>
+        <linea>{</linea>
+        <linea>  char str[] =</linea>
+        <linea>    "73167176531330624919225119674426574742355349194934"</linea>
+        <linea>    "96983520312774506326239578318016984801869478851843"</linea>
+        <linea>    "85861560789112949495459501737958331952853208805511"</linea>
+        <linea>    "12540698747158523863050715693290963295227443043557"</linea>
+        <linea>    "66896648950445244523161731856403098711121722383113"</linea>
+        <linea>    "62229893423380308135336276614282806444486645238749"</linea>
+        <linea>    "30358907296290491560440772390713810515859307960866"</linea>
+        <linea>    "70172427121883998797908792274921901699720888093776"</linea>
+        <linea>    "65727333001053367881220235421809751254540594752243"</linea>
+        <linea>    "52584907711670556013604839586446706324415722155397"</linea>
+        <linea>    "53697817977846174064955149290862569321978468622482"</linea>
+        <linea>    "83972241375657056057490261407972968652414535100474"</linea>
+        <linea>    "82166370484403199890008895243450658541227588666881"</linea>
+        <linea>    "16427171479924442928230863465674813919123162824586"</linea>
+        <linea>    "17866458359124566529476545682848912883142607690042"</linea>
+        <linea>    "24219022671055626321111109370544217506941658960408"</linea>
+        <linea>    "07198403850962455444362981230987879927244284909188"</linea>
+        <linea>    "84580156166097919133875499200524063689912560717606"</linea>
+        <linea>    "05886116467109405077541002256983155200055935729725"</linea>
+        <linea>    "71636269561882670428252483600823257530420752963450";</linea>
+        <linea>  size_t len = sizeof str - 1;</linea>
+        <linea>  size_t i;</linea>
+        <linea>  unsigned max = 0;</linea>
+        <linea/>
+        <linea>  for (i = 0; i &lt; len-4; i++) {</linea>
+        <linea>    unsigned p = 1;</linea>
+        <linea>    size_t j;</linea>
+        <linea/>
+        <linea>    for (j = 0; j &lt; 5; j++) {</linea>
+        <linea>      p *= (unsigned)(str[i+j]-'0');</linea>
+        <linea>    }</linea>
+        <linea>    if (p &gt; max) {</linea>
+        <linea>      max = p;</linea>
+        <linea>    }</linea>
+        <linea>  }</linea>
+        <linea>  printf("%u\n", max);</linea>
+        <linea>  return 0;</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>PHP</lenguaje>
+      <nivel_sol>1</nivel_sol>
+      <codigo>
+        <linea>&lt;?php</linea>
+        <linea>  $data = '7316717653133062491922511967442657474235534919493496983520312774506326239578318016984801869478851843858615607891129494954595017379583319528532088055111254069874715852386305071569329096329522744304355766896648950445244523161731856403098711121722383113622298934233803081353362766142828064444866452387493035890729629049156044077239071381051585930796086670172427121883998797908792274921901699720888093776657273330010533678812202354218097512545405947522435258490771167055601360483958644670632441572215539753697817977846174064955149290862569321978468622482839722413756570560574902614079729686524145351004748216637048440319989000889524345065854122758866688116427171479924442928230863465674813919123162824586178664583591245665294765456828489128831426076900422421902267105562632111110937054421750694165896040807198403850962455444362981230987879927244284909188845801561660979191338754992005240636899125607176060588611646710940507754100225698315520005593572972571636269561882670428252483600823257530420752963450';</linea>
+        <linea>  $greatest = 0;</linea>
+        <linea>  for ($i = 0; $i &lt; strlen($data); $i++) {</linea>
+        <linea>    $_data = substr($data, $i, 5);</linea>
+        <linea>    if (strlen($_data) == 5) {</linea>
+        <linea>      $_product = 1;</linea>
+        <linea>      for ($j = 0; $j &lt; 5; $j++) {</linea>
+        <linea>        $_product *= $_data[$j];</linea>
+        <linea>      }</linea>
+        <linea>      if ($_product &gt; $greatest) {</linea>
+        <linea>        $greatest = $_product;</linea>
+        <linea>      }</linea>
+        <linea>    }</linea>
+        <linea>  }</linea>
+        <linea>  echo $greatest;</linea>
+        <linea>?&gt;</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>Python</lenguaje>
+      <nivel_sol>1</nivel_sol>
+      <codigo>
+        <linea>s = '7316717653133062491922511967442657474235534919493496983520312774506326239578318016984801869478851843858615607891129494954595017379583319528532088055111254069874715852386305071569329096329522744304355766896648950445244523161731856403098711121722383113622298934233803081353362766142828064444866452387493035890729629049156044077239071381051585930796086670172427121883998797908792274921901699720888093776657273330010533678812202354218097512545405947522435258490771167055601360483958644670632441572215539753697817977846174064955149290862569321978468622482839722413756570560574902614079729686524145351004748216637048440319989000889524345065854122758866688116427171479924442928230863465674813919123162824586178664583591245665294765456828489128831426076900422421902267105562632111110937054421750694165896040807198403850962455444362981230987879927244284909188845801561660979191338754992005240636899125607176060588611646710940507754100225698315520005593572972571636269561882670428252483600823257530420752963450'</linea>
+        <linea>n = 0</linea>
+        <linea>for i in xrange(0, len(s)-4):</linea>
+        <linea>    p = 1</linea>
+        <linea>    for j in xrange(i,i+5):</linea>
+        <linea>        p = p * int(s[j])</linea>
+        <linea>    if p &gt; n: n = p</linea>
+        <linea/>
+        <linea>print n</linea>
+      </codigo>
+    </solucion>
+  </ejercicio>
+  <ejercicio id="e09">
+    <enunciado>&lt;p&gt;Una terna pitagórica es una tupla de tres enteros positivos, &lt;var&gt;a&lt;/var&gt; &amp;lt; &lt;var&gt;b&lt;/var&gt; &amp;lt; &lt;var&gt;c&lt;/var&gt;, para los que se cumple,&lt;/p&gt;&lt;p style="text-align:center;"&gt; &lt;var&gt;a&lt;/var&gt;&lt;sup&gt;2&lt;/sup&gt; + &lt;var&gt;b&lt;/var&gt;&lt;sup&gt;2&lt;/sup&gt; = &lt;var&gt;c&lt;/var&gt;&lt;sup&gt;2&lt;/sup&gt;&lt;/p&gt;&lt;p&gt;Por ejemplo, 3&lt;sup&gt;2&lt;/sup&gt; + 4&lt;sup&gt;2&lt;/sup&gt; = 9 + 16 = 25 = 5&lt;sup&gt;2&lt;/sup&gt;.&lt;/p&gt;&lt;p&gt;Existe exactamente una terna pitagórica para la cual &lt;var&gt;a&lt;/var&gt; + &lt;var&gt;b&lt;/var&gt; + &lt;var&gt;c&lt;/var&gt; = 1000.&lt;/p&gt;&lt;p&gt;Encuentra el producto &lt;span style="font-style: italic;"&gt;abc&lt;/span&gt;.&lt;/p&gt;</enunciado>
+    <nivel_en>1</nivel_en>
+    <orientadoALenguaje>true</orientadoALenguaje>
+    <solucion>
+      <lenguaje>C</lenguaje>
+      <nivel_sol>1</nivel_sol>
+      <codigo>
+        <linea>#include &lt;stdio.h&gt;</linea>
+        <linea/>
+        <linea>int main(void)</linea>
+        <linea>{</linea>
+        <linea>  int a, b;</linea>
+        <linea/>
+        <linea>  for (a = 1; a &lt;= 333; a++) {</linea>
+        <linea>    for (b = a; b &lt;= 666; b++) {</linea>
+        <linea>      int c = (1000 - a - b);</linea>
+        <linea>      if (a*a + b*b == c*c) {</linea>
+        <linea>        printf("%d\n", a * b * c);</linea>
+        <linea>      }</linea>
+        <linea>    }</linea>
+        <linea>  }</linea>
+        <linea>  return 0;</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>Python</lenguaje>
+      <nivel_sol>1</nivel_sol>
+      <codigo>
+        <linea>for a in xrange(1, 1000):</linea>
+        <linea>    for b in xrange(a, 1000):</linea>
+        <linea>        c = 1000 - a - b</linea>
+        <linea>        if c &gt; 0:</linea>
+        <linea>            if c*c == a*a + b*b:</linea>
+        <linea>                print a*b*c</linea>
+        <linea>                break</linea>
+      </codigo>
+    </solucion>
+  </ejercicio>
+  <ejercicio id="e10">
+    <enunciado>&lt;p&gt;La suma de todos los primos menores que 10 es 2 + 3 + 5 + 7 = 17.&lt;/p&gt;&lt;p&gt;Encuentra la suma de todos los primos menores que dos millones.&lt;/p&gt;</enunciado>
+    <nivel_en>1</nivel_en>
+    <orientadoALenguaje>true</orientadoALenguaje>
+    <solucion>
+      <lenguaje>C</lenguaje>
+      <nivel_sol>2</nivel_sol>
+      <codigo>
+        <linea>#include &lt;stdio.h&gt;</linea>
+        <linea>#include &lt;stdlib.h&gt;</linea>
+        <linea></linea>
+        <linea>int main(void)</linea>
+        <linea>{</linea>
+        <linea>  char *sieve;</linea>
+        <linea>  unsigned i, j;</linea>
+        <linea>  size_t n = 2000000;</linea>
+        <linea>  unsigned long long sum = 0ULL;</linea>
+        <linea></linea>
+        <linea>  sieve = calloc(n, sizeof *sieve);</linea>
+        <linea>  for (i = 2; i &lt; n; i++) {</linea>
+        <linea>    if (!sieve[i]) {</linea>
+        <linea>      sum += i;</linea>
+        <linea>      for (j = i*2; j &lt; n; j += i) {</linea>
+        <linea>        sieve[j] = 1;</linea>
+        <linea>      }</linea>
+        <linea>    }</linea>
+        <linea>  }</linea>
+        <linea>  free(sieve);</linea>
+        <linea></linea>
+        <linea>  printf("%llu\n", sum);</linea>
+        <linea></linea>
+        <linea>  return 0;</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+  </ejercicio>
+</ejercicios>

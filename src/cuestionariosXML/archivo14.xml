@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ejercicios xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../preguntas.xsd">
+  <ejercicio id="p11">
+    <enunciado>Desarrolla un algoritmo de Búsqueda en Profundidad Iterativa (BPI) sobre una estructura en forma de árbol y que esté limitado a una profundidad dada.&lt;br&gt;</enunciado>
+    <nivel_en>3</nivel_en>
+    <orientadoALenguaje>false</orientadoALenguaje>
+    <solucion>
+      <lenguaje>Pseudocodigo</lenguaje>
+      <nivel_sol>3</nivel_sol>
+      <codigo>
+        <linea>BPL(nodo, objetivo, profundidad)</linea>
+        <linea>{</linea>
+        <linea>  Si (profundidad == 0 y nodo == objetivo)</linea>
+        <linea>    devolver nodo</linea>
+        <linea>  sino si (profundidad &gt; 0)</linea>
+        <linea>    para cada hijo en expandir(nodo)</linea>
+        <linea>      resultado = BPL(hijo, objetivo, profundidad-1)</linea>
+        <linea>      si resultado distinto de null</linea>
+        <linea>         devolver resultado</linea>
+        <linea>  sino</linea>
+        <linea>    devolver null</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+  </ejercicio>
+  <ejercicio id="p12">
+    <enunciado>&lt;p&gt;Implementa un algoritmo que resuelva el problema del Productor-Consumidor haciendo uso de monitores.&lt;/p&gt;&lt;p&gt;La tarea del productor es generar un producto, almacenarlo y comenzar&#13;
+ nuevamente; mientras que el consumidor toma (simultáneamente) productos&#13;
+ uno a uno. El problema consiste en que el productor no añada más &#13;
+productos que la capacidad del buffer y que el consumidor no intente &#13;
+tomar un producto si el buffer está vacío.&#13;
+&lt;/p&gt;&lt;p&gt;La idea para la solución es la siguiente, ambos productos se ejecutan&#13;
+ simultáneamente y se “despiertan” o “duermen” según el estado del &#13;
+buffer. Concretamente, el productor agrega productos mientras quede &#13;
+espacio y en el momento en que se llene el buffer se pone a “dormir”. &#13;
+Cuando el consumidor toma un producto notifica al productor que puede &#13;
+comenzar a trabajar nuevamente. En caso contrario si el buffer se vacía,&#13;
+ el consumidor se pone a dormir y en el momento en que el productor &#13;
+agrega un producto crea una señal para despertarlo. Se puede encontrar &#13;
+una solución usando mecanismos de comunicación interprocesos, generalmente se usan semáforos. Una inadecuada implementación del problema puede terminar en un &lt;span class="mw-redirect"&gt;deadlock&lt;/span&gt;&#13;
+ donde ambos procesos queden en espera de ser despertados. Este problema&#13;
+ pude ser generalizado para múltiples consumidores y productores.&lt;/p&gt;</enunciado>
+    <nivel_en>3</nivel_en>
+    <orientadoALenguaje>false</orientadoALenguaje>
+    <solucion>
+      <lenguaje>Pseudocodigo</lenguaje>
+      <nivel_sol>3</nivel_sol>
+      <codigo>
+        <linea>monitor ProducerConsumer {</linea>
+        <linea>    int itemCount</linea>
+        <linea>    condition full;</linea>
+        <linea>    condition empty;</linea>
+        <linea> </linea>
+        <linea>    procedure add(item) {</linea>
+        <linea>        while (itemCount == BUFFER_SIZE) {</linea>
+        <linea>            wait(full);</linea>
+        <linea>        }</linea>
+        <linea> </linea>
+        <linea>        putItemIntoBuffer(item);</linea>
+        <linea>        itemCount = itemCount + 1;</linea>
+        <linea> </linea>
+        <linea>        if (itemCount == 1) {</linea>
+        <linea>            notify(empty);</linea>
+        <linea>        }</linea>
+        <linea>    }</linea>
+        <linea>    procedure remove() {</linea>
+        <linea>        while (itemCount == 0) {</linea>
+        <linea>            wait(empty);</linea>
+        <linea>        }</linea>
+        <linea> </linea>
+        <linea>        item = removeItemFromBuffer();</linea>
+        <linea>        itemCount = itemCount - 1;</linea>
+        <linea> </linea>
+        <linea>        if (itemCount == BUFFER_SIZE - 1) {</linea>
+        <linea>            notify(full);</linea>
+        <linea>        }</linea>
+        <linea> </linea>
+        <linea> </linea>
+        <linea>        return item;</linea>
+        <linea>    }</linea>
+        <linea>}</linea>
+        <linea> </linea>
+        <linea>procedure producer() {</linea>
+        <linea>    while (true) {</linea>
+        <linea>        item = produceItem()</linea>
+        <linea>        ProducerConsumer.add(item)</linea>
+        <linea>    }</linea>
+        <linea>}</linea>
+        <linea> </linea>
+        <linea>procedure consumer() {</linea>
+        <linea>    while (true) {</linea>
+        <linea>        item = ProducerConsumer.remove()</linea>
+        <linea>        consumeItem(item)</linea>
+        <linea>    }</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+  </ejercicio>
+  <ejercicio id="p13">
+    <enunciado>Realizar el pseudocódigo de un programa que permita calcular el área de&#13;
+un rectángulo. Se debe introducir la base y la altura para poder realizar el&#13;
+cálculo..</enunciado>
+    <nivel_en>3</nivel_en>
+    <orientadoALenguaje>false</orientadoALenguaje>
+    <solucion>
+      <lenguaje>Pseudocodigo</lenguaje>
+      <nivel_sol>2</nivel_sol>
+      <codigo>
+        <linea>Programa; área</linea>
+        <linea>Entorno: BASE, ALTURA, AREA son número enteros</linea>
+        <linea>Algoritmo:</linea>
+        <linea>            escribir “Introduzca la base y la altura”</linea>
+        <linea>            leer BASE, ALTURA</linea>
+        <linea>            calcular AREA = BASE * ALTURA</linea>
+        <linea>            escribir “El área del rectángulo es “AREA</linea>
+        <linea>Finprograma</linea>
+      </codigo>
+    </solucion>
+  </ejercicio>
+  <ejercicio id="p14">
+    <enunciado>Escribe un programa que transforme números enteros a notación romana.&lt;br&gt;</enunciado>
+    <nivel_en>3</nivel_en>
+    <orientadoALenguaje>false</orientadoALenguaje>
+    <solucion>
+      <lenguaje>Pseudocodigo</lenguaje>
+      <nivel_sol>3</nivel_sol>
+      <codigo>
+        <linea>Proceso Romanos</linea>
+        <linea>    </linea>
+        <linea>    // leer el número</linea>
+        <linea>    Escribir "Ingrese un número entre 1 y 1000"</linea>
+        <linea>    Leer Numero</linea>
+        <linea>    </linea>
+        <linea>    // controlar que sea válido para convertir</linea>
+        <linea>    SePuedeConvertir&lt;-Verdadero</linea>
+        <linea>    Si Numero=0 Entonces</linea>
+        <linea>        Escribir "No existe ningún símbolo para representar el 0"</linea>
+        <linea>        SePuedeConvertir&lt;-Falso</linea>
+        <linea>    FinSi</linea>
+        <linea>    Si Numero&lt;&gt;trunc(numero) Entonces</linea>
+        <linea>        Escribir "El número debe ser entero"</linea>
+        <linea>        SePuedeConvertir&lt;-Falso</linea>
+        <linea>    FinSi</linea>
+        <linea>    Si Numero&gt;1000 Entonces</linea>
+        <linea>        Escribir "Muy alto"</linea>
+        <linea>        SePuedeConvertir&lt;-Falso</linea>
+        <linea>    FinSi</linea>
+        <linea>    Si Numero&lt;0 Entonces</linea>
+        <linea>        Escribir "Debe ser positivo"</linea>
+        <linea>        SePuedeConvertir&lt;-Falso</linea>
+        <linea>    FinSi</linea>
+        <linea>    </linea>
+        <linea>    // realizar la conversión</linea>
+        <linea>    Si SePuedeConvertir Entonces        </linea>
+        <linea>        Si Numero=1000 Entonces</linea>
+        <linea>            Escribir "M"</linea>
+        <linea>        Sino</linea>
+        <linea>            Dimension nu[10], nd[10], nc[10] // notación para unidades, decenas y centenas</linea>
+        <linea>            nu[1]&lt;-''; nu[2]&lt;-'I'; nu[3]&lt;-'II'; nu[4]&lt;-'III'; nu[5]&lt;-'IV'; nu[6]&lt;-'V'; nu[7]&lt;-'VI'; nu[8]&lt;-'VII'; nu[9]&lt;-'VIII'; nu[10]&lt;-'IX'</linea>
+        <linea>            nd[1]&lt;-''; nd[2]&lt;-'X'; nd[3]&lt;-'XX'; nd[4]&lt;-'XXX'; nd[5]&lt;-'XL'; nd[6]&lt;-'L'; nd[7]&lt;-'LX'; nd[8]&lt;-'LXX'; nd[9]&lt;-'LXXX'; nd[10]&lt;-'XC'</linea>
+        <linea>            nc[1]&lt;-''; nc[2]&lt;-'C'; nc[3]&lt;-'CC'; nc[4]&lt;-'CCC'; nc[5]&lt;-'CD'; nc[6]&lt;-'D'; nc[7]&lt;-'DC'; nc[8]&lt;-'DCC'; nc[9]&lt;-'DCCC'; nc[10]&lt;-'CM'</linea>
+        <linea>            centenas&lt;-trunc(Numero/100) MOD 10</linea>
+        <linea>            decenas&lt;-trunc(Numero/10) MOD 10</linea>
+        <linea>            unidades&lt;-Numero MOD 10</linea>
+        <linea>            Escribir nc[centenas+1],nd[decenas+1],nu[unidades+1]</linea>
+        <linea>        FinSi</linea>
+        <linea>    FinSi</linea>
+        <linea>    </linea>
+        <linea>FinProceso</linea>
+        <linea/>
+      </codigo>
+    </solucion>
+  </ejercicio>
+  <ejercicio id="p15">
+    <enunciado>Escribe un algoritmo que descomponga un número en sus factores primos.&lt;br&gt;</enunciado>
+    <nivel_en>3</nivel_en>
+    <orientadoALenguaje>false</orientadoALenguaje>
+    <solucion>
+      <lenguaje>Pseudocodigo</lenguaje>
+      <nivel_sol>3</nivel_sol>
+      <codigo>
+        <linea>Proceso Factorizacion</linea>
+        <linea>    </linea>
+        <linea>    Escribir "Ingrese el numero: "</linea>
+        <linea>    Leer num</linea>
+        <linea>    </linea>
+        <linea>    Escribir "Factorizacion: "</linea>
+        <linea>    </linea>
+        <linea>    factorizar&lt;-verdadero</linea>
+        <linea>    </linea>
+        <linea>    Mientras factorizar Y num&gt;1 hacer</linea>
+        <linea>        div&lt;-0</linea>
+        <linea>        Si num/2 = trunc(num/2) Entonces</linea>
+        <linea>            Escribir 2</linea>
+        <linea>            num&lt;-num/2</linea>
+        <linea>        Sino</linea>
+        <linea>            div&lt;-1; factor_primo&lt;-Verdadero</linea>
+        <linea>            Mientras div&lt;=rc(num) Y factor_primo Hacer</linea>
+        <linea>                div &lt;- div+2</linea>
+        <linea>                Si num/div = trunc(num/div) Entonces</linea>
+        <linea>                    factor_primo &lt;- Falso</linea>
+        <linea>                FinSi</linea>
+        <linea>            FinMientras</linea>
+        <linea>            Si factor_primo Entonces</linea>
+        <linea>                escribir num</linea>
+        <linea>                factorizar&lt;-falso</linea>
+        <linea>            sino</linea>
+        <linea>                escribir div</linea>
+        <linea>                num&lt;-num/div</linea>
+        <linea>                factor_primo&lt;-verdadero</linea>
+        <linea>            FinSi</linea>
+        <linea>        FinSi</linea>
+        <linea>    FinMientras</linea>
+        <linea>    </linea>
+        <linea>FinProceso</linea>
+        <linea></linea>
+      </codigo>
+    </solucion>
+  </ejercicio>
+</ejercicios>

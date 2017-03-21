@@ -1,0 +1,614 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ejercicios xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../preguntas.xsd">
+  <ejercicio id="e31">
+    <enunciado>&lt;p&gt;En Inglaterra el dinero se compone con libras, £, y peniques, p, y existen ocho monedas en circulación:&lt;/p&gt;&lt;blockquote&gt;1p, 2p, 5p, 10p, 20p, 50p, £1 (100p) y £2 (200p).&lt;/blockquote&gt;&lt;p&gt;Se pueden tener £2 de la siguiente manera:&lt;/p&gt;&lt;blockquote&gt;1×£1 + 1×50p + 2×20p + 1×5p + 1×2p + 3×1p&lt;/blockquote&gt;&lt;p&gt;¿De cuantas formas diferentes se pueden conseguir £2 utilizando cualquier combinación posible de monedas?&lt;/p&gt;</enunciado>
+    <nivel_en>2</nivel_en>
+    <orientadoALenguaje>true</orientadoALenguaje>
+    <solucion>
+      <lenguaje>Java</lenguaje>
+      <nivel_sol>1</nivel_sol>
+      <codigo>
+        <linea>public final class e31 {</linea>
+        <linea>	</linea>
+        <linea>	public static void main(String[] args) {</linea>
+        <linea>		System.out.println(new e31().run());</linea>
+        <linea>	}	</linea>
+        <linea>	</linea>
+        <linea>	private static final int TOTAL = 200;</linea>
+        <linea>	private static int[] COINS = {1, 2, 5, 10, 20, 50, 100, 200};	</linea>
+        <linea>	public String run() {</linea>
+        <linea>		// Problema de la mochila. ways[i][j] es el número de formas en las que se pueden usar</linea>
+        <linea>		// el valor de cualquiera de las primeras i monedas para obtener una suma desordenada j.</linea>
+        <linea>		int[][] ways = new int[COINS.length + 1][TOTAL + 1];</linea>
+        <linea>		ways[0][0] = 1;</linea>
+        <linea>		for (int i = 0; i &lt; COINS.length; i++) {</linea>
+        <linea>			for (int j = 0; j &lt;= TOTAL; j++)</linea>
+        <linea>				ways[i + 1][j] = ways[i][j] + (j &gt;= COINS[i] ? ways[i + 1][j - COINS[i]] : 0);</linea>
+        <linea>		}</linea>
+        <linea>		return Integer.toString(ways[COINS.length][TOTAL]);</linea>
+        <linea>	}	</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>C</lenguaje>
+      <nivel_sol>2</nivel_sol>
+      <codigo>
+        <linea>#include &lt;stdio.h&gt;</linea>
+        <linea/>
+        <linea>int main(void)</linea>
+        <linea>{</linea>
+        <linea>  int z = 0;</linea>
+        <linea>  int n = 200;</linea>
+        <linea>  </linea>
+        <linea>  int a, b, c, d, e, f, g;</linea>
+        <linea>  for (a = 0; a &lt;= n; a += 200)</linea>
+        <linea>    for (b = 0; b &lt;= n; b += 100)</linea>
+        <linea>      for (c = 0; c &lt;= n; c += 50)</linea>
+        <linea>        for (d = 0; d &lt;= n; d += 20)</linea>
+        <linea>          for (e = 0; e &lt;= n; e += 10)</linea>
+        <linea>            for (f = 0; f &lt;= n; f += 5)</linea>
+        <linea>              for (g = 0; g &lt;= n; g += 2)</linea>
+        <linea>                if (a+b+c+d+e+f+g &lt;= 200)</linea>
+        <linea>                  z++;</linea>
+        <linea>  printf("%d\n", z);</linea>
+        <linea/>
+        <linea>  return 0;</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>Python</lenguaje>
+      <nivel_sol>2</nivel_sol>
+      <codigo>
+        <linea>coins = (1, 2, 5, 10, 20, 50, 100, 200)</linea>
+        <linea/>
+        <linea>def balance(pattern): return sum(coins[x]*pattern[x] for x in xrange(0, len(pattern)))</linea>
+        <linea/>
+        <linea>def gen(pattern, coinnum, num):</linea>
+        <linea>    coin = coins[coinnum]</linea>
+        <linea>    for p in xrange(0, num/coin + 1):</linea>
+        <linea>        newpat = pattern[:coinnum] + (p,)</linea>
+        <linea>        bal = balance(newpat)</linea>
+        <linea>        if bal &gt; num: return</linea>
+        <linea>        elif bal == num: yield newpat</linea>
+        <linea>        elif coinnum &lt; len(coins)-1:</linea>
+        <linea>            for pat in gen(newpat, coinnum+1, num):</linea>
+        <linea>                yield pat</linea>
+        <linea/>
+        <linea>print sum(1 for pat in gen((), 0, 200))</linea>
+      </codigo>
+    </solucion>
+  </ejercicio>
+  <ejercicio id="e32">
+    <enunciado>&lt;p&gt;Diremos que un número pandigital de &lt;span style="font-style: italic;"&gt;n&lt;/span&gt;-dígitos es aquel que utiliza todos los dígitos del 1 al &lt;span style="font-style: italic;"&gt;n&lt;/span&gt; exactamente una vez. Por ejemplo, el número de 5 dígitos 15234, es pandigital de 1 hasta 5.&lt;/p&gt;&lt;p&gt;El producto 7254 es poco usual, ya que la identidad 39 × 186 = 7254, que contiene multiplicando, multiplicador y producto, es pandigital de 1 hasta 9.&lt;/p&gt;&lt;p&gt;Encuentra la suma de todos los productos cuya identidad multiplicando/multiplicador/producto pueda ser escrita como un pandigital de 1 a 9.&lt;/p&gt;&lt;p&gt;PISTA: algunos productos se pueden obtener de varias maneras, así que asegúrate de incluirlos una única vez en la suma.&lt;/p&gt;</enunciado>
+    <nivel_en>2</nivel_en>
+    <orientadoALenguaje>true</orientadoALenguaje>
+    <solucion>
+      <lenguaje>Java</lenguaje>
+      <nivel_sol>2</nivel_sol>
+      <codigo>
+        <linea>import java.util.Arrays;</linea>
+        <linea/>
+        <linea>public final class e32 {</linea>
+        <linea>	</linea>
+        <linea>	public static void main(String[] args) {</linea>
+        <linea>		System.out.println(new e32().run());</linea>
+        <linea>	}</linea>
+        <linea>		</linea>
+        <linea>	public String run() {</linea>
+        <linea>		// Un producto candidato tiene como mucho 4 dígitos. Se debe a que si tuviese</linea>
+        <linea>		// 5 dígitos, entonces los dos multiplicandos deberían tener al menos 5 dígitos</linea>
+        <linea>		// entre los dos.</linea>
+        <linea>		int sum = 0;</linea>
+        <linea>		for (int i = 1; i &lt; 10000; i++) {</linea>
+        <linea>			if (hasPandigitalProduct(i))</linea>
+        <linea>				sum += i;</linea>
+        <linea>		}</linea>
+        <linea>		return Integer.toString(sum);</linea>
+        <linea>	}</linea>
+        <linea>		</linea>
+        <linea>	private static boolean hasPandigitalProduct(int n) {</linea>
+        <linea>		// Encontrar y examinar todos los factores de n</linea>
+        <linea>		for (int i = 1; i &lt;= n; i++) {</linea>
+        <linea>			if (n % i == 0 &amp;&amp; isPandigital("" + n + i + n/i))</linea>
+        <linea>				return true;</linea>
+        <linea>		}</linea>
+        <linea>		return false;</linea>
+        <linea>	}</linea>
+        <linea>		</linea>
+        <linea>	private static boolean isPandigital(String s) {</linea>
+        <linea>		if (s.length() != 9)</linea>
+        <linea>			return false;</linea>
+        <linea>		char[] temp = s.toCharArray();</linea>
+        <linea>		Arrays.sort(temp);</linea>
+        <linea>		return new String(temp).equals("123456789");</linea>
+        <linea>	}	</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>C</lenguaje>
+      <nivel_sol>3</nivel_sol>
+      <codigo>
+        <linea>#include &lt;stdio.h&gt;</linea>
+        <linea>#include &lt;stdlib.h&gt;</linea>
+        <linea>#include &lt;math.h&gt;</linea>
+        <linea>#include &lt;string.h&gt;</linea>
+        <linea/>
+        <linea>static int compare(const void *a, const void *b);</linea>
+        <linea>static int is_pandigital(char *buf);</linea>
+        <linea>#define DIGITS(x) (lround(floor(log10((double)x))))</linea>
+        <linea/>
+        <linea>int main(void)</linea>
+        <linea>{</linea>
+        <linea>  int product, multiplier, multiplicand, remaindar;</linea>
+        <linea>  int sum = 0;</linea>
+        <linea>  char buf[10];</linea>
+        <linea/>
+        <linea>  for (product = 1111; product &lt; 100000; product++) {</linea>
+        <linea>    for (multiplicand = 2; multiplicand*multiplicand &lt; product; multiplicand++) {</linea>
+        <linea>      remaindar = product % multiplicand;</linea>
+        <linea>      if (remaindar != 0) {</linea>
+        <linea>        continue;</linea>
+        <linea>      }</linea>
+        <linea>      multiplier = product / multiplicand;</linea>
+        <linea>      if (DIGITS(multiplicand) + DIGITS(multiplier) + DIGITS(product) != 6) {</linea>
+        <linea>        continue;</linea>
+        <linea>      }</linea>
+        <linea/>
+        <linea>      snprintf(buf, sizeof buf, "%d%d%d", multiplicand, multiplier, product);</linea>
+        <linea>      if (is_pandigital(buf)) {</linea>
+        <linea>        sum += product;</linea>
+        <linea>        break;</linea>
+        <linea>      }</linea>
+        <linea>    }</linea>
+        <linea>  }</linea>
+        <linea>  printf("%d\n", sum);</linea>
+        <linea/>
+        <linea>  return 0;</linea>
+        <linea>}</linea>
+        <linea/>
+        <linea>static int compare(const void *a, const void *b)</linea>
+        <linea>{</linea>
+        <linea>  return *(const char *)a - *(const char *)b;</linea>
+        <linea>}</linea>
+        <linea/>
+        <linea>static int is_pandigital(char *buf)</linea>
+        <linea>{</linea>
+        <linea>  qsort(buf, 9, 1, compare);</linea>
+        <linea>  return memcmp(buf, "123456789", 9) == 0;</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>Python</lenguaje>
+      <nivel_sol>2</nivel_sol>
+      <codigo>
+        <linea>from combinatorics import permutations</linea>
+        <linea/>
+        <linea>def num(l):</linea>
+        <linea>    s = 0</linea>
+        <linea>    for n in l: s = s * 10 + n</linea>
+        <linea>    return s</linea>
+        <linea/>
+        <linea>product = {}</linea>
+        <linea>for perm in permutations(range(1,10)):</linea>
+        <linea>    for cross in range(1,4):            # Número no puede tener más de 4 dígitos</linea>
+        <linea>        for eq in range(cross+1, 6):    # Resultado no puede tener menos de 4 dígitos</linea>
+        <linea>            a = num(perm[0:cross])</linea>
+        <linea>            b = num(perm[cross:eq])</linea>
+        <linea>            c = num(perm[eq:9])</linea>
+        <linea>            if a * b == c: product[c] = 1</linea>
+        <linea/>
+        <linea>print sum(p for p in product)</linea>
+      </codigo>
+    </solucion>
+  </ejercicio>
+  <ejercicio id="e33">
+    <enunciado>&lt;p&gt;La fracción &lt;sup&gt;49&lt;/sup&gt;/&lt;sub&gt;98&lt;/sub&gt; es una fracción interesante, ya que un matemático inexperto que intente simplificarla puede llegar a creer que &lt;sup&gt;49&lt;/sup&gt;/&lt;sub&gt;98&lt;/sub&gt; = &lt;sup&gt;4&lt;/sup&gt;/&lt;sub&gt;8&lt;/sub&gt;, lo cual es correcto, obtenido cancelando los 9s.&lt;/p&gt;&lt;p&gt;Consideremos fracciones del tipo &lt;sup&gt;30&lt;/sup&gt;/&lt;sub&gt;50&lt;/sub&gt; = &lt;sup&gt;3&lt;/sup&gt;/&lt;sub&gt;5&lt;/sub&gt;, como ejemplos triviales.&lt;/p&gt;&lt;p&gt;Existen exactamente cuatro ejemplos no triviales de este tipo de fracciones, cuyo valor sea menor de uno, y que contengan números de dos dígitos tanto en el numerador como en el denominador.&lt;/p&gt;&lt;p&gt;Si el producto de estas cuatro fracciones se da mediante sus mínimos comunes, encuentra el valor de su denominador.&lt;/p&gt;</enunciado>
+    <nivel_en>2</nivel_en>
+    <orientadoALenguaje>true</orientadoALenguaje>
+    <solucion>
+      <lenguaje>Java</lenguaje>
+      <nivel_sol>3</nivel_sol>
+      <codigo>
+        <linea>public final class e33 implements EulerSolution {</linea>
+        <linea>	</linea>
+        <linea>	public static void main(String[] args) {</linea>
+        <linea>		System.out.println(new e33().run());</linea>
+        <linea>	}</linea>
+        <linea>	</linea>
+        <linea>	/* </linea>
+        <linea>	 * Consideremos una fracción arbitraria n/d:</linea>
+        <linea>	 *   Sea n = 10 * n1 + n0 el numerador.</linea>
+        <linea>	 *   Sea d = 10 * d1 + d0 el denominador.</linea>
+        <linea>	 * Como dice el problema, necesitamos que 10 &lt;= n &lt; d &lt; 100.</linea>
+        <linea>	 * Debemos ignorar simplificaciones triviales donde n0 = d0 = 0.</linea>
+        <linea>	 * </linea>
+        <linea>	 * Ahora, una simplificación con n0 = d0 es imposible porque:</linea>
+        <linea>	 *   n1 / d1 = n / d = (10*n1 + n0) / (10*d1 + n0).</linea>
+        <linea>	 *   n1 * (10*d1 + n0) = d1 * (10*n1 + n0).</linea>
+        <linea>	 *   10*n1*d1 + n1*n0 = 10*d1*n1 + d1*n0.</linea>
+        <linea>	 *   n1*n0 = d1*n0.</linea>
+        <linea>	 *   n1 = d1.</linea>
+        <linea>	 *   Esto implica que n = d, lo cual contradice el hecho de que n &lt; d.</linea>
+        <linea>	 * Similarmente, no podemos tener una simplificación donde donde n1 = d1 por el mismo motivo.</linea>
+        <linea>	 * </linea>
+        <linea>	 * Por lo tanto sólo necesitamos considerar los casos donde n0 = d1 or n1 = d0.</linea>
+        <linea>	 * Para el primer caso, comprobar que n1/d0 = n/d; para el segundo caso, comprobar que n0/d1 = n/d.</linea>
+        <linea>	 */</linea>
+        <linea>	public String run() {</linea>
+        <linea>		int numer = 1;</linea>
+        <linea>		int denom = 1;</linea>
+        <linea>		for (int d = 10; d &lt; 100; d++) {</linea>
+        <linea>			for (int n = 10; n &lt; d; n++) {</linea>
+        <linea>				int n0 = n % 10, n1 = n / 10;</linea>
+        <linea>				int d0 = d % 10, d1 = d / 10;</linea>
+        <linea>				if (n1 == d0 &amp;&amp; n0 * d == n * d1 || n0 == d1 &amp;&amp; n1 * d == n * d0) {</linea>
+        <linea>					numer *= n;</linea>
+        <linea>					denom *= d;</linea>
+        <linea>				}</linea>
+        <linea>			}</linea>
+        <linea>		}</linea>
+        <linea>		return Integer.toString(denom / Library.gcd(numer, denom));</linea>
+        <linea>	}	</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>C</lenguaje>
+      <nivel_sol>3</nivel_sol>
+      <codigo>
+        <linea>#include &lt;stdio.h&gt;</linea>
+        <linea>#include &lt;math.h&gt;</linea>
+        <linea/>
+        <linea>static unsigned gcd(unsigned a, unsigned b);</linea>
+        <linea>static int cancel(unsigned n1, unsigned d1, unsigned *n2, unsigned *d2);</linea>
+        <linea/>
+        <linea>int main(void)</linea>
+        <linea>{</linea>
+        <linea>  unsigned ans_n = 1, ans_d = 1;</linea>
+        <linea>  unsigned i;</linea>
+        <linea>  for (i = 11; i &lt; 100; i++) {</linea>
+        <linea>    unsigned j;</linea>
+        <linea/>
+        <linea>    if (i % 10 == 0) {</linea>
+        <linea>      continue;</linea>
+        <linea>    }</linea>
+        <linea/>
+        <linea>    for (j = 11; j &lt; i; j++) {</linea>
+        <linea>      unsigned g, n, d;</linea>
+        <linea>      unsigned n2, d2;</linea>
+        <linea/>
+        <linea>      if (j % 10 == 0) {</linea>
+        <linea>        continue;</linea>
+        <linea>      }</linea>
+        <linea/>
+        <linea>      if ((g = gcd(i, j)) == 1) {</linea>
+        <linea>        continue;</linea>
+        <linea>      }</linea>
+        <linea>      /* cancelar numéricamente */</linea>
+        <linea>      n = j/g;</linea>
+        <linea>      d = i/g;</linea>
+        <linea/>
+        <linea>      /* cancelar simbólicamente */</linea>
+        <linea>      if (cancel(j, i, &amp;n2, &amp;d2)) {</linea>
+        <linea>        unsigned g2 = gcd(n2, d2);</linea>
+        <linea>        n2 /= g2; d2 /= g2;</linea>
+        <linea>        if (n == n2 &amp;&amp; d == d2) {</linea>
+        <linea>          ans_n *= n;</linea>
+        <linea>          ans_d *= d;</linea>
+        <linea>        }</linea>
+        <linea>      }</linea>
+        <linea>    }</linea>
+        <linea>  }</linea>
+        <linea>  printf("%u\n", ans_d / gcd(ans_n, ans_d));</linea>
+        <linea>  return 0;</linea>
+        <linea>}</linea>
+        <linea/>
+        <linea>unsigned gcd(unsigned a, unsigned b)</linea>
+        <linea>{</linea>
+        <linea>  unsigned r;</linea>
+        <linea>  while ((r = a % b) != 0) {</linea>
+        <linea>    a = b; b = r;</linea>
+        <linea>  }</linea>
+        <linea>  return b;</linea>
+        <linea>}</linea>
+        <linea/>
+        <linea>int cancel(unsigned n1, unsigned d1, unsigned *n2, unsigned *d2)</linea>
+        <linea>{</linea>
+        <linea>  if (n1%10 == d1%10) {</linea>
+        <linea>    /* p.e. 24 y 34 */</linea>
+        <linea>    *n2 = n1/10;</linea>
+        <linea>    *d2 = d1/10;</linea>
+        <linea>    return 1;</linea>
+        <linea>  }</linea>
+        <linea>  else if (n1%10 == d1/10) {</linea>
+        <linea>    /* p.e. 24 y 41 */</linea>
+        <linea>    *n2 = n1/10;</linea>
+        <linea>    *d2 = d1%10;</linea>
+        <linea>    return 1;</linea>
+        <linea>  }</linea>
+        <linea>  else if (n1/10 == d1%10) {</linea>
+        <linea>    /* p.e. 24 y 32 */</linea>
+        <linea>    *n2 = n1%10;</linea>
+        <linea>    *d2 = d1/10;</linea>
+        <linea>    return 1;</linea>
+        <linea>  }</linea>
+        <linea>  else if (n1/10 == d1/10) {</linea>
+        <linea>    /* p.e. 24 y 21 */</linea>
+        <linea>    *n2 = n1%10;</linea>
+        <linea>    *d2 = d1%10;</linea>
+        <linea>    return 1;</linea>
+        <linea>  }</linea>
+        <linea>  else {</linea>
+        <linea>    *n2 = n1;</linea>
+        <linea>    *d2 = d1;</linea>
+        <linea>    return 0;</linea>
+        <linea>  }</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>Python</lenguaje>
+      <nivel_sol>2</nivel_sol>
+      <codigo>
+        <linea>def fractions():</linea>
+        <linea>    for numerator in map(str, xrange(10, 100)):</linea>
+        <linea>        for denominator in map(str, xrange(int(numerator)+1, 100)):</linea>
+        <linea>            if numerator == denominator: continue</linea>
+        <linea>            if numerator[1] == denominator[1] and numerator[1] == '0': continue</linea>
+        <linea>            if numerator[0] == denominator[0] and int(numerator) * int(denominator[1]) == int(denominator) * int(numerator[1]): yield(int(numerator), int(denominator))</linea>
+        <linea>            if numerator[0] == denominator[1] and int(numerator) * int(denominator[0]) == int(denominator) * int(numerator[1]): yield(int(numerator), int(denominator))</linea>
+        <linea>            if numerator[1] == denominator[1] and int(numerator) * int(denominator[0]) == int(denominator) * int(numerator[0]): yield(int(numerator), int(denominator))</linea>
+        <linea>            if numerator[1] == denominator[0] and int(numerator) * int(denominator[1]) == int(denominator) * int(numerator[0]): yield(int(numerator), int(denominator))</linea>
+        <linea/>
+        <linea>def gcd(a,b): return b and gcd(b, a % b) or a</linea>
+        <linea/>
+        <linea>numerator = 1</linea>
+        <linea>denominator = 1</linea>
+        <linea>for frac in fractions():</linea>
+        <linea>    numerator = numerator * frac[0]</linea>
+        <linea>    denominator = denominator * frac[1]</linea>
+        <linea/>
+        <linea>g = gcd(numerator, denominator)</linea>
+        <linea>print denominator / g</linea>
+      </codigo>
+    </solucion>
+  </ejercicio>
+  <ejercicio id="e34">
+    <enunciado>&lt;p&gt;145 es un número interesante, ya que 1! + 4! + 5! = 1 + 24 + 120 = 145.&lt;/p&gt;&lt;p&gt;Encuentra la suma de todos los números que sean igual a la suma del factorial de cada uno de sus dígitos.&lt;/p&gt;&lt;p class="info"&gt;Nota: como 1! = 1 y 2! = 2 no son sumas no se deben incluir.&lt;/p&gt;</enunciado>
+    <nivel_en>2</nivel_en>
+    <orientadoALenguaje>true</orientadoALenguaje>
+    <solucion>
+      <lenguaje>Java</lenguaje>
+      <nivel_sol>2</nivel_sol>
+      <codigo>
+        <linea>public final class e34 {</linea>
+        <linea>	</linea>
+        <linea>	public static void main(String[] args) {</linea>
+        <linea>		System.out.println(new e34().run());</linea>
+        <linea>	}</linea>
+        <linea>	</linea>
+        <linea>	public String run() {</linea>
+        <linea>		// 1 = 1! y 2 = 2! se deben excluir.</linea>
+        <linea>		// Si un número tiene al menos n &gt;= 8 dígitos, incluso si cada dígito es 9,</linea>
+        <linea>		// n * 9! todavía es menor que dicho número (el cual es al menos 10^n).</linea>
+        <linea>		int sum = 0;</linea>
+        <linea>		for (int i = 3; i &lt; 10000000; i++) {</linea>
+        <linea>			if (i == factorialDigitSum(i))</linea>
+        <linea>				sum += i;</linea>
+        <linea>		}</linea>
+        <linea>		return Integer.toString(sum);</linea>
+        <linea>	}</linea>
+        <linea>	</linea>
+        <linea>	// Valores para factorial(0), factorial(1), ..., factorial(9)</linea>
+        <linea>	private static int[] FACTORIAL = {1, 1, 2, 6, 24, 120, 720, 5040, 40320, 362880};</linea>
+        <linea>	</linea>
+        <linea>	private static int factorialDigitSum(int x) {</linea>
+        <linea>		int sum = 0;</linea>
+        <linea>		while (x != 0) {</linea>
+        <linea>			sum += FACTORIAL[x % 10];</linea>
+        <linea>			x /= 10;</linea>
+        <linea>		}</linea>
+        <linea>		return sum;</linea>
+        <linea>	}	</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>C</lenguaje>
+      <nivel_sol>2</nivel_sol>
+      <codigo>
+        <linea>#include &lt;stdio.h&gt;</linea>
+        <linea/>
+        <linea>unsigned fact(unsigned n);</linea>
+        <linea/>
+        <linea>int main(void)</linea>
+        <linea>{</linea>
+        <linea>  unsigned i, sum = 0;</linea>
+        <linea>  char buf[16];</linea>
+        <linea/>
+        <linea>  for (i = 3; i &lt; 100000; i++) {</linea>
+        <linea>    unsigned j, s = 0;</linea>
+        <linea/>
+        <linea>    snprintf(buf, sizeof buf, "%u", i);</linea>
+        <linea>    for (j = 0; buf[j] != 0; j++) {</linea>
+        <linea>      s += fact(buf[j]-'0');</linea>
+        <linea>    }</linea>
+        <linea>    if (i == s) {</linea>
+        <linea>      sum += s;</linea>
+        <linea>    }</linea>
+        <linea>  }</linea>
+        <linea>  printf("%u\n", sum);</linea>
+        <linea/>
+        <linea>  return 0;</linea>
+        <linea>}</linea>
+        <linea/>
+        <linea>unsigned fact(unsigned n)</linea>
+        <linea>{</linea>
+        <linea>  unsigned f = 1;</linea>
+        <linea>  while (n != 0) {</linea>
+        <linea>    f *= n--;</linea>
+        <linea>  }</linea>
+        <linea>  return f;</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>Python</lenguaje>
+      <nivel_sol>2</nivel_sol>
+      <codigo>
+        <linea>fact = (1, 1, 2, 6, 24, 120, 720, 5040, 40320, 362880)</linea>
+        <linea/>
+        <linea>def sum_of_digits_factorial(n):</linea>
+        <linea>    s = 0</linea>
+        <linea>    while n &gt; 0:</linea>
+        <linea>        d = n % 10</linea>
+        <linea>        s = s + fact[d]</linea>
+        <linea>        n = n / 10</linea>
+        <linea>    return s</linea>
+        <linea/>
+        <linea>print sum(n for n in xrange(10, 100000) if n == sum_of_digits_factorial(n))</linea>
+      </codigo>
+    </solucion>
+  </ejercicio>
+  <ejercicio id="e35">
+    <enunciado>&lt;p&gt;Al número 197 se le llama primo circular porque cualquier rotación de sus dígitos: 197, 971, y 719, es también un número primo.&lt;br&gt;&lt;/p&gt;&lt;p&gt;Existen trece primos circulares por debajo de 100: 2, 3, 5, 7, 11, 13, 17, 31, 37, 71, 73, 79, y 97.&lt;/p&gt;&lt;p&gt;¿Cuántos primos circulares existen por debajo del millón?&lt;/p&gt;</enunciado>
+    <nivel_en>2</nivel_en>
+    <orientadoALenguaje>true</orientadoALenguaje>
+    <solucion>
+      <lenguaje>Java</lenguaje>
+      <nivel_sol>2</nivel_sol>
+      <codigo>
+        <linea>public final class e35 {</linea>
+        <linea>	</linea>
+        <linea>	public static void main(String[] args) {</linea>
+        <linea>		System.out.println(new e35().run());</linea>
+        <linea>	}	</linea>
+        <linea>	</linea>
+        <linea>	private static final int LIMIT = Library.pow(10, 6);</linea>
+        <linea>	private boolean[] isPrime = Library.listPrimality(LIMIT - 1);</linea>
+        <linea>  </linea>
+        <linea>	public String run() {</linea>
+        <linea>		int count = 0;</linea>
+        <linea>		for (int i = 0; i &lt; isPrime.length; i++) {</linea>
+        <linea>			if (isCircularPrime(i))</linea>
+        <linea>				count++;</linea>
+        <linea>		}</linea>
+        <linea>		return Integer.toString(count);</linea>
+        <linea>	}</linea>
+        <linea>	</linea>
+        <linea>	private boolean isCircularPrime(int n) {</linea>
+        <linea>		String s = Integer.toString(n);</linea>
+        <linea>		for (int i = 0; i &lt; s.length(); i++) {</linea>
+        <linea>			if (!isPrime[Integer.parseInt(s.substring(i) + s.substring(0, i))])</linea>
+        <linea>				return false;</linea>
+        <linea>		}</linea>
+        <linea>		return true;</linea>
+        <linea>	}	</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>C</lenguaje>
+      <nivel_sol>2</nivel_sol>
+      <codigo>
+        <linea>#include &lt;stdio.h&gt;</linea>
+        <linea>#include &lt;math.h&gt;</linea>
+        <linea></linea>
+        <linea>#define N 1000000</linea>
+        <linea></linea>
+        <linea>static int is_prime(unsigned n);</linea>
+        <linea></linea>
+        <linea>int main(void)</linea>
+        <linea>{</linea>
+        <linea>  unsigned i, count = 0;</linea>
+        <linea></linea>
+        <linea>  for (i = 2; i &lt; N; i++) {</linea>
+        <linea>    unsigned digits;</linea>
+        <linea>    unsigned k;</linea>
+        <linea>    unsigned j;</linea>
+        <linea></linea>
+        <linea>    if (!is_prime(i)) {</linea>
+        <linea>      continue;</linea>
+        <linea>    }</linea>
+        <linea>    digits = log10(i);</linea>
+        <linea>    k = i;</linea>
+        <linea>    for (j = 0; j &lt; digits; j++) {</linea>
+        <linea>      unsigned l = pow(10, digits);</linea>
+        <linea>      unsigned t = k % l;</linea>
+        <linea>      k /= l;</linea>
+        <linea>      k += t*10;</linea>
+        <linea>      if (!is_prime(k)) {</linea>
+        <linea>        goto NEXT;</linea>
+        <linea>      }</linea>
+        <linea>    }</linea>
+        <linea>    count++;</linea>
+        <linea>NEXT:</linea>
+        <linea>    ;</linea>
+        <linea>  }</linea>
+        <linea>  printf("%u\n", count);</linea>
+        <linea></linea>
+        <linea>  return 0;</linea>
+        <linea>}</linea>
+        <linea></linea>
+        <linea>int is_prime(unsigned n)</linea>
+        <linea>{</linea>
+        <linea>  if (n &lt;= 1) {</linea>
+        <linea>    return 0;</linea>
+        <linea>  }</linea>
+        <linea>  else if (n == 2) {</linea>
+        <linea>    return 1;</linea>
+        <linea>  }</linea>
+        <linea>  else {</linea>
+        <linea>    unsigned i;</linea>
+        <linea>    for (i = 2; i*i &lt;= n; i++) {</linea>
+        <linea>      if (n % i == 0) {</linea>
+        <linea>        return 0;</linea>
+        <linea>      }</linea>
+        <linea>    }</linea>
+        <linea>    return 1;</linea>
+        <linea>  }</linea>
+        <linea>}</linea>
+      </codigo>
+    </solucion>
+    <solucion>
+      <lenguaje>Python</lenguaje>
+      <nivel_sol>3</nivel_sol>
+      <codigo>
+        <linea>sieve = [True] * 1000000</linea>
+        <linea>sieve[0] = sieve[1] = False</linea>
+        <linea></linea>
+        <linea>def mark(sieve, x):</linea>
+        <linea>    for i in xrange(x+x, len(sieve), x):</linea>
+        <linea>        sieve[i] = False</linea>
+        <linea></linea>
+        <linea>for x in xrange(2, int(len(sieve) ** 0.5) + 1):</linea>
+        <linea>    mark(sieve, x)</linea>
+        <linea></linea>
+        <linea>def circular(n):</linea>
+        <linea>    digits = []</linea>
+        <linea>    while n &gt; 0:</linea>
+        <linea>        digits.insert(0, str(n % 10))</linea>
+        <linea>        n = n / 10</linea>
+        <linea>    for d in xrange(1, len(digits)):</linea>
+        <linea>        yield int(''.join(digits[d:] + digits[0:d]))</linea>
+        <linea></linea>
+        <linea>count = 0</linea>
+        <linea>for n, p in enumerate(sieve):</linea>
+        <linea>    if p:</linea>
+        <linea>        iscircularprime = 1</linea>
+        <linea>        for m in circular(n):</linea>
+        <linea>            if not sieve[m]:</linea>
+        <linea>                iscircularprime = 0</linea>
+        <linea>                break</linea>
+        <linea>        if iscircularprime:</linea>
+        <linea>            count = count + 1</linea>
+        <linea></linea>
+        <linea>print count</linea>
+      </codigo>
+    </solucion>
+  </ejercicio>
+</ejercicios>
